@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.biel.qmsgatherCgVn.mapper.DfUpScreenPrintingbmMapper">
+
+    <resultMap id="BaseResultMap" type="com.biel.qmsgatherCgVn.domain.DfUpScreenPrintingbm">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="date" column="date" jdbcType="TIMESTAMP"/>
+            <result property="factory" column="factory" jdbcType="VARCHAR"/>
+            <result property="model" column="model" jdbcType="VARCHAR"/>
+            <result property="process" column="process" jdbcType="VARCHAR"/>
+            <result property="project" column="project" jdbcType="VARCHAR"/>
+            <result property="testProject" column="test_project" jdbcType="VARCHAR"/>
+            <result property="onePointy2" column="one_pointy2" jdbcType="DOUBLE"/>
+            <result property="twoPointy1" column="two_pointy1" jdbcType="DOUBLE"/>
+            <result property="threePointx" column="three_pointx" jdbcType="DOUBLE"/>
+            <result property="fourPointx" column="four_pointx" jdbcType="DOUBLE"/>
+            <result property="fivePointy1" column="five_pointy1" jdbcType="DOUBLE"/>
+            <result property="sixPointy2" column="six_pointy2" jdbcType="DOUBLE"/>
+            <result property="sevenPointx" column="seven_pointx" jdbcType="DOUBLE"/>
+            <result property="eightPointx" column="eight_pointx" jdbcType="DOUBLE"/>
+            <result property="windowLength1" column="window_length1" jdbcType="DOUBLE"/>
+            <result property="windowLength2" column="window_length2" jdbcType="DOUBLE"/>
+            <result property="windowWide1" column="window_wide1" jdbcType="DOUBLE"/>
+            <result property="windowWide2" column="window_wide2" jdbcType="DOUBLE"/>
+            <result property="debugMachiney1" column="debug_machiney1" jdbcType="DOUBLE"/>
+            <result property="debugMachiney2" column="debug_machiney2" jdbcType="DOUBLE"/>
+            <result property="debugMachinex" column="debug_machinex" jdbcType="DOUBLE"/>
+            <result property="machineCode" column="machine_code" jdbcType="VARCHAR"/>
+            <result property="state" column="state" jdbcType="VARCHAR"/>
+            <result property="batchId" column="batch_id" jdbcType="VARCHAR"/>
+            <result property="uploadName" column="upload_name" jdbcType="VARCHAR"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,date,factory,
+        model,process,project,
+        test_project,one_pointy2,two_pointy1,
+        three_pointx,four_pointx,five_pointy1,
+        six_pointy2,seven_pointx,eight_pointx,
+        window_length1,window_length2,window_wide1,
+        window_wide2,debug_machiney1,debug_machiney2,
+        debug_machinex,machine_code,state,
+        batch_id,upload_name,create_time
+    </sql>
+</mapper>

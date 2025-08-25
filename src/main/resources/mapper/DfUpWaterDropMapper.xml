@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.biel.qmsgatherCgVn.mapper.DfUpWaterDropMapper">
+
+    <resultMap id="BaseResultMap" type="com.biel.qmsgatherCgVn.domain.DfUpWaterDrop">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="process" column="process" jdbcType="VARCHAR"/>
+            <result property="factory" column="factory" jdbcType="VARCHAR"/>
+            <result property="model" column="model" jdbcType="VARCHAR"/>
+            <result property="stage" column="stage" jdbcType="VARCHAR"/>
+            <result property="testRegion" column="test_region" jdbcType="VARCHAR"/>
+            <result property="data" column="data" jdbcType="TIMESTAMP"/>
+            <result property="no" column="no" jdbcType="INTEGER"/>
+            <result property="testTime" column="test_time" jdbcType="TIMESTAMP"/>
+            <result property="testClass" column="test_class" jdbcType="VARCHAR"/>
+            <result property="machineCode" column="machine_code" jdbcType="VARCHAR"/>
+            <result property="m4" column="M4" jdbcType="DECIMAL"/>
+            <result property="m6" column="M6" jdbcType="DECIMAL"/>
+            <result property="l2" column="L2" jdbcType="DECIMAL"/>
+            <result property="l5" column="L5" jdbcType="DECIMAL"/>
+            <result property="m1" column="M1" jdbcType="DECIMAL"/>
+            <result property="m3" column="M3" jdbcType="DECIMAL"/>
+            <result property="result" column="result" jdbcType="VARCHAR"/>
+            <result property="dayinbiTest" column="dayinbi_test" jdbcType="VARCHAR"/>
+            <result property="status" column="status" jdbcType="VARCHAR"/>
+            <result property="batchId" column="batch_id" jdbcType="VARCHAR"/>
+            <result property="uploadName" column="upload_name" jdbcType="VARCHAR"/>
+            <result property="uploadTime" column="upload_time" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,process,factory,
+        model,stage,test_region,
+        data,no,test_time,
+        test_class,machine_code,M4,
+        M6,L2,L5,
+        M1,M3,result,
+        dayinbi_test,status,batch_id,
+        upload_name,upload_time
+    </sql>
+</mapper>

@@ -1,0 +1,13 @@
+2025-08-21 09:33:48.329  INFO 13394 --- [           main] c.b.q.QmsgatherCgvnApplicationTests      : Starting QmsgatherCgvnApplicationTests using Java 17.0.15 on dafenqidebijibendiannao.local with PID 13394 (started by dafenqi in /Users/work/zsz/Qmsgather_CGVN/Qmsgather_CGVN)
+2025-08-21 09:33:48.330  INFO 13394 --- [           main] c.b.q.QmsgatherCgvnApplicationTests      : No active profile set, falling back to 1 default profile: "default"
+2025-08-21 09:33:49.583  INFO 13394 --- [           main] pertySourcedRequestMappingHandlerMapping : Mapped URL path [/v2/api-docs] onto method [springfox.documentation.swagger2.web.Swagger2Controller#getDocumentation(String, HttpServletRequest)]
+2025-08-21 09:33:49.815  INFO 13394 --- [           main] d.s.w.p.DocumentationPluginsBootstrapper : Context refreshed
+2025-08-21 09:33:49.825  INFO 13394 --- [           main] d.s.w.p.DocumentationPluginsBootstrapper : Found 1 custom documentation plugin(s)
+2025-08-21 09:33:49.840  INFO 13394 --- [           main] s.d.s.w.s.ApiListingReferenceScanner     : Scanning for api listing references
+2025-08-21 09:33:49.925  INFO 13394 --- [           main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: importExcelUsingPOST_1
+2025-08-21 09:33:49.929  INFO 13394 --- [           main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: importExcelUsingPOST_2
+2025-08-21 09:33:49.933  INFO 13394 --- [           main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: importExcelUsingPOST_3
+2025-08-21 09:33:49.938  INFO 13394 --- [           main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: importExcelUsingPOST_4
+2025-08-21 09:33:49.943  INFO 13394 --- [           main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: importExcelUsingPOST_5
+2025-08-21 09:33:49.947  INFO 13394 --- [           main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: importExcelUsingPOST_6
+2025-08-21 09:33:49.957  INFO 13394 --- [           main] c.b.q.QmsgatherCgvnApplicationTests      : Started QmsgatherCgvnApplicationTests in 1.814 seconds (JVM running for 2.243)
