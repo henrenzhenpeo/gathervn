@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.biel.qmsgatherCgVn.mapper.DfUpTxPvdOverflowPlatingMapper">
+
+    <resultMap id="BaseResultMap" type="com.biel.qmsgatherCgVn.domain.DfUpTxPvdOverflowPlating">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="date" column="date" jdbcType="TIMESTAMP"/>
+            <result property="factory" column="factory" jdbcType="VARCHAR"/>
+            <result property="model" column="model" jdbcType="VARCHAR"/>
+            <result property="process" column="process" jdbcType="VARCHAR"/>
+            <result property="testProject" column="test_project" jdbcType="VARCHAR"/>
+            <result property="squareHoleHeight" column="square_hole_height" jdbcType="DECIMAL"/>
+            <result property="squareHoleWidth" column="square_hole_width" jdbcType="DECIMAL"/>
+            <result property="lengthHoleCenterBmoLeft" column="length_hole_center_bmo_left" jdbcType="DECIMAL"/>
+            <result property="lengthHoleCenterBmoLower" column="length_hole_center_bmo_lower" jdbcType="DECIMAL"/>
+            <result property="longHoleCenterSquareHoleCenter" column="long_hole_center_square_hole_center" jdbcType="DECIMAL"/>
+            <result property="longHoleCenterSmallHoleCenter" column="long_hole_center_small_hole_center" jdbcType="DECIMAL"/>
+            <result property="longHoleTopRound" column="long_hole_top_round" jdbcType="DECIMAL"/>
+            <result property="longHoleLowerRound" column="long_hole_lower_round" jdbcType="DECIMAL"/>
+            <result property="longHoleWidth" column="long_hole_width" jdbcType="DECIMAL"/>
+            <result property="longHoleTopCenterLowerCenter" column="long_hole_top_center_lower_center" jdbcType="DECIMAL"/>
+            <result property="lengthHoleCenterBmoRight" column="length_hole_center_bmo_right" jdbcType="DECIMAL"/>
+            <result property="lengthHoleCenterBmoBottom" column="length_hole_center_bmo_bottom" jdbcType="DECIMAL"/>
+            <result property="smallCircleDiameter" column="small_circle_diameter" jdbcType="DECIMAL"/>
+            <result property="smallCircleCenterBm0Right" column="small_circle_center_bm0_right" jdbcType="DECIMAL"/>
+            <result property="smallCircleCenterBm0Lower" column="small_circle_center_bm0_lower" jdbcType="DECIMAL"/>
+            <result property="arHoleTop" column="ar_hole_top" jdbcType="DECIMAL"/>
+            <result property="arHoleLeft" column="ar_hole_left" jdbcType="DECIMAL"/>
+            <result property="arHoleLower" column="ar_hole_lower" jdbcType="DECIMAL"/>
+            <result property="arHoleRight" column="ar_hole_right" jdbcType="DECIMAL"/>
+            <result property="arHoleCoatingDiameter" column="ar_hole_coating_diameter" jdbcType="DECIMAL"/>
+            <result property="arHoleDiameter" column="ar_hole_diameter" jdbcType="DECIMAL"/>
+            <result property="result" column="result" jdbcType="VARCHAR"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="uploadName" column="upload_name" jdbcType="VARCHAR"/>
+            <result property="batchId" column="batch_id" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,date,factory,
+        model,process,test_project,
+        square_hole_height,square_hole_width,length_hole_center_bmo_left,
+        length_hole_center_bmo_lower,long_hole_center_square_hole_center,long_hole_center_small_hole_center,
+        long_hole_top_round,long_hole_lower_round,long_hole_width,
+        long_hole_top_center_lower_center,length_hole_center_bmo_right,length_hole_center_bmo_bottom,
+        small_circle_diameter,small_circle_center_bm0_right,small_circle_center_bm0_lower,
+        ar_hole_top,ar_hole_left,ar_hole_lower,
+        ar_hole_right,ar_hole_coating_diameter,ar_hole_diameter,
+        result,create_time,upload_name,
+        batch_id
+    </sql>
+</mapper>

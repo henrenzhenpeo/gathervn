@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.biel.qmsgatherCgVn.mapper.DfUpBaigeMapper">
+
+    <resultMap id="BaseResultMap" type="com.biel.qmsgatherCgVn.domain.DfUpBaige">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="process" column="process" jdbcType="VARCHAR"/>
+            <result property="factory" column="factory" jdbcType="VARCHAR"/>
+            <result property="project" column="project" jdbcType="VARCHAR"/>
+            <result property="stage" column="stage" jdbcType="VARCHAR"/>
+            <result property="date" column="date" jdbcType="TIMESTAMP"/>
+            <result property="no" column="no" jdbcType="INTEGER"/>
+            <result property="releaseTime" column="release_time" jdbcType="TIMESTAMP"/>
+            <result property="examFurnaceNumber" column="exam_furnace_number" jdbcType="VARCHAR"/>
+            <result property="testTime" column="test_time" jdbcType="TIMESTAMP"/>
+            <result property="sample1" column="sample1" jdbcType="VARCHAR"/>
+            <result property="sample2" column="sample2" jdbcType="VARCHAR"/>
+            <result property="sample3" column="sample3" jdbcType="VARCHAR"/>
+            <result property="sample4" column="sample4" jdbcType="VARCHAR"/>
+            <result property="sample5" column="sample5" jdbcType="VARCHAR"/>
+            <result property="testResult" column="test_result" jdbcType="VARCHAR"/>
+            <result property="popTime" column="pop_time" jdbcType="TIMESTAMP"/>
+            <result property="mekSoakTestNumber" column="mek_soak_test_number" jdbcType="VARCHAR"/>
+            <result property="uploadName" column="upload_name" jdbcType="VARCHAR"/>
+            <result property="batchId" column="batch_id" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,process,factory,
+        project,stage,date,
+        no,release_time,exam_furnace_number,
+        test_time,sample1,sample2,
+        sample3,sample4,sample5,
+        test_result,pop_time,mek_soak_test_number,
+        upload_name,batch_id
+    </sql>
+</mapper>

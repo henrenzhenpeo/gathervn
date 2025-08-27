@@ -1,0 +1,120 @@
+2025-08-15 09:45:51.777  INFO 73210 --- [           main] c.b.q.QmsgatherCgvnApplication           : Starting QmsgatherCgvnApplication using Java 17.0.15 on dafenqidebijibendiannao.local with PID 73210 (/Users/work/zsz/Qmsgather_CGVN/Qmsgather_CGVN/target/classes started by dafenqi in /Users/work/zsz/Qmsgather_CGVN/Qmsgather_CGVN)
+2025-08-15 09:45:51.779  INFO 73210 --- [           main] c.b.q.QmsgatherCgvnApplication           : No active profile set, falling back to 1 default profile: "default"
+2025-08-15 09:45:52.396  INFO 73210 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 1236 (http)
+2025-08-15 09:45:52.400  INFO 73210 --- [           main] o.a.coyote.http11.Http11NioProtocol      : Initializing ProtocolHandler ["http-nio-1236"]
+2025-08-15 09:45:52.401  INFO 73210 --- [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-08-15 09:45:52.401  INFO 73210 --- [           main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.68]
+2025-08-15 09:45:52.458  INFO 73210 --- [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-08-15 09:45:52.458  INFO 73210 --- [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 660 ms
+2025-08-15 09:45:52.960  INFO 73210 --- [           main] pertySourcedRequestMappingHandlerMapping : Mapped URL path [/v2/api-docs] onto method [springfox.documentation.swagger2.web.Swagger2Controller#getDocumentation(String, HttpServletRequest)]
+2025-08-15 09:45:53.083  INFO 73210 --- [           main] o.a.coyote.http11.Http11NioProtocol      : Starting ProtocolHandler ["http-nio-1236"]
+2025-08-15 09:45:53.095  INFO 73210 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 1236 (http) with context path ''
+2025-08-15 09:45:53.096  INFO 73210 --- [           main] d.s.w.p.DocumentationPluginsBootstrapper : Context refreshed
+2025-08-15 09:45:53.108  INFO 73210 --- [           main] d.s.w.p.DocumentationPluginsBootstrapper : Found 1 custom documentation plugin(s)
+2025-08-15 09:45:53.124  INFO 73210 --- [           main] s.d.s.w.s.ApiListingReferenceScanner     : Scanning for api listing references
+2025-08-15 09:45:53.280  INFO 73210 --- [           main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: importExcelUsingPOST_1
+2025-08-15 09:45:53.283  INFO 73210 --- [           main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: importExcelUsingPOST_2
+2025-08-15 09:45:53.285  INFO 73210 --- [           main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: importExcelUsingPOST_3
+2025-08-15 09:45:53.288  INFO 73210 --- [           main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: importExcelUsingPOST_4
+2025-08-15 09:45:53.289  INFO 73210 --- [           main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: exportDfUpSilkScreenWireframeUsingGET_1
+2025-08-15 09:45:53.291  INFO 73210 --- [           main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: importExcelUsingPOST_5
+2025-08-15 09:45:53.294  INFO 73210 --- [           main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: importExcelUsingPOST_6
+2025-08-15 09:45:53.304  INFO 73210 --- [           main] c.b.q.QmsgatherCgvnApplication           : Started QmsgatherCgvnApplication in 1.735 seconds (JVM running for 2.823)
+2025-08-15 09:51:36.959  INFO 73210 --- [http-nio-1236-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-08-15 09:51:36.960  INFO 73210 --- [http-nio-1236-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-08-15 09:51:36.962  INFO 73210 --- [http-nio-1236-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2025-08-15 10:02:38.707  INFO 73210 --- [http-nio-1236-exec-6] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-08-15 10:02:40.815  INFO 73210 --- [http-nio-1236-exec-6] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-08-15 10:32:38.768  INFO 73210 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-08-15 10:32:38.773  INFO 73210 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-08-15 10:32:42.347  INFO 79649 --- [           main] c.b.q.QmsgatherCgvnApplication           : Starting QmsgatherCgvnApplication using Java 17.0.15 on dafenqidebijibendiannao.local with PID 79649 (/Users/work/zsz/Qmsgather_CGVN/Qmsgather_CGVN/target/classes started by dafenqi in /Users/work/zsz/Qmsgather_CGVN/Qmsgather_CGVN)
+2025-08-15 10:32:42.348  INFO 79649 --- [           main] c.b.q.QmsgatherCgvnApplication           : No active profile set, falling back to 1 default profile: "default"
+2025-08-15 10:32:42.984  INFO 79649 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 1236 (http)
+2025-08-15 10:32:42.990  INFO 79649 --- [           main] o.a.coyote.http11.Http11NioProtocol      : Initializing ProtocolHandler ["http-nio-1236"]
+2025-08-15 10:32:42.990  INFO 79649 --- [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-08-15 10:32:42.990  INFO 79649 --- [           main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.68]
+2025-08-15 10:32:43.041  INFO 79649 --- [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-08-15 10:32:43.042  INFO 79649 --- [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 673 ms
+2025-08-15 10:32:43.534  INFO 79649 --- [           main] pertySourcedRequestMappingHandlerMapping : Mapped URL path [/v2/api-docs] onto method [springfox.documentation.swagger2.web.Swagger2Controller#getDocumentation(String, HttpServletRequest)]
+2025-08-15 10:32:43.660  INFO 79649 --- [           main] o.a.coyote.http11.Http11NioProtocol      : Starting ProtocolHandler ["http-nio-1236"]
+2025-08-15 10:32:43.670  INFO 79649 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 1236 (http) with context path ''
+2025-08-15 10:32:43.671  INFO 79649 --- [           main] d.s.w.p.DocumentationPluginsBootstrapper : Context refreshed
+2025-08-15 10:32:43.682  INFO 79649 --- [           main] d.s.w.p.DocumentationPluginsBootstrapper : Found 1 custom documentation plugin(s)
+2025-08-15 10:32:43.697  INFO 79649 --- [           main] s.d.s.w.s.ApiListingReferenceScanner     : Scanning for api listing references
+2025-08-15 10:32:43.780  INFO 79649 --- [           main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: importExcelUsingPOST_1
+2025-08-15 10:32:43.782  INFO 79649 --- [           main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: importExcelUsingPOST_2
+2025-08-15 10:32:43.786  INFO 79649 --- [           main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: importExcelUsingPOST_3
+2025-08-15 10:32:43.789  INFO 79649 --- [           main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: importExcelUsingPOST_4
+2025-08-15 10:32:43.792  INFO 79649 --- [           main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: importExcelUsingPOST_5
+2025-08-15 10:32:43.795  INFO 79649 --- [           main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: importExcelUsingPOST_6
+2025-08-15 10:32:43.805  INFO 79649 --- [           main] c.b.q.QmsgatherCgvnApplication           : Started QmsgatherCgvnApplication in 1.666 seconds (JVM running for 2.858)
+2025-08-15 10:33:57.011  INFO 79649 --- [http-nio-1236-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-08-15 10:33:57.011  INFO 79649 --- [http-nio-1236-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-08-15 10:33:57.012  INFO 79649 --- [http-nio-1236-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 0 ms
+2025-08-15 10:33:57.073  INFO 79649 --- [http-nio-1236-exec-1] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-08-15 10:33:57.488  INFO 79649 --- [http-nio-1236-exec-1] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-08-15 10:54:25.427  INFO 79649 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-08-15 10:54:25.437  INFO 79649 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-08-15 10:54:28.169  INFO 82677 --- [           main] c.b.q.QmsgatherCgvnApplication           : Starting QmsgatherCgvnApplication using Java 17.0.15 on dafenqidebijibendiannao.local with PID 82677 (/Users/work/zsz/Qmsgather_CGVN/Qmsgather_CGVN/target/classes started by dafenqi in /Users/work/zsz/Qmsgather_CGVN/Qmsgather_CGVN)
+2025-08-15 10:54:28.171  INFO 82677 --- [           main] c.b.q.QmsgatherCgvnApplication           : No active profile set, falling back to 1 default profile: "default"
+2025-08-15 10:54:28.806  INFO 82677 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 1236 (http)
+2025-08-15 10:54:28.811  INFO 82677 --- [           main] o.a.coyote.http11.Http11NioProtocol      : Initializing ProtocolHandler ["http-nio-1236"]
+2025-08-15 10:54:28.811  INFO 82677 --- [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-08-15 10:54:28.812  INFO 82677 --- [           main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.68]
+2025-08-15 10:54:28.860  INFO 82677 --- [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-08-15 10:54:28.860  INFO 82677 --- [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 669 ms
+2025-08-15 10:54:29.340  INFO 82677 --- [           main] pertySourcedRequestMappingHandlerMapping : Mapped URL path [/v2/api-docs] onto method [springfox.documentation.swagger2.web.Swagger2Controller#getDocumentation(String, HttpServletRequest)]
+2025-08-15 10:54:29.462  INFO 82677 --- [           main] o.a.coyote.http11.Http11NioProtocol      : Starting ProtocolHandler ["http-nio-1236"]
+2025-08-15 10:54:29.472  INFO 82677 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 1236 (http) with context path ''
+2025-08-15 10:54:29.473  INFO 82677 --- [           main] d.s.w.p.DocumentationPluginsBootstrapper : Context refreshed
+2025-08-15 10:54:29.483  INFO 82677 --- [           main] d.s.w.p.DocumentationPluginsBootstrapper : Found 1 custom documentation plugin(s)
+2025-08-15 10:54:29.497  INFO 82677 --- [           main] s.d.s.w.s.ApiListingReferenceScanner     : Scanning for api listing references
+2025-08-15 10:54:29.583  INFO 82677 --- [           main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: importExcelUsingPOST_1
+2025-08-15 10:54:29.587  INFO 82677 --- [           main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: importExcelUsingPOST_2
+2025-08-15 10:54:29.591  INFO 82677 --- [           main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: importExcelUsingPOST_3
+2025-08-15 10:54:29.595  INFO 82677 --- [           main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: importExcelUsingPOST_4
+2025-08-15 10:54:29.598  INFO 82677 --- [           main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: importExcelUsingPOST_5
+2025-08-15 10:54:29.600  INFO 82677 --- [           main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: importExcelUsingPOST_6
+2025-08-15 10:54:29.612  INFO 82677 --- [           main] c.b.q.QmsgatherCgvnApplication           : Started QmsgatherCgvnApplication in 1.647 seconds (JVM running for 2.151)
+2025-08-15 11:23:30.536  INFO 86776 --- [           main] c.b.q.QmsgatherCgvnApplication           : Starting QmsgatherCgvnApplication using Java 17.0.15 on dafenqidebijibendiannao.local with PID 86776 (/Users/work/zsz/Qmsgather_CGVN/Qmsgather_CGVN/target/classes started by dafenqi in /Users/work/zsz/Qmsgather_CGVN/Qmsgather_CGVN)
+2025-08-15 11:23:30.537  INFO 86776 --- [           main] c.b.q.QmsgatherCgvnApplication           : No active profile set, falling back to 1 default profile: "default"
+2025-08-15 11:23:31.170  INFO 86776 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 1236 (http)
+2025-08-15 11:23:31.175  INFO 86776 --- [           main] o.a.coyote.http11.Http11NioProtocol      : Initializing ProtocolHandler ["http-nio-1236"]
+2025-08-15 11:23:31.176  INFO 86776 --- [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-08-15 11:23:31.176  INFO 86776 --- [           main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.68]
+2025-08-15 11:23:31.229  INFO 86776 --- [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-08-15 11:23:31.229  INFO 86776 --- [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 672 ms
+2025-08-15 11:23:31.734  INFO 86776 --- [           main] pertySourcedRequestMappingHandlerMapping : Mapped URL path [/v2/api-docs] onto method [springfox.documentation.swagger2.web.Swagger2Controller#getDocumentation(String, HttpServletRequest)]
+2025-08-15 11:23:31.861  INFO 86776 --- [           main] o.a.coyote.http11.Http11NioProtocol      : Starting ProtocolHandler ["http-nio-1236"]
+2025-08-15 11:23:31.871  INFO 86776 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 1236 (http) with context path ''
+2025-08-15 11:23:31.872  INFO 86776 --- [           main] d.s.w.p.DocumentationPluginsBootstrapper : Context refreshed
+2025-08-15 11:23:31.882  INFO 86776 --- [           main] d.s.w.p.DocumentationPluginsBootstrapper : Found 1 custom documentation plugin(s)
+2025-08-15 11:23:31.897  INFO 86776 --- [           main] s.d.s.w.s.ApiListingReferenceScanner     : Scanning for api listing references
+2025-08-15 11:23:31.981  INFO 86776 --- [           main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: importExcelUsingPOST_1
+2025-08-15 11:23:31.984  INFO 86776 --- [           main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: importExcelUsingPOST_2
+2025-08-15 11:23:31.987  INFO 86776 --- [           main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: importExcelUsingPOST_3
+2025-08-15 11:23:31.991  INFO 86776 --- [           main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: importExcelUsingPOST_4
+2025-08-15 11:23:31.994  INFO 86776 --- [           main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: importExcelUsingPOST_5
+2025-08-15 11:23:31.997  INFO 86776 --- [           main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: importExcelUsingPOST_6
+2025-08-15 11:23:32.009  INFO 86776 --- [           main] c.b.q.QmsgatherCgvnApplication           : Started QmsgatherCgvnApplication in 1.7 seconds (JVM running for 2.903)
+2025-08-15 11:41:05.431  INFO 89204 --- [           main] c.b.q.QmsgatherCgvnApplication           : Starting QmsgatherCgvnApplication using Java 17.0.15 on dafenqidebijibendiannao.local with PID 89204 (/Users/work/zsz/Qmsgather_CGVN/Qmsgather_CGVN/target/classes started by dafenqi in /Users/work/zsz/Qmsgather_CGVN/Qmsgather_CGVN)
+2025-08-15 11:41:05.433  INFO 89204 --- [           main] c.b.q.QmsgatherCgvnApplication           : No active profile set, falling back to 1 default profile: "default"
+2025-08-15 11:41:06.036  INFO 89204 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 1236 (http)
+2025-08-15 11:41:06.040  INFO 89204 --- [           main] o.a.coyote.http11.Http11NioProtocol      : Initializing ProtocolHandler ["http-nio-1236"]
+2025-08-15 11:41:06.041  INFO 89204 --- [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-08-15 11:41:06.041  INFO 89204 --- [           main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.68]
+2025-08-15 11:41:06.091  INFO 89204 --- [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-08-15 11:41:06.091  INFO 89204 --- [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 640 ms
+2025-08-15 11:41:06.568  INFO 89204 --- [           main] pertySourcedRequestMappingHandlerMapping : Mapped URL path [/v2/api-docs] onto method [springfox.documentation.swagger2.web.Swagger2Controller#getDocumentation(String, HttpServletRequest)]
+2025-08-15 11:41:06.690  INFO 89204 --- [           main] o.a.coyote.http11.Http11NioProtocol      : Starting ProtocolHandler ["http-nio-1236"]
+2025-08-15 11:41:06.700  INFO 89204 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 1236 (http) with context path ''
+2025-08-15 11:41:06.701  INFO 89204 --- [           main] d.s.w.p.DocumentationPluginsBootstrapper : Context refreshed
+2025-08-15 11:41:06.711  INFO 89204 --- [           main] d.s.w.p.DocumentationPluginsBootstrapper : Found 1 custom documentation plugin(s)
+2025-08-15 11:41:06.725  INFO 89204 --- [           main] s.d.s.w.s.ApiListingReferenceScanner     : Scanning for api listing references
+2025-08-15 11:41:06.805  INFO 89204 --- [           main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: importExcelUsingPOST_1
+2025-08-15 11:41:06.808  INFO 89204 --- [           main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: importExcelUsingPOST_2
+2025-08-15 11:41:06.811  INFO 89204 --- [           main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: importExcelUsingPOST_3
+2025-08-15 11:41:06.815  INFO 89204 --- [           main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: importExcelUsingPOST_4
+2025-08-15 11:41:06.818  INFO 89204 --- [           main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: importExcelUsingPOST_5
+2025-08-15 11:41:06.820  INFO 89204 --- [           main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: importExcelUsingPOST_6
+2025-08-15 11:41:06.831  INFO 89204 --- [           main] c.b.q.QmsgatherCgvnApplication           : Started QmsgatherCgvnApplication in 1.598 seconds (JVM running for 2.874)

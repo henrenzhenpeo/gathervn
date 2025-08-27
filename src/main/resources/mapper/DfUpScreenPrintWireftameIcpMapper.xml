@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.biel.qmsgatherCgVn.mapper.DfUpScreenPrintWireftameIcpMapper">
+
+    <resultMap id="BaseResultMap" type="com.biel.qmsgatherCgVn.domain.DfUpScreenPrintWireftameIcp">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="date" column="date" jdbcType="TIMESTAMP"/>
+            <result property="factory" column="factory" jdbcType="VARCHAR"/>
+            <result property="model" column="model" jdbcType="VARCHAR"/>
+            <result property="process" column="process" jdbcType="VARCHAR"/>
+            <result property="testProject" column="test_project" jdbcType="VARCHAR"/>
+            <result property="r1" column="r1" jdbcType="DOUBLE"/>
+            <result property="r2" column="r2" jdbcType="DOUBLE"/>
+            <result property="r3" column="r3" jdbcType="DOUBLE"/>
+            <result property="r4" column="r4" jdbcType="DOUBLE"/>
+            <result property="upperLongSide1" column="upper_long_side1" jdbcType="DOUBLE"/>
+            <result property="upperLongSide2" column="upper_long_side2" jdbcType="DOUBLE"/>
+            <result property="upperLongSide3" column="upper_long_side3" jdbcType="DOUBLE"/>
+            <result property="lowerLongSide1" column="lower_long_side1" jdbcType="DOUBLE"/>
+            <result property="lowerLongSide2" column="lower_long_side2" jdbcType="DOUBLE"/>
+            <result property="lowerLongSide3" column="lower_long_side3" jdbcType="DOUBLE"/>
+            <result property="shortDegeGroove1" column="short_dege_groove1" jdbcType="DOUBLE"/>
+            <result property="shortDegeGroove2" column="short_dege_groove2" jdbcType="DOUBLE"/>
+            <result property="noShortDegeGroove1" column="no_short_dege_groove1" jdbcType="DOUBLE"/>
+            <result property="noShortDegeGroove2" column="no_short_dege_groove2" jdbcType="DOUBLE"/>
+            <result property="degeGroove" column="dege_groove" jdbcType="DOUBLE"/>
+            <result property="longAppearance1" column="long_appearance1" jdbcType="DOUBLE"/>
+            <result property="exteriorWidth" column="exterior_width" jdbcType="DOUBLE"/>
+            <result property="exteriorWidth2" column="exterior_width2" jdbcType="DOUBLE"/>
+            <result property="maxValue" column="max_value" jdbcType="DOUBLE"/>
+            <result property="machineCode" column="machine_code" jdbcType="VARCHAR"/>
+            <result property="state" column="state" jdbcType="VARCHAR"/>
+            <result property="batchId" column="batch_id" jdbcType="VARCHAR"/>
+            <result property="uploadName" column="upload_name" jdbcType="VARCHAR"/>
+            <result property="uploadCreate" column="upload_create" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,date,factory,
+        model,process,test_project,
+        r1,r2,r3,
+        r4,upper_long_side1,upper_long_side2,
+        upper_long_side3,lower_long_side1,lower_long_side2,
+        lower_long_side3,short_dege_groove1,short_dege_groove2,
+        no_short_dege_groove1,no_short_dege_groove2,dege_groove,
+        long_appearance1,exterior_width,exterior_width2,
+        max_value,machine_code,state,
+        batch_id,upload_name,upload_create
+    </sql>
+</mapper>

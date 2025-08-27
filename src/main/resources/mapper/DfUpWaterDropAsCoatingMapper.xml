@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.biel.qmsgatherCgVn.mapper.DfUpWaterDropAsCoatingMapper">
+
+    <resultMap id="BaseResultMap" type="com.biel.qmsgatherCgVn.domain.DfUpWaterDropAsCoating">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="process" column="process" jdbcType="VARCHAR"/>
+            <result property="factory" column="factory" jdbcType="VARCHAR"/>
+            <result property="model" column="model" jdbcType="VARCHAR"/>
+            <result property="stage" column="stage" jdbcType="VARCHAR"/>
+            <result property="testRegion" column="test_region" jdbcType="VARCHAR"/>
+            <result property="testProject" column="test_project" jdbcType="VARCHAR"/>
+            <result property="date" column="date" jdbcType="TIMESTAMP"/>
+            <result property="no" column="no" jdbcType="INTEGER"/>
+            <result property="testTime" column="test_time" jdbcType="TIMESTAMP"/>
+            <result property="classShift" column="class_shift" jdbcType="VARCHAR"/>
+            <result property="machineCode" column="machine_code" jdbcType="VARCHAR"/>
+            <result property="potNumber" column="pot_number" jdbcType="INTEGER"/>
+            <result property="beforeP1" column="before_p1" jdbcType="INTEGER"/>
+            <result property="beforeP2" column="before_p2" jdbcType="INTEGER"/>
+            <result property="beforeP3" column="before_p3" jdbcType="INTEGER"/>
+            <result property="beforeP4" column="before_p4" jdbcType="INTEGER"/>
+            <result property="beforeMin" column="before_min" jdbcType="INTEGER"/>
+            <result property="afterP1" column="after_p1" jdbcType="INTEGER"/>
+            <result property="afterP2" column="after_p2" jdbcType="INTEGER"/>
+            <result property="afterP3" column="after_p3" jdbcType="INTEGER"/>
+            <result property="afterMin" column="after_min" jdbcType="INTEGER"/>
+            <result property="batchId" column="batch_id" jdbcType="VARCHAR"/>
+            <result property="uploadName" column="upload_name" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,process,factory,
+        model,stage,test_region,
+        test_project,date,no,
+        test_time,class_shift,machine_code,
+        pot_number,before_p1,before_p2,
+        before_p3,before_p4,before_min,
+        after_p1,after_p2,after_p3,
+        after_min,batch_id,upload_name
+    </sql>
+</mapper>

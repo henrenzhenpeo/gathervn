@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.biel.qmsgatherCgVn.mapper.DfUpFileMaterialSizeMapper">
+
+    <resultMap id="BaseResultMap" type="com.biel.qmsgatherCgVn.domain.DfUpFileMaterialSize">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="date" column="date" jdbcType="TIMESTAMP"/>
+            <result property="factory" column="factory" jdbcType="VARCHAR"/>
+            <result property="model" column="model" jdbcType="VARCHAR"/>
+            <result property="process" column="process" jdbcType="VARCHAR"/>
+            <result property="testProject" column="test_project" jdbcType="VARCHAR"/>
+            <result property="membraneLength1" column="membrane_length1" jdbcType="DECIMAL"/>
+            <result property="membraneLength2" column="membrane_length2" jdbcType="DECIMAL"/>
+            <result property="membraneWidth1" column="membrane_width1" jdbcType="DECIMAL"/>
+            <result property="membraneWidth2" column="membrane_width2" jdbcType="DECIMAL"/>
+            <result property="arHoleDiameter" column="ar_hole_diameter" jdbcType="DECIMAL"/>
+            <result property="trueRoundness1" column="true_roundness1" jdbcType="DECIMAL"/>
+            <result property="arHoleCenterTopy" column="ar_hole_center_topy" jdbcType="DECIMAL"/>
+            <result property="arHoleCenterTopx" column="ar_hole_center_topx" jdbcType="DECIMAL"/>
+            <result property="squareHoleLength" column="square_hole_length" jdbcType="DECIMAL"/>
+            <result property="squareHoleWidth" column="square_hole_width" jdbcType="DECIMAL"/>
+            <result property="squareHoleTopy" column="square_hole_topy" jdbcType="DECIMAL"/>
+            <result property="squareHoleTopx" column="square_hole_topx" jdbcType="DECIMAL"/>
+            <result property="lengthHoleDiameterTop" column="length_hole_diameter_top" jdbcType="DECIMAL"/>
+            <result property="trueRoundness2" column="true_roundness2" jdbcType="DECIMAL"/>
+            <result property="lengthHoleDiameterLower" column="length_hole_diameter_lower" jdbcType="DECIMAL"/>
+            <result property="trueRoundness3" column="true_roundness3" jdbcType="DECIMAL"/>
+            <result property="lengthHoleLength" column="length_hole_length" jdbcType="DECIMAL"/>
+            <result property="longHoleWidth" column="long_hole_width" jdbcType="DECIMAL"/>
+            <result property="longHoleTopLongHoleLowery" column="long_hole_top_long_hole_lowery" jdbcType="DECIMAL"/>
+            <result property="longHoleCenterTopy" column="long_hole_center_topy" jdbcType="DECIMAL"/>
+            <result property="longHoleCenterTopx" column="long_hole_center_topx" jdbcType="DECIMAL"/>
+            <result property="smallCircleDiameter" column="small_circle_diameter" jdbcType="DECIMAL"/>
+            <result property="trueRoundness4" column="true_roundness4" jdbcType="DECIMAL"/>
+            <result property="smallHoleCenterSquareHolex" column="small_hole_center_square_holex" jdbcType="DECIMAL"/>
+            <result property="smallHoleCenterTopy" column="small_hole_center_topy" jdbcType="DECIMAL"/>
+            <result property="qrCodeWidth" column="qr_code_width" jdbcType="DECIMAL"/>
+            <result property="qrCodeHigh" column="qr_code_high" jdbcType="DECIMAL"/>
+            <result property="qrCodeMaterialCenterx" column="qr_code_material_centerx" jdbcType="DECIMAL"/>
+            <result property="qrCodeMaterialCentery" column="qr_code_material_centery" jdbcType="DECIMAL"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="uploadName" column="upload_name" jdbcType="VARCHAR"/>
+            <result property="batchId" column="batch_id" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,date,factory,
+        model,process,test_project,
+        membrane_length1,membrane_length2,membrane_width1,
+        membrane_width2,ar_hole_diameter,true_roundness1,
+        ar_hole_center_topy,ar_hole_center_topx,square_hole_length,
+        square_hole_width,square_hole_topy,square_hole_topx,
+        length_hole_diameter_top,true_roundness2,length_hole_diameter_lower,
+        true_roundness3,length_hole_length,long_hole_width,
+        long_hole_top_long_hole_lowery,long_hole_center_topy,long_hole_center_topx,
+        small_circle_diameter,true_roundness4,small_hole_center_square_holex,
+        small_hole_center_topy,qr_code_width,qr_code_high,
+        qr_code_material_centerx,qr_code_material_centery,create_time,
+        upload_name,batch_id
+    </sql>
+</mapper>

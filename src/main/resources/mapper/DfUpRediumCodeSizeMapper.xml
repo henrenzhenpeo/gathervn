@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.biel.qmsgatherCgVn.mapper.DfUpRediumCodeSizeMapper">
+    <resultMap id="BaseResultMap" type="com.biel.qmsgatherCgVn.domain.DfUpRadiumCodeSize">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="date" property="date" jdbcType="TIMESTAMP"/>
+        <result column="factory" property="factory" jdbcType="VARCHAR"/>
+        <result column="model" property="model" jdbcType="VARCHAR"/>
+        <result column="process" property="process" jdbcType="VARCHAR"/>
+        <result column="test_project" property="testProject" jdbcType="VARCHAR"/>
+        <result column="batch_id" property="batchId" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="upload_name" property="uploadName" jdbcType="VARCHAR"/>
+        <result column="machine_code" property="machineCode" jdbcType="VARCHAR"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+        <result column="state" property="state" jdbcType="VARCHAR"/>
+        <result column="test_number" property="testNumber" jdbcType="INTEGER"/>
+        <result column="qr_code_length" property="qrCodeLength" jdbcType="DOUBLE"/>
+        <result column="qr_code_width" property="qrCodeWidth" jdbcType="DOUBLE"/>
+        <result column="barcode_toglass" property="barcodeToglass" jdbcType="DOUBLE"/>
+        <result column="x_white_plate_to_glass_center" property="xWhitePlateToGlassCenter" jdbcType="DOUBLE"/>
+        <result column="left_distance" property="leftDistance" jdbcType="DOUBLE"/>
+        <result column="right_distance" property="rightDistance" jdbcType="DOUBLE"/>
+        <result column="classes" property="classes" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!-- 基础列 -->
+    <sql id="Base_Column_List">
+        id, date, factory, model, process, test_project, batch_id, create_time, upload_name,
+        machine_code, remark, state, test_number, qr_code_length, qr_code_width,
+        barcode_toglass, x_white_plate_to_glass_center, left_distance, right_distance, classes
+    </sql>
+
+</mapper>
