@@ -16,7 +16,7 @@ import lombok.Data;
 @Data
 public class DfUpWaterDrop {
     /**
-     * 
+     *
      */
     @TableId(type = IdType.AUTO)
     private Integer id;
@@ -50,7 +50,7 @@ public class DfUpWaterDrop {
      * 时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    private Date data;
+    private Date date;
 
     /**
      * 编号
@@ -74,47 +74,47 @@ public class DfUpWaterDrop {
     private String machineCode;
 
     /**
-     * 
+     *
      */
     private Integer m4;
 
     /**
-     * 
+     *
      */
     private Integer m6;
 
     /**
-     * 
+     *
      */
     private Integer l2;
 
     /**
-     * 
+     *
      */
     private Integer l5;
 
     /**
-     * 
+     *
      */
     private Integer m1;
 
     /**
-     * 
+     *
      */
     private Integer m3;
 
     /**
-     * 
+     *
      */
     private String result;
 
     /**
-     * 
+     *
      */
     private String dayinbiTest;
 
     /**
-     * 
+     *
      */
     private String status;
 
@@ -124,12 +124,12 @@ public class DfUpWaterDrop {
     private String batchId;
 
     /**
-     * 
+     *
      */
     private String uploadName;
 
     /**
-     * 
+     *
      */
     private String uploadTime;
 
@@ -146,28 +146,28 @@ public class DfUpWaterDrop {
         }
         DfUpWaterDrop other = (DfUpWaterDrop) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
-            && (this.getProcess() == null ? other.getProcess() == null : this.getProcess().equals(other.getProcess()))
-            && (this.getFactory() == null ? other.getFactory() == null : this.getFactory().equals(other.getFactory()))
-            && (this.getModel() == null ? other.getModel() == null : this.getModel().equals(other.getModel()))
-            && (this.getStage() == null ? other.getStage() == null : this.getStage().equals(other.getStage()))
-            && (this.getTestRegion() == null ? other.getTestRegion() == null : this.getTestRegion().equals(other.getTestRegion()))
-            && (this.getData() == null ? other.getData() == null : this.getData().equals(other.getData()))
-            && (this.getNo() == null ? other.getNo() == null : this.getNo().equals(other.getNo()))
-            && (this.getTestTime() == null ? other.getTestTime() == null : this.getTestTime().equals(other.getTestTime()))
-            && (this.getTestClass() == null ? other.getTestClass() == null : this.getTestClass().equals(other.getTestClass()))
-            && (this.getMachineCode() == null ? other.getMachineCode() == null : this.getMachineCode().equals(other.getMachineCode()))
-            && (this.getM4() == null ? other.getM4() == null : this.getM4().equals(other.getM4()))
-            && (this.getM6() == null ? other.getM6() == null : this.getM6().equals(other.getM6()))
-            && (this.getL2() == null ? other.getL2() == null : this.getL2().equals(other.getL2()))
-            && (this.getL5() == null ? other.getL5() == null : this.getL5().equals(other.getL5()))
-            && (this.getM1() == null ? other.getM1() == null : this.getM1().equals(other.getM1()))
-            && (this.getM3() == null ? other.getM3() == null : this.getM3().equals(other.getM3()))
-            && (this.getResult() == null ? other.getResult() == null : this.getResult().equals(other.getResult()))
-            && (this.getDayinbiTest() == null ? other.getDayinbiTest() == null : this.getDayinbiTest().equals(other.getDayinbiTest()))
-            && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
-            && (this.getBatchId() == null ? other.getBatchId() == null : this.getBatchId().equals(other.getBatchId()))
-            && (this.getUploadName() == null ? other.getUploadName() == null : this.getUploadName().equals(other.getUploadName()))
-            && (this.getUploadTime() == null ? other.getUploadTime() == null : this.getUploadTime().equals(other.getUploadTime()));
+                && (this.getProcess() == null ? other.getProcess() == null : this.getProcess().equals(other.getProcess()))
+                && (this.getFactory() == null ? other.getFactory() == null : this.getFactory().equals(other.getFactory()))
+                && (this.getModel() == null ? other.getModel() == null : this.getModel().equals(other.getModel()))
+                && (this.getStage() == null ? other.getStage() == null : this.getStage().equals(other.getStage()))
+                && (this.getTestRegion() == null ? other.getTestRegion() == null : this.getTestRegion().equals(other.getTestRegion()))
+                && (this.getDate() == null ? other.getDate() == null : this.getDate().equals(other.getDate()))
+                && (this.getNo() == null ? other.getNo() == null : this.getNo().equals(other.getNo()))
+                && (this.getTestTime() == null ? other.getTestTime() == null : this.getTestTime().equals(other.getTestTime()))
+                && (this.getTestClass() == null ? other.getTestClass() == null : this.getTestClass().equals(other.getTestClass()))
+                && (this.getMachineCode() == null ? other.getMachineCode() == null : this.getMachineCode().equals(other.getMachineCode()))
+                && (this.getM4() == null ? other.getM4() == null : this.getM4().equals(other.getM4()))
+                && (this.getM6() == null ? other.getM6() == null : this.getM6().equals(other.getM6()))
+                && (this.getL2() == null ? other.getL2() == null : this.getL2().equals(other.getL2()))
+                && (this.getL5() == null ? other.getL5() == null : this.getL5().equals(other.getL5()))
+                && (this.getM1() == null ? other.getM1() == null : this.getM1().equals(other.getM1()))
+                && (this.getM3() == null ? other.getM3() == null : this.getM3().equals(other.getM3()))
+                && (this.getResult() == null ? other.getResult() == null : this.getResult().equals(other.getResult()))
+                && (this.getDayinbiTest() == null ? other.getDayinbiTest() == null : this.getDayinbiTest().equals(other.getDayinbiTest()))
+                && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
+                && (this.getBatchId() == null ? other.getBatchId() == null : this.getBatchId().equals(other.getBatchId()))
+                && (this.getUploadName() == null ? other.getUploadName() == null : this.getUploadName().equals(other.getUploadName()))
+                && (this.getUploadTime() == null ? other.getUploadTime() == null : this.getUploadTime().equals(other.getUploadTime()));
     }
 
     @Override
@@ -180,7 +180,7 @@ public class DfUpWaterDrop {
         result = prime * result + ((getModel() == null) ? 0 : getModel().hashCode());
         result = prime * result + ((getStage() == null) ? 0 : getStage().hashCode());
         result = prime * result + ((getTestRegion() == null) ? 0 : getTestRegion().hashCode());
-        result = prime * result + ((getData() == null) ? 0 : getData().hashCode());
+        result = prime * result + ((getDate() == null) ? 0 : getDate().hashCode());
         result = prime * result + ((getNo() == null) ? 0 : getNo().hashCode());
         result = prime * result + ((getTestTime() == null) ? 0 : getTestTime().hashCode());
         result = prime * result + ((getTestClass() == null) ? 0 : getTestClass().hashCode());
@@ -212,7 +212,7 @@ public class DfUpWaterDrop {
         sb.append(", model=").append(model);
         sb.append(", stage=").append(stage);
         sb.append(", testRegion=").append(testRegion);
-        sb.append(", data=").append(data);
+        sb.append(", date=").append(date);
         sb.append(", no=").append(no);
         sb.append(", testTime=").append(testTime);
         sb.append(", testClass=").append(testClass);
