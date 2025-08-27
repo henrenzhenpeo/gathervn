@@ -38,7 +38,7 @@ public class DfUpWaterDropController {
     @ApiOperation(value = "vn 水滴角上传接口")
     public Result uploadDfUpWaterDrop(@RequestBody List<DfUpWaterDrop> dfUpWaterDrops){
         for (DfUpWaterDrop dfUpWaterDrop : dfUpWaterDrops) {
-            String batchFromDate = DateUtil.getBatchFromDate(dfUpWaterDrop.getData());
+            String batchFromDate = DateUtil.getBatchFromDate(dfUpWaterDrop.getDate());
             dfUpWaterDrop.setBatchId(batchFromDate);
         }
 
@@ -78,7 +78,7 @@ public class DfUpWaterDropController {
         }
 
         if (StringUtils.isNotEmpty(startTestDate) && StringUtils.isNotEmpty(endTestDate)) {
-            dfUpWaterDropQueryWrapper.between("data", startTestDate, endTestDate);
+            dfUpWaterDropQueryWrapper.between("date", startTestDate, endTestDate);
         }
 
         // 执行分页查询

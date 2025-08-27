@@ -50,7 +50,7 @@ public class DfUpWaterDrop {
      * 时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    private Date data;
+    private Date date;
 
     /**
      * 编号
@@ -151,7 +151,7 @@ public class DfUpWaterDrop {
             && (this.getModel() == null ? other.getModel() == null : this.getModel().equals(other.getModel()))
             && (this.getStage() == null ? other.getStage() == null : this.getStage().equals(other.getStage()))
             && (this.getTestRegion() == null ? other.getTestRegion() == null : this.getTestRegion().equals(other.getTestRegion()))
-            && (this.getData() == null ? other.getData() == null : this.getData().equals(other.getData()))
+            && (this.getDate() == null ? other.getDate() == null : this.getDate().equals(other.getDate()))
             && (this.getNo() == null ? other.getNo() == null : this.getNo().equals(other.getNo()))
             && (this.getTestTime() == null ? other.getTestTime() == null : this.getTestTime().equals(other.getTestTime()))
             && (this.getTestClass() == null ? other.getTestClass() == null : this.getTestClass().equals(other.getTestClass()))
@@ -180,7 +180,7 @@ public class DfUpWaterDrop {
         result = prime * result + ((getModel() == null) ? 0 : getModel().hashCode());
         result = prime * result + ((getStage() == null) ? 0 : getStage().hashCode());
         result = prime * result + ((getTestRegion() == null) ? 0 : getTestRegion().hashCode());
-        result = prime * result + ((getData() == null) ? 0 : getData().hashCode());
+        result = prime * result + ((getDate() == null) ? 0 : getDate().hashCode());
         result = prime * result + ((getNo() == null) ? 0 : getNo().hashCode());
         result = prime * result + ((getTestTime() == null) ? 0 : getTestTime().hashCode());
         result = prime * result + ((getTestClass() == null) ? 0 : getTestClass().hashCode());
@@ -212,7 +212,7 @@ public class DfUpWaterDrop {
         sb.append(", model=").append(model);
         sb.append(", stage=").append(stage);
         sb.append(", testRegion=").append(testRegion);
-        sb.append(", data=").append(data);
+        sb.append(", date=").append(date);
         sb.append(", no=").append(no);
         sb.append(", testTime=").append(testTime);
         sb.append(", testClass=").append(testClass);
