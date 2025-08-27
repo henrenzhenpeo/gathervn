@@ -32,7 +32,7 @@ public class DfUpBottomGapChamferServiceImpl extends ServiceImpl<DfUpBottomGapCh
 
         Sheet sheet = workbook.getSheetAt(0); // 读取第一个sheet
 
-        int startRow = 11; // 从第12行开始（索引是11）
+        int startRow = 12; // 从第13行开始（索引是12）
         for (int r = startRow; r <= sheet.getLastRowNum(); r++) {
             Row row = sheet.getRow(r);
 
@@ -176,9 +176,31 @@ public class DfUpBottomGapChamferServiceImpl extends ServiceImpl<DfUpBottomGapCh
                 // 清理格式：将 2025/6/20 8:30:35 -> 2025-06-20 08:30:35
                 val = val.replace("/", "-");
 
-                // 解析格式：支持不补零格式的时间（注意单个数字）
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-M-d H:m:s");
-                return sdf.parse(val);
+                // 处理多种可能的日期格式
+                // 格式1: 2025-08-19,20:54 -> 2025-08-19 20:54:00
+                if (val.contains(",")) {
+                    // 替换逗号为时间分隔符
+                    val = val.replace(",", " ");
+                    // 如果没有秒数，则添加默认秒数
+                    if (val.split(":").length == 2) {
+                        val += ":00";
+                    }
+                }
+
+                // 尝试多种日期格式进行解析
+                SimpleDateFormat[] formats = {
+                        new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"),
+                        new SimpleDateFormat("yyyy-MM-dd HH:mm"),
+                        new SimpleDateFormat("yyyy-M-d H:m:s")
+                };
+
+                for (SimpleDateFormat sdf : formats) {
+                    try {
+                        return sdf.parse(val);
+                    } catch (Exception e) {
+                        // 继续尝试下一个格式
+                    }
+                }
             }
         } catch (Exception e) {
             e.printStackTrace(); // 可记录日志
