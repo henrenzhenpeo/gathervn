@@ -52,12 +52,7 @@ public class DfUpChamferHypotenuseServiceImpl extends ServiceImpl<DfUpChamferHyp
 
             Date recordDate = getDateCellValue(row.getCell(i++));
             entity.setDate(recordDate);
-            
-            // 基础测量值（保持原精度）
-            // 修改前（有精度问题）
-            //entity.setShortUr1(getDoubleCellValue(row.getCell(i++)));
-            
-            // 修改后（精度控制）
+            // 基础测量值：保留3位小数
             entity.setShortUr1(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)), 3));
             entity.setLongUr2(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)), 3));
             entity.setLongLr3(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)), 3));
@@ -66,23 +61,12 @@ public class DfUpChamferHypotenuseServiceImpl extends ServiceImpl<DfUpChamferHyp
             entity.setLongLl6(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)), 3));
             entity.setLongUl7(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)), 3));
             entity.setShortUl8(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)), 3));
-            
             // 平均值：保留4位小数
-            double avgValue = getDoubleCellValue(row.getCell(i++));
-            entity.setAvg(roundToDecimalPlaces(avgValue, 4));
-            
-            // 差值字段：保留3位小数
-            double std1to4Value = getDoubleCellValue(row.getCell(i++));
-            entity.setStd1to4(roundToDecimalPlaces(std1to4Value, 3));
-            
-            double std2to7Value = getDoubleCellValue(row.getCell(i++));
-            entity.setStd2to7(roundToDecimalPlaces(std2to7Value, 3));
-            
-            double std3to6Value = getDoubleCellValue(row.getCell(i++));
-            entity.setStd3to6(roundToDecimalPlaces(std3to6Value, 3));
-            
-            double std5to8Value = getDoubleCellValue(row.getCell(i++));
-            entity.setStd5to8(roundToDecimalPlaces(std5to8Value, 3));
+            entity.setAvg(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)), 4));
+            entity.setStd1to4(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)), 3));
+            entity.setStd2to7(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)), 3));
+            entity.setStd3to6(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)), 3));
+            entity.setStd5to8(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)), 3));
 
             entity.setMachineCode(getStringCellValue(row.getCell(i++)));
             entity.setState(getStringCellValue(row.getCell(i++)));

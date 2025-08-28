@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -50,18 +52,18 @@ public class DfUpBottomGapChamferServiceImpl extends ServiceImpl<DfUpBottomGapCh
 
             Date recordDate = getDateCellValue(row.getCell(i++));
             entity.setDate(recordDate);
-            entity.setUpperLongSideBottomChamfer1(getDoubleCellValue(row.getCell(i++)));
-            entity.setUpperLongSideBottomChamfer2(getDoubleCellValue(row.getCell(i++)));
-            entity.setUpperLongSideBottomChamfer3(getDoubleCellValue(row.getCell(i++)));
-            entity.setRightShortSideBottomChamfer1(getDoubleCellValue(row.getCell(i++)));
-            entity.setGrooveBottomChamfer2(getDoubleCellValue(row.getCell(i++)));
-            entity.setRightShortSideBottomChamfer3(getDoubleCellValue(row.getCell(i++)));
-            entity.setLowerLongSideBottomChamfer1(getDoubleCellValue(row.getCell(i++)));
-            entity.setLowerLongSideBottomChamfer2(getDoubleCellValue(row.getCell(i++)));
-            entity.setLowerLongSideBottomChamfer3(getDoubleCellValue(row.getCell(i++)));
-            entity.setLeftShortSideBottomChamfer1(getDoubleCellValue(row.getCell(i++)));
-            entity.setLeftShortSideBottomChamfer2(getDoubleCellValue(row.getCell(i++)));
-            entity.setLeftShortSideBottomChamfer3(getDoubleCellValue(row.getCell(i++)));
+            entity.setUpperLongSideBottomChamfer1(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)),3));
+            entity.setUpperLongSideBottomChamfer2(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)),3));
+            entity.setUpperLongSideBottomChamfer3(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)),3));
+            entity.setRightShortSideBottomChamfer1(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)),3));
+            entity.setGrooveBottomChamfer2(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)),3));
+            entity.setRightShortSideBottomChamfer3(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)),3));
+            entity.setLowerLongSideBottomChamfer1(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)),3));
+            entity.setLowerLongSideBottomChamfer2(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)),3));
+            entity.setLowerLongSideBottomChamfer3(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)),3));
+            entity.setLeftShortSideBottomChamfer1(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)),3));
+            entity.setLeftShortSideBottomChamfer2(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)),3));
+            entity.setLeftShortSideBottomChamfer3(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)),3));
 
             entity.setMachineCode(getStringCellValue(row.getCell(i++)));
             entity.setState(getStringCellValue(row.getCell(i++)));
@@ -74,6 +76,7 @@ public class DfUpBottomGapChamferServiceImpl extends ServiceImpl<DfUpBottomGapCh
 
             dfUpBottomGapChamferMapper.insert(entity);
         }
+
     }
 
     private String determineShift(Date date) {
@@ -207,5 +210,16 @@ public class DfUpBottomGapChamferServiceImpl extends ServiceImpl<DfUpBottomGapCh
         }
 
         return null;
+    }
+
+    /**
+     * 保留指定小数位数
+     */
+    private double roundToDecimalPlaces(double value, int decimalPlaces) {
+        if (Double.isNaN(value) || Double.isInfinite(value)) {
+            return 0.0;
+        }
+        BigDecimal bd = BigDecimal.valueOf(value);
+        return bd.setScale(decimalPlaces, RoundingMode.HALF_UP).doubleValue();
     }
 }

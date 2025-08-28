@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -51,12 +53,12 @@ public class DfUpRediumCodeSizeServiceImpl extends ServiceImpl<DfUpRediumCodeSiz
     
                 Date recordDate = getDateCellValue(row.getCell(i++));
                 entity.setDate(recordDate);
-                entity.setQrCodeLength(getDoubleCellValue(row.getCell(i++)));
-                entity.setQrCodeWidth(getDoubleCellValue(row.getCell(i++)));
-                entity.setBarcodeToglass(getDoubleCellValue(row.getCell(i++)));
-                entity.setXWhitePlateToGlassCenter(getDoubleCellValue(row.getCell(i++)));
-                entity.setLeftDistance(getDoubleCellValue(row.getCell(i++)));
-                entity.setRightDistance(getDoubleCellValue(row.getCell(i++)));
+                entity.setQrCodeLength(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)),3));
+                entity.setQrCodeWidth(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)),3));
+                entity.setBarcodeToglass(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)),3));
+                entity.setXWhitePlateToGlassCenter(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)), 3));
+                entity.setLeftDistance(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)), 3));
+                entity.setRightDistance(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)), 3));
     
                 entity.setMachineCode(getStringCellValue(row.getCell(i++)));
                 entity.setState(getStringCellValue(row.getCell(i++)));
@@ -184,5 +186,16 @@ public class DfUpRediumCodeSizeServiceImpl extends ServiceImpl<DfUpRediumCodeSiz
         }
 
         return null;
+    }
+
+    /**
+     * 保留指定小数位数
+     */
+    private double roundToDecimalPlaces(double value, int decimalPlaces) {
+        if (Double.isNaN(value) || Double.isInfinite(value)) {
+            return 0.0;
+        }
+        BigDecimal bd = BigDecimal.valueOf(value);
+        return bd.setScale(decimalPlaces, RoundingMode.HALF_UP).doubleValue();
     }
 }
