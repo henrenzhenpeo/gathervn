@@ -111,13 +111,13 @@ public class DfUpRadiumCodeSize {
     private double qrCodeWidth;
 
     /**
-     * 玻璃下边到 X 片源中心
+     * 镭码下边到玻璃边距
      */
     @Excel(name = "镭码下边到玻璃边距")
     private double barcodeToglass;
 
     /**
-     * 玻璃上边到 X 片源中心
+     * x白片镭码到玻璃中心
      */
     @Excel(name = "x白片镭码到玻璃中心")
     private double xWhitePlateToGlassCenter;
