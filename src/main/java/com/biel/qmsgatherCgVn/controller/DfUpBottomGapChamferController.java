@@ -149,6 +149,8 @@ public class DfUpBottomGapChamferController {
             v.setState(e.getState());
             v.setTestNumber(e.getTestNumber());
             v.setRemark(e.getRemark());
+            v.setBatchId(e.getBatchId());
+            v.setUploadName(e.getUploadName());
             return v;
         }).collect(Collectors.toList());
 

@@ -114,4 +114,16 @@ public class DfUpBottomGapChamferVo {
     @Excel(name = "备注", orderNum = "17")
     private String remark;
 
+    /**
+     * 上传人
+     */
+    @Excel(name = "上传人", orderNum = "18")
+    private String uploadName;
+
+    /**
+     * 批次号
+     */
+    @Excel(name = "批次号", orderNum = "19")
+    private String batchId;
+
 }

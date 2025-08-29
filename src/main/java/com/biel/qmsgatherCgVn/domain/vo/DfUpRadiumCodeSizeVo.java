@@ -79,5 +79,16 @@ public class DfUpRadiumCodeSizeVo {
     @Excel(name = "备注", orderNum = "11")
     private String remark;
 
+    /**
+     * 上传人
+     */
+    @Excel(name = "上传人", orderNum = "12")
+    private String uploadName;
+
+    /**
+     * 批次号
+     */
+    @Excel(name = "批次号", orderNum = "13")
+    private String batchId;
 
 }
