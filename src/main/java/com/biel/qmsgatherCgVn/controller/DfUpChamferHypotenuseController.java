@@ -95,8 +95,8 @@ public class DfUpChamferHypotenuseController {
         return R.ok(pageResult);
     }
 
-    @GetMapping("/exportDfUpChamferHypotenuse")
-    @ApiOperation(value = "导出镭码尺寸 Excel")
+    @GetMapping("/exportChamferHypotenuse")
+    @ApiOperation(value = "导出斜边倒角尺寸 Excel")
     public void exportDfUpChamferHypotenuse(
             @RequestParam(required = false) String factory,
             @RequestParam(required = false) String model,

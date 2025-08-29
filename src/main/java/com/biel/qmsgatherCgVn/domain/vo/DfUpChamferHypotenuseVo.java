@@ -36,7 +36,7 @@ public class DfUpChamferHypotenuseVo {
     /**
      * 短边左上
      */
-    @Excel(name = "短边左上9")
+    @Excel(name = "短边左上", orderNum = "9")
     private double shortUl8;
 
     /**
