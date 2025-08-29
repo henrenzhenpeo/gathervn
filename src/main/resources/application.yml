@@ -12,9 +12,10 @@ spring:
     min-idle: 5
     #    url: jdbc:mysql://192.168.1.24:3306/df_demo
     #    url: jdbc:mysql://localhost:3306/df_demo_05
-    url: jdbc:mysql://192.168.110.95:3306/boen_qms_vn_cg?serverTimezone=Asia/Shanghai
-    username: root2
-    password: root
+    #url: jdbc:mysql://192.168.110.95:3306/boen_qms_vn_cg?serverTimezone=Asia/Shanghai
+    url: jdbc:mysql://192.168.110.20:3306/boen_qms_vn_cg?serverTimezone=Asia/Shanghai
+    username: remote_user
+    password: 123456
   servlet:
     multipart:
 #      location: /Users/dafenqi/Downloads #上传文件临时目录
