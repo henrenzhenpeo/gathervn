@@ -47,9 +47,10 @@ public class DfUpSSBThreeDMachineController {
                          @RequestParam("process") String process,
                          @RequestParam("test_project") String testProject,
                          @RequestParam("upload_name") String uploadName,
-                         @RequestParam("batch_id") String batchId){
+                         @RequestParam("batch_id") String batchId,
+                         @RequestParam("create_time") String createTime){
         try {
-            dfUpSSBThreeDMachineService.importExcel(file, factory, model, process, testProject,uploadName,batchId);
+            dfUpSSBThreeDMachineService.importExcel(file, factory, model, process, testProject,uploadName,batchId,createTime);
             return R.ok("导入成功");
         } catch (Exception e) {
             e.printStackTrace();

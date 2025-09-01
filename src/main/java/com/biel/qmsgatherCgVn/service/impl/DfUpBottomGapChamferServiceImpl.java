@@ -28,11 +28,13 @@ public class DfUpBottomGapChamferServiceImpl extends ServiceImpl<DfUpBottomGapCh
     private DfUpBottomGapChamferMapper dfUpBottomGapChamferMapper;
 
     @Override
-    public void importExcel(MultipartFile file, String factory, String model, String process, String testProject, String uploadName, String batchId) throws Exception{
+    public void importExcel(MultipartFile file, String factory, String model, String process, String testProject, String uploadName, String batchId,String createTime) throws Exception{
 
         Workbook workbook = WorkbookFactory.create(file.getInputStream()); // ✅ 自动识别 xls/xlsx
 
         Sheet sheet = workbook.getSheetAt(0); // 读取第一个sheet
+
+        Date createTimeDate = parseCreateTime(createTime);
 
         int startRow = 12; // 从第13行开始（索引是12）
         for (int r = startRow; r <= sheet.getLastRowNum(); r++) {
@@ -72,7 +74,7 @@ public class DfUpBottomGapChamferServiceImpl extends ServiceImpl<DfUpBottomGapCh
 
             entity.setClasses(determineShift(recordDate));
             entity.setUploadName(uploadName);
-            entity.setCreateTime(new Date());
+            entity.setCreateTime(createTimeDate);
 
             dfUpBottomGapChamferMapper.insert(entity);
         }
@@ -211,6 +213,38 @@ public class DfUpBottomGapChamferServiceImpl extends ServiceImpl<DfUpBottomGapCh
 
         return null;
     }
+
+    // ... existing code ...
+    private Date parseCreateTime(String val) {
+        if (val == null) return null;
+        val = val.trim();
+        if (val.isEmpty()) return null;
+
+        try {
+            // 兼容常见分隔符和格式
+            val = val.replace("/", "-").replace("T", " ");
+            // 处理 "yyyy-MM-dd,HH:mm:ss" 之类
+            if (val.contains(",")) {
+                val = val.replace(",", " ");
+            }
+
+            SimpleDateFormat[] formats = new SimpleDateFormat[] {
+                    new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"),
+                    new SimpleDateFormat("yyyy-MM-dd HH:mm"),
+                    new SimpleDateFormat("yyyy-M-d H:m:s")
+            };
+
+            for (SimpleDateFormat sdf : formats) {
+                try {
+                    return sdf.parse(val);
+                } catch (Exception ignore) { }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+// ... existing code ...
 
     /**
      * 保留指定小数位数
