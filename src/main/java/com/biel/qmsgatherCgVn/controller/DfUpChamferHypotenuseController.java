@@ -53,7 +53,7 @@ public class DfUpChamferHypotenuseController {
             return R.ok("导入成功");
         } catch (Exception e) {
             e.printStackTrace();
-            return R.failed("导入失败：" + e.getMessage());
+            return R.failed("斜边倒角导入失败：" + e.getMessage());
         }
     }
 

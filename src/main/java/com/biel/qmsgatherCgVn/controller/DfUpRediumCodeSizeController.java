@@ -53,7 +53,7 @@ public class DfUpRediumCodeSizeController {
             return R.ok("导入成功");
         } catch (Exception e) {
             e.printStackTrace();
-            return R.failed("导入失败：" + e.getMessage());
+            return R.failed("镭码尺寸导入失败：" + e.getMessage());
         }
     }
 

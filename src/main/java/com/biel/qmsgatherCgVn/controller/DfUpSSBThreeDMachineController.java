@@ -54,7 +54,7 @@ public class DfUpSSBThreeDMachineController {
             return R.ok("导入成功");
         } catch (Exception e) {
             e.printStackTrace();
-            return R.failed("导入失败：" + e.getMessage());
+            return R.failed("SSB3D机导入失败：" + e.getMessage());
         }
     }
 
