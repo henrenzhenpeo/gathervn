@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.biel.qmsgatherCgVn.mapper.DfUpSSBThreeDMachineMapper">
+
+    <resultMap id="BaseResultMap" type="com.biel.qmsgatherCgVn.domain.DfUpSSBThreeDMachine">
+        <id property="id" column="id" jdbcType="INTEGER"/>
+        <result property="date" column="date" jdbcType="TIMESTAMP"/>
+        <result property="factory" column="factory" jdbcType="VARCHAR"/>
+        <result property="model" column="model" jdbcType="VARCHAR"/>
+        <result property="process" column="process" jdbcType="VARCHAR"/>
+        <result property="testProject" column="test_project" jdbcType="VARCHAR"/>
+        <result property="batchId" column="batch_id" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="uploadName" column="upload_name" jdbcType="VARCHAR"/>
+        <result property="machineCode" column="machine_code" jdbcType="VARCHAR"/>
+        <result property="remark" column="remark" jdbcType="VARCHAR"/>
+        <result property="state" column="state" jdbcType="VARCHAR"/>
+        <result property="testNumber" column="test_number" jdbcType="INTEGER"/>
+
+        <result property="externalLong1" column="external_long1" jdbcType="DOUBLE"/>
+        <result property="externalLong2" column="external_long2" jdbcType="DOUBLE"/>
+        <result property="externalWidth1" column="external_width1" jdbcType="DOUBLE"/>
+        <result property="externalWidth2" column="external_width2" jdbcType="DOUBLE"/>
+        <result property="externalWidth3" column="external_width3" jdbcType="DOUBLE"/>
+
+        <result property="cutAngle" column="cut_angle" jdbcType="DOUBLE"/>
+        <result property="cutAngleLong" column="cut_angle_long" jdbcType="DOUBLE"/>
+        <result property="cutAngleWidth" column="cut_angle_width" jdbcType="DOUBLE"/>
+
+        <result property="qrCodeLength" column="qr_code_length" jdbcType="DOUBLE"/>
+        <result property="qrCodeWidth" column="qr_code_width" jdbcType="DOUBLE"/>
+
+        <result property="whitePlateToglass" column="white_plate_toglass" jdbcType="DOUBLE"/>
+        <result property="whitePlateToGlassCenter" column="white_plate_to_glass_center" jdbcType="DOUBLE"/>
+
+        <result property="classes" column="classes" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,date,factory,
+        model,process,test_project,
+        batch_id,create_time,upload_name,
+        machine_code,remark,state,
+        test_number,external_long1,external_long2,
+        external_width1,external_width2,external_width3,
+        cut_angle,cut_angle_long,cut_angle_width,
+        qr_code_length,qr_code_width,white_plate_toglass,
+        white_plate_to_glass_center,classes
+    </sql>
+</mapper>

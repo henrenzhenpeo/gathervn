@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.biel.qmsgatherCgVn.mapper.DfUpChamferHypotenuseMapper">
+
+    <resultMap id="BaseResultMap" type="com.biel.qmsgatherCgVn.domain.DfUpChamferHypotenuse">
+        <id property="id" column="id" jdbcType="INTEGER"/>
+        <result property="date" column="date" jdbcType="TIMESTAMP"/>
+        <result property="factory" column="factory" jdbcType="VARCHAR"/>
+        <result property="model" column="model" jdbcType="VARCHAR"/>
+        <result property="process" column="process" jdbcType="VARCHAR"/>
+        <result property="testProject" column="test_project" jdbcType="VARCHAR"/>
+        <result property="batchId" column="batch_id" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="uploadName" column="upload_name" jdbcType="VARCHAR"/>
+        <result property="machineCode" column="machine_code" jdbcType="VARCHAR"/>
+        <result property="remark" column="remark" jdbcType="VARCHAR"/>
+        <result property="state" column="state" jdbcType="VARCHAR"/>
+        <result property="testNumber" column="test_number" jdbcType="INTEGER"/>
+
+        <result property="shortUr1" column="short_ur1" jdbcType="DOUBLE"/>
+        <result property="shortLr4" column="short_lr4" jdbcType="DOUBLE"/>
+        <result property="shortUl8" column="short_ul8" jdbcType="DOUBLE"/>
+        <result property="shortLl5" column="short_ll5" jdbcType="DOUBLE"/>
+
+        <result property="longUr2" column="long_ur2" jdbcType="DOUBLE"/>
+        <result property="longLr3" column="long_lr3" jdbcType="DOUBLE"/>
+        <result property="longUl7" column="long_ul7" jdbcType="DOUBLE"/>
+        <result property="longLl6" column="long_ll6" jdbcType="DOUBLE"/>
+
+        <result property="avg" column="avg" jdbcType="DOUBLE"/>
+        <result property="std1to4" column="std1to4" jdbcType="DOUBLE"/>
+        <result property="std2to7" column="std2to7" jdbcType="DOUBLE"/>
+        <result property="std3to6" column="std3to6" jdbcType="DOUBLE"/>
+        <result property="std5to8" column="std5to8" jdbcType="DOUBLE"/>
+
+        <result property="classes" column="classes" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,date,factory,
+        model,process,test_project,
+        batch_id,create_time,upload_name,
+        machine_code,remark,state,
+        test_number,short_ur1,short_lr4,
+        short_ul8,short_ll5,long_ur2,
+        long_lr3,long_ul7,long_ll6,
+        avg,std1to4,std2to7,
+        std3to6,std5to8,classes
+    </sql>
+</mapper>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.biel.qmsgatherCgVn.mapper.DfUpBottomGapChamferMapper">
+
+    <resultMap id="BaseResultMap" type="com.biel.qmsgatherCgVn.domain.DfUpBottomGapChamfer">
+        <id property="id" column="id" jdbcType="INTEGER"/>
+        <result property="date" column="date" jdbcType="TIMESTAMP"/>
+        <result property="factory" column="factory" jdbcType="VARCHAR"/>
+        <result property="model" column="model" jdbcType="VARCHAR"/>
+        <result property="process" column="process" jdbcType="VARCHAR"/>
+        <result property="testProject" column="test_project" jdbcType="VARCHAR"/>
+        <result property="batchId" column="batch_id" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="uploadName" column="upload_name" jdbcType="VARCHAR"/>
+        <result property="machineCode" column="machine_code" jdbcType="VARCHAR"/>
+        <result property="remark" column="remark" jdbcType="VARCHAR"/>
+        <result property="state" column="state" jdbcType="VARCHAR"/>
+        <result property="testNumber" column="test_number" jdbcType="INTEGER"/>
+
+        <result property="upperLongSideBottomChamfer1" column="upper_long_side_bottom_chamfer1" jdbcType="DOUBLE"/>
+        <result property="upperLongSideBottomChamfer2" column="upper_long_side_bottom_chamfer2" jdbcType="DOUBLE"/>
+        <result property="upperLongSideBottomChamfer3" column="upper_long_side_bottom_chamfer3" jdbcType="DOUBLE"/>
+
+        <result property="rightShortSideBottomChamfer1" column="right_short_side_bottom_chamfer1" jdbcType="DOUBLE"/>
+        <result property="rightShortSideBottomChamfer3" column="right_short_side_bottom_chamfer3" jdbcType="DOUBLE"/>
+
+        <result property="grooveBottomChamfer2" column="groove_bottom_chamfer2" jdbcType="DOUBLE"/>
+
+        <result property="lowerLongSideBottomChamfer1" column="lower_long_side_bottom_chamfer1" jdbcType="DOUBLE"/>
+        <result property="lowerLongSideBottomChamfer2" column="lower_long_side_bottom_chamfer2" jdbcType="DOUBLE"/>
+        <result property="lowerLongSideBottomChamfer3" column="lower_long_side_bottom_chamfer3" jdbcType="DOUBLE"/>
+
+        <result property="leftShortSideBottomChamfer1" column="left_short_side_bottom_chamfer1" jdbcType="DOUBLE"/>
+        <result property="leftShortSideBottomChamfer2" column="left_short_side_bottom_chamfer2" jdbcType="DOUBLE"/>
+        <result property="leftShortSideBottomChamfer3" column="left_short_side_bottom_chamfer3" jdbcType="DOUBLE"/>
+
+        <result property="classes" column="classes" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,date,factory,
+        model,process,test_project,
+        batch_id,create_time,upload_name,
+        machine_code,remark,state,
+        test_number,upper_long_side_bottom_chamfer1,upper_long_side_bottom_chamfer2,
+        upper_long_side_bottom_chamfer3,right_short_side_bottom_chamfer1,right_short_side_bottom_chamfer3,
+        groove_bottom_chamfer2,lower_long_side_bottom_chamfer1,lower_long_side_bottom_chamfer2,
+        lower_long_side_bottom_chamfer3,left_short_side_bottom_chamfer1,left_short_side_bottom_chamfer2,
+        left_short_side_bottom_chamfer3,classes
+    </sql>
+</mapper>
