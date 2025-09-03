@@ -3,6 +3,8 @@ package com.biel.qmsgatherCgVn.domain;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+
+import java.math.BigDecimal;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -76,32 +78,32 @@ public class DfUpWaterDrop {
     /**
      *
      */
-    private Integer m4;
+    private BigDecimal m4;
 
     /**
      *
      */
-    private Integer m6;
+    private BigDecimal m6;
 
     /**
      *
      */
-    private Integer l2;
+    private BigDecimal  l2;
 
     /**
      *
      */
-    private Integer l5;
+    private BigDecimal  l5;
 
     /**
      *
      */
-    private Integer m1;
+    private BigDecimal  m1;
 
     /**
      *
      */
-    private Integer m3;
+    private BigDecimal  m3;
 
     /**
      *
