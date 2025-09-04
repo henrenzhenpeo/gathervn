@@ -34,6 +34,8 @@ public class DfUpRediumCodeSizeServiceImpl extends ServiceImpl<DfUpRediumCodeSiz
             Workbook workbook = WorkbookFactory.create(file.getInputStream()); // ✅ 自动识别 xls/xlsx
             
             Sheet sheet = workbook.getSheetAt(0); // 读取第一个sheet
+            // 表头校验：镭码尺寸要求包含“二维码长”
+            validateExcelHeader(sheet, "二维码长");
 
             Date createTimeDate = parseCreateTime(createTime);
             
@@ -229,5 +231,32 @@ public class DfUpRediumCodeSizeServiceImpl extends ServiceImpl<DfUpRediumCodeSiz
         }
         BigDecimal bd = BigDecimal.valueOf(value);
         return bd.setScale(decimalPlaces, RoundingMode.HALF_UP).doubleValue();
+    }
+
+    // 表头通用校验（扫描前20行*每行前50列）
+    private void validateExcelHeader(Sheet sheet, String requiredHeader) {
+        if (!containsHeaderKeyword(sheet, requiredHeader)) {
+            throw new RuntimeException("导入的excel文件错误");
+        }
+    }
+
+    private boolean containsHeaderKeyword(Sheet sheet, String keyword) {
+        DataFormatter formatter = new DataFormatter();
+        int maxRowsToScan = Math.min(20, sheet.getLastRowNum() + 1);
+        for (int r = 0; r < maxRowsToScan; r++) {
+            Row row = sheet.getRow(r);
+            if (row == null) continue;
+            short lastCellNum = row.getLastCellNum();
+            if (lastCellNum < 0) continue;
+            for (int c = 0; c < lastCellNum && c < 50; c++) {
+                Cell cell = row.getCell(c);
+                if (cell == null) continue;
+                String text = formatter.formatCellValue(cell).trim();
+                if (!text.isEmpty() && text.contains(keyword)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }
