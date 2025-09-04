@@ -34,7 +34,7 @@ public class DfUpChamferHypotenuseServiceImpl extends ServiceImpl<DfUpChamferHyp
 
         Sheet sheet = workbook.getSheetAt(0); // 读取第一个sheet
         // 表头校验：斜边倒角要求包含“短边右上1”
-        validateExcelHeader(sheet, "短边右上1");
+        validateExcelHeader(sheet, "平均值");
 
         Date createTimeDate = parseCreateTime(createTime);
 
