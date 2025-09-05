@@ -5,6 +5,7 @@ import com.biel.qmsgatherCgVn.domain.DfUpScreenPrintingbm;
 import com.biel.qmsgatherCgVn.domain.DfUpSilkScreenWireframe;
 import com.biel.qmsgatherCgVn.service.DfUpSilkScreenWireframeService;
 import com.biel.qmsgatherCgVn.mapper.DfUpSilkScreenWireframeMapper;
+import com.biel.qmsgatherCgVn.util.PoiZipSecurity;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.DateUtil;
@@ -34,6 +35,7 @@ public class DfUpSilkScreenWireframeServiceImpl extends ServiceImpl<DfUpSilkScre
 
     @Override
     public void importExcel(MultipartFile file, String factory, String model, String process, String testProject,String uploadName, String batchId) throws Exception {
+        PoiZipSecurity.configure();
         Workbook workbook = WorkbookFactory.create(file.getInputStream()); // ✅ 自动识别 xls/xlsx
 
         Sheet sheet = workbook.getSheetAt(0); // 读取第一个sheet

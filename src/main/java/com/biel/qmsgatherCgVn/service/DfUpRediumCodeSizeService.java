@@ -11,5 +11,5 @@ import org.springframework.web.multipart.MultipartFile;
  * @DATE 2025/8/26 13:37
  */
 public interface DfUpRediumCodeSizeService extends IService<DfUpRadiumCodeSize> {
-    void importExcel(MultipartFile file, String factory, String model, String process, String testProject, String uploadName, String batchId,String createTime);
+    void importExcel(MultipartFile file, String factory, String model, String process, String testProject, String uploadName, String batchId,String createTime)throws  Exception;
 }

@@ -5,6 +5,7 @@ import com.biel.qmsgatherCgVn.domain.DfUpScreenPrintingVarnish;
 import com.biel.qmsgatherCgVn.domain.DfUpScreenPrintingbm;
 import com.biel.qmsgatherCgVn.service.DfUpScreenPrintingbmService;
 import com.biel.qmsgatherCgVn.mapper.DfUpScreenPrintingbmMapper;
+import com.biel.qmsgatherCgVn.util.PoiZipSecurity;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.DateUtil;
@@ -18,6 +19,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+
 
 /**
 * @author dafenqi
@@ -33,6 +36,7 @@ public class DfUpScreenPrintingbmServiceImpl extends ServiceImpl<DfUpScreenPrint
 
     @Override
     public void importExcel(MultipartFile file, String factory, String model, String process, String testProject,String uploadName, String batchId) throws Exception {
+        PoiZipSecurity.configure();
         Workbook workbook = WorkbookFactory.create(file.getInputStream()); // ✅ 自动识别 xls/xlsx
 
         Sheet sheet = workbook.getSheetAt(0); // 读取第一个sheet
@@ -90,6 +94,7 @@ public class DfUpScreenPrintingbmServiceImpl extends ServiceImpl<DfUpScreenPrint
 
         workbook.close();
     }
+
 
     private boolean isRowEmpty(Row row) {
         if (row == null) return true;

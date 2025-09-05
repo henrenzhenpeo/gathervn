@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.biel.qmsgatherCgVn.domain.DfUpScreenPrintWireftameIcp;
 import com.biel.qmsgatherCgVn.service.DfUpScreenPrintWireftameIcpService;
 import com.biel.qmsgatherCgVn.mapper.DfUpScreenPrintWireftameIcpMapper;
+import com.biel.qmsgatherCgVn.util.PoiZipSecurity;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.DateUtil;
@@ -37,6 +38,7 @@ public class DfUpScreenPrintWireftameIcpServiceImpl extends ServiceImpl<DfUpScre
 
     @Override
     public void importExcel(MultipartFile file,String factory, String model,String process,String testProject,String uploadName,String batchId) throws Exception {
+        PoiZipSecurity.configure();
         Workbook workbook = WorkbookFactory.create(file.getInputStream()); // ✅ 自动识别 xls/xlsx
 
         Sheet sheet = workbook.getSheetAt(0); // 读取第一个sheet

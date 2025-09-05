@@ -5,6 +5,7 @@ import com.biel.qmsgatherCgVn.domain.DfUpRadiumCodeSize;
 import com.biel.qmsgatherCgVn.mapper.DfUpRediumCodeSizeMapper;
 import com.biel.qmsgatherCgVn.service.DfUpRediumCodeSizeService;
 import lombok.extern.slf4j.Slf4j;
+import lombok.val;
 import org.apache.poi.ss.usermodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,8 +30,7 @@ public class DfUpRediumCodeSizeServiceImpl extends ServiceImpl<DfUpRediumCodeSiz
     @Autowired
     private DfUpRediumCodeSizeMapper dfUpRediumCodeSizeMapper;
     @Override
-    public void importExcel(MultipartFile file, String factory, String model, String process, String testProject, String uploadName, String batchId,String createTime) {
-        try {
+    public void importExcel(MultipartFile file, String factory, String model, String process, String testProject, String uploadName, String batchId,String createTime) throws Exception {
             Workbook workbook = WorkbookFactory.create(file.getInputStream()); // ✅ 自动识别 xls/xlsx
             
             Sheet sheet = workbook.getSheetAt(0); // 读取第一个sheet
@@ -76,9 +76,6 @@ public class DfUpRediumCodeSizeServiceImpl extends ServiceImpl<DfUpRediumCodeSiz
                 dfUpRediumCodeSizeMapper.insert(entity);
             }
             workbook.close();
-        } catch (Exception e) {
-            throw new RuntimeException("Excel文件处理失败: " + e.getMessage(), e);
-        }
     }
 
     private String determineShift(Date date) {
