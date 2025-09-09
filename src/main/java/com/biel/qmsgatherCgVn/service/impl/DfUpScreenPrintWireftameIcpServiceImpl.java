@@ -14,6 +14,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.apache.poi.ss.util.CellRangeAddress;  // ← 新增：用于读取合并单元格区域
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -42,6 +43,9 @@ public class DfUpScreenPrintWireftameIcpServiceImpl extends ServiceImpl<DfUpScre
         Workbook workbook = WorkbookFactory.create(file.getInputStream()); // ✅ 自动识别 xls/xlsx
 
         Sheet sheet = workbook.getSheetAt(0); // 读取第一个sheet
+
+        // 新增：表头校验（表头在第2行，即索引1）
+        validateHeader(sheet);
 
         int startRow = 8; // 从第9行开始（索引是8）
         for (int r = startRow; r <= sheet.getLastRowNum(); r++) {
@@ -151,6 +155,72 @@ public class DfUpScreenPrintWireftameIcpServiceImpl extends ServiceImpl<DfUpScre
         }
 
         return null;
+    }
+
+    private void validateHeader(Sheet sheet) {
+        int headerRowIndex = 1; // 第二行
+        Row headerRow = sheet.getRow(headerRowIndex);
+        if (headerRow == null) {
+            throw new IllegalArgumentException("Excel表头校验失败：未找到第2行表头（索引1）");
+        }
+
+        // 单列校验
+        assertSingleHeader(headerRow, 0, "时间");
+        assertSingleHeader(headerRow, 15, "凹槽");
+        assertSingleHeader(headerRow, 20, "max");
+
+        // 合并单元格校验
+        assertMergedHeader(sheet, headerRowIndex, 1, 4, "R角");
+        assertMergedHeader(sheet, headerRowIndex, 5, 7, "上长边");
+        assertMergedHeader(sheet, headerRowIndex, 8, 10, "下长边");
+        assertMergedHeader(sheet, headerRowIndex, 11, 12, "凹槽短边");
+        assertMergedHeader(sheet, headerRowIndex, 13, 14, "无凹槽短边");
+        assertMergedHeader(sheet, headerRowIndex, 16, 17, "外形长");
+        assertMergedHeader(sheet, headerRowIndex, 18, 19, "外形宽");
+    }
+
+    private void assertSingleHeader(Row headerRow, int colIndex, String expected) {
+        Cell cell = headerRow.getCell(colIndex);
+        String actual = normalizeCellString(cell);
+        if (!equalsIgnoreCaseSafe(actual, expected)) {
+            throw new IllegalArgumentException("Excel表头校验失败：第" + (colIndex + 1) + "列应为【" + expected + "】, 实际为【" + (actual == null ? "空" : actual) + "】");
+        }
+    }
+
+    private void assertMergedHeader(Sheet sheet, int rowIndex, int startCol, int endCol, String expected) {
+        CellRangeAddress region = findMergedRegion(sheet, rowIndex, startCol, endCol);
+        if (region == null) {
+            throw new IllegalArgumentException("Excel表头校验失败：第" + (startCol + 1) + "-" + (endCol + 1) + "列应为合并单元格【" + expected + "】, 但未检测到对应的合并区域");
+        }
+        Row firstRow = sheet.getRow(region.getFirstRow());
+        Cell firstCell = firstRow != null ? firstRow.getCell(region.getFirstColumn()) : null;
+        String actual = normalizeCellString(firstCell);
+        if (!equalsIgnoreCaseSafe(actual, expected)) {
+            throw new IllegalArgumentException("Excel表头校验失败：第" + (startCol + 1) + "-" + (endCol + 1) + "列合并单元格应为【" + expected + "】, 实际为【" + (actual == null ? "空" : actual) + "】");
+        }
+    }
+
+    private CellRangeAddress findMergedRegion(Sheet sheet, int rowIndex, int startCol, int endCol) {
+        for (CellRangeAddress region : sheet.getMergedRegions()) {
+            boolean rowInRange = rowIndex >= region.getFirstRow() && rowIndex <= region.getLastRow();
+            boolean colMatch = region.getFirstColumn() == startCol && region.getLastColumn() == endCol;
+            if (rowInRange && colMatch) {
+                return region;
+            }
+        }
+        return null;
+    }
+
+    private String normalizeCellString(Cell cell) {
+        if (cell == null) return null;
+        String s = cell.toString();
+        return s == null ? null : s.trim();
+    }
+
+    private boolean equalsIgnoreCaseSafe(String a, String b) {
+        if (a == null && b == null) return true;
+        if (a == null || b == null) return false;
+        return a.equalsIgnoreCase(b);
     }
 
 }
