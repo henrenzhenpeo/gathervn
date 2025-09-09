@@ -47,7 +47,7 @@ public class DfUpScreenPrintWireftameIcpServiceImpl extends ServiceImpl<DfUpScre
         // 新增：表头校验（表头在第2行，即索引1）
         validateHeader(sheet);
 
-        int startRow = 8; // 从第9行开始（索引是8）
+        int startRow = 5; // 从第9行开始（索引是8）
         for (int r = startRow; r <= sheet.getLastRowNum(); r++) {
             Row row = sheet.getRow(r);
 
