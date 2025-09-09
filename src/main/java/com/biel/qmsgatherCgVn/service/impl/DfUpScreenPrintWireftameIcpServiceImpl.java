@@ -166,17 +166,26 @@ public class DfUpScreenPrintWireftameIcpServiceImpl extends ServiceImpl<DfUpScre
 
         // 单列校验
         assertSingleHeader(headerRow, 0, "时间");
+        assertSingleHeader(headerRow, 1, "左上R角");
+        assertSingleHeader(headerRow, 2, "右上R角");
+        assertSingleHeader(headerRow, 3, "左下R角");
+        assertSingleHeader(headerRow, 4, "右下R角");
+        assertSingleHeader(headerRow, 5, "上长边左");
+        assertSingleHeader(headerRow, 6, "上长边中");
+        assertSingleHeader(headerRow, 7, "上长边右");
+        assertSingleHeader(headerRow, 8, "下长边左");
+        assertSingleHeader(headerRow, 9, "中长边");
+        assertSingleHeader(headerRow, 10, "右长边");
+        assertSingleHeader(headerRow, 11, "凹槽短边1");
+        assertSingleHeader(headerRow, 12, "凹槽短边2");
+        assertSingleHeader(headerRow, 13, "凹槽短边3");
+        assertSingleHeader(headerRow, 14, "凹槽短边4");
         assertSingleHeader(headerRow, 15, "凹槽");
+        assertSingleHeader(headerRow, 16, "外形长1");
+        assertSingleHeader(headerRow, 17, "外形长2");
+        assertSingleHeader(headerRow, 18, "外形宽1");
+        assertSingleHeader(headerRow, 19, "外形宽2");
         assertSingleHeader(headerRow, 20, "max");
-
-        // 合并单元格校验
-        assertMergedHeader(sheet, headerRowIndex, 1, 4, "R角");
-        assertMergedHeader(sheet, headerRowIndex, 5, 7, "上长边");
-        assertMergedHeader(sheet, headerRowIndex, 8, 10, "下长边");
-        assertMergedHeader(sheet, headerRowIndex, 11, 12, "凹槽短边");
-        assertMergedHeader(sheet, headerRowIndex, 13, 14, "无凹槽短边");
-        assertMergedHeader(sheet, headerRowIndex, 16, 17, "外形长");
-        assertMergedHeader(sheet, headerRowIndex, 18, 19, "外形宽");
     }
 
     private void assertSingleHeader(Row headerRow, int colIndex, String expected) {

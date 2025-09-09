@@ -56,61 +56,61 @@ public class DfUpScreenPrintWireftameIcp {
     /**
      * 
      */
-    @Excel(name = "r1")
+    @Excel(name = "左上R角")
     private Double r1;
 
     /**
      * 
      */
-    @Excel(name = "r2")
+    @Excel(name = "右上R角")
     private Double r2;
 
     /**
      * 
      */
-    @Excel(name = "r3")
+    @Excel(name = "左下R角")
     private Double r3;
 
     /**
      * 
      */
-    @Excel(name = "r4")
+    @Excel(name = "右下R角")
     private Double r4;
 
     /**
      * 上长边
      */
-    @Excel(name = "上长边")
+    @Excel(name = "上长边左")
     private Double upperLongSide1;
 
     /**
      * 上长边2
      */
-    @Excel(name = "上长边2")
+    @Excel(name = "上长边中")
     private Double upperLongSide2;
 
     /**
      * 上长边3
      */
-    @Excel(name = "上长边3")
+    @Excel(name = "上长边下")
     private Double upperLongSide3;
 
     /**
      * 下长边1
      */
-    @Excel(name = "下长边1")
+    @Excel(name = "下长边左")
     private Double lowerLongSide1;
 
     /**
      * 下长边
      */
-    @Excel(name = "下长边2")
+    @Excel(name = "中长边")
     private Double lowerLongSide2;
 
     /**
      * 下长边
      */
-    @Excel(name = "下长边3")
+    @Excel(name = "右长边")
     private Double lowerLongSide3;
 
     /**
@@ -128,13 +128,13 @@ public class DfUpScreenPrintWireftameIcp {
     /**
      * 无凹槽短边
      */
-    @Excel(name = "无凹槽短边")
+    @Excel(name = "凹槽短边3")
     private Double noShortDegeGroove1;
 
     /**
      * 无凹槽短边2
      */
-    @Excel(name = "无凹槽短边2")
+    @Excel(name = "凹槽短边4")
     private Double noShortDegeGroove2;
 
     /**
@@ -146,7 +146,7 @@ public class DfUpScreenPrintWireftameIcp {
     /**
      * 外形长
      */
-    @Excel(name = "外形长")
+    @Excel(name = "外形长1")
     private Double longAppearance1;
     /**
      * 外形长2
@@ -157,7 +157,7 @@ public class DfUpScreenPrintWireftameIcp {
     /**
      * 外形宽2
      */
-    @Excel(name = "外形宽2")
+    @Excel(name = "外形宽1")
     private Double exteriorWidth;
 
     /**
@@ -169,7 +169,7 @@ public class DfUpScreenPrintWireftameIcp {
     /**
      * 
      */
-    @Excel(name = "最大值")
+    @Excel(name = "max")
     private Double maxValue;
 
     /**
