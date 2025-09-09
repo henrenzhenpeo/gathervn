@@ -68,7 +68,7 @@ public class DfUpWireFrameInkClimbing {
     /**
      * aoc
      */
-    @Excel(name = "aoc")
+    @Excel(name = "凹槽")
     private Double groove;
 
     /**

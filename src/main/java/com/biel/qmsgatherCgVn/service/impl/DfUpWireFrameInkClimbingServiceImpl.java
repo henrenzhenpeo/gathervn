@@ -41,6 +41,11 @@ public class DfUpWireFrameInkClimbingServiceImpl extends ServiceImpl<DfUpWireFra
         Sheet sheet = workbook.getSheetAt(0); // 读取第一个sheet
 
         int startRow = 4; // 从第5行开始（索引是4）
+
+        // 调整：表头在第一行（索引0）
+        Row headerRow = sheet.getRow(0);
+        validateHeader(headerRow);
+
         for (int r = startRow; r <= sheet.getLastRowNum(); r++) {
             Row row = sheet.getRow(r);
 
@@ -63,7 +68,6 @@ public class DfUpWireFrameInkClimbingServiceImpl extends ServiceImpl<DfUpWireFra
 
             entity.setShortSide(getDoubleCellValue(row.getCell(i++)));
 
-
             entity.setMachineCode(getStringCellValue(row.getCell(i++)));
             entity.setState(getStringCellValue(row.getCell(i++)));
 
@@ -78,6 +82,23 @@ public class DfUpWireFrameInkClimbingServiceImpl extends ServiceImpl<DfUpWireFra
     }
 
 
+    // 表头校验（校验第2~6列为：长边1、长边2、凹槽、凹槽短边、短边）
+    private void validateHeader(Row headerRow) {
+        if (headerRow == null) {
+            throw new IllegalArgumentException("Excel表头不存在或格式错误：未找到表头行（应在第1行）");
+        }
+        String[] expected = {"长边1", "长边2", "凹槽", "凹槽短边", "短边"};
+        for (int i = 0; i < expected.length; i++) {
+            Cell cell = headerRow.getCell(i + 1); // 从第2列起（索引1）
+            String actual = (cell == null) ? "" : cell.toString().trim();
+            if (!expected[i].equals(actual)) {
+                throw new IllegalArgumentException(String.format(
+                    "Excel表头不匹配",
+                    i + 2, expected[i], actual
+                ));
+            }
+        }
+    }
     private Double getDoubleCellValue(Cell cell) {
         if (cell == null) return null;
         try {
