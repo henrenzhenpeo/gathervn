@@ -13,6 +13,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.apache.poi.ss.util.CellRangeAddress; // 新增：用于校验合并单元格
 // 新增：POI Zip 安全设置
 import org.apache.poi.openxml4j.util.ZipSecureFile;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +42,9 @@ public class DfUpScreenPrintingVarnishServiceImpl extends ServiceImpl<DfUpScreen
         Workbook workbook = WorkbookFactory.create(file.getInputStream()); // ✅ 自动识别 xls/xlsx
 
         Sheet sheet = workbook.getSheetAt(0); // 读取第一个sheet
+
+        // 新增：表头校验（表头在第3行，即索引2；从第2列开始校验）
+        validateHeader(sheet);
 
         int startRow = 8; // 从第9行开始（索引是8）
         for (int r = startRow; r <= sheet.getLastRowNum(); r++) {
@@ -146,6 +150,101 @@ public class DfUpScreenPrintingVarnishServiceImpl extends ServiceImpl<DfUpScreen
         }
 
         return null;
+    }
+
+    /**
+     * 表头默认在第3行（索引2），从第2列开始校验：
+     *  1: 1点Y2（精确）
+     *  2: 2点Y1（精确）
+     *  3-5: 合并，包含“3点，凹槽，四点X”（模糊）
+     *  6: 5点Y1（精确）
+     *  7: 6点Y2（精确）
+     *  8-9: 合并，包含“7点，8点X”（模糊）
+     *  9-10: 均包含“2D码到视窗”（模糊）——注意第10列同时在合并区域内
+     *  11-12: 合并，包含“光油上边到基准C”（模糊）
+     *  13-14: 合并，包含“光油内边到玻璃中心距离”（模糊）
+     *  15-16: 合并，包含“上端到玻中心”（模糊）
+     */
+    private void validateHeader(Sheet sheet) {
+        int headerRowIndex = 2; // 第三行
+        Row headerRow = sheet.getRow(headerRowIndex);
+        if (headerRow == null) {
+            throw new IllegalArgumentException("Excel表头校验失败：未找到第3行表头（索引2）");
+        }
+
+        // 单列（精确匹配）
+        assertSingleHeaderFuzzy(headerRow, 1, "1点");
+        assertSingleHeaderFuzzy(headerRow, 2, "2点");
+        assertSingleHeaderFuzzy(headerRow, 6, "5点");
+        assertSingleHeaderFuzzy(headerRow, 7, "6点");
+
+        // 合并块（模糊匹配）
+        assertMergedHeaderFuzzy(sheet, headerRowIndex, 3, 5, "3点，凹槽，四点");
+        assertMergedHeaderFuzzy(sheet, headerRowIndex, 8, 9, "7点，8点");
+
+        // 两列均需模糊匹配“2D码到视窗”
+        assertSingleHeaderFuzzy(headerRow, 10,  "2D码到视窗");
+        assertSingleHeaderFuzzy(headerRow, 11, "2D码到视窗");
+
+        // 后续合并块
+        assertMergedHeaderFuzzy(sheet, headerRowIndex, 12, 13, "光油上边到基准C");
+        assertMergedHeaderFuzzy(sheet, headerRowIndex, 14, 15, "光油内边到玻璃中心距离");
+        assertMergedHeaderFuzzy(sheet, headerRowIndex, 16, 17, "上端到玻中心");
+    }
+
+    private void assertSingleHeaderExact(Row headerRow, int colIndex, String expected) {
+        String actual = normalizeCellString(headerRow.getCell(colIndex));
+        if (!equalsIgnoreCaseSafe(actual, expected)) {
+            throw new IllegalArgumentException("Excel表头校验失败：第" + (colIndex + 1) + "列应为【" + expected + "】, 实际为【" + (actual == null ? "空" : actual) + "】");
+        }
+    }
+
+    private void assertSingleHeaderFuzzy(Row headerRow, int colIndex, String expectedContains) {
+        String actual = normalizeCellString(headerRow.getCell(colIndex));
+        if (!containsIgnoreCase(actual, expectedContains)) {
+            throw new IllegalArgumentException("Excel表头校验失败：第" + (colIndex + 1) + "列应包含【" + expectedContains + "】, 实际为【" + (actual == null ? "空" : actual) + "】");
+        }
+    }
+
+    private void assertMergedHeaderFuzzy(Sheet sheet, int rowIndex, int startCol, int endCol, String expectedContains) {
+        CellRangeAddress region = findMergedRegion(sheet, rowIndex, startCol, endCol);
+        if (region == null) {
+            throw new IllegalArgumentException("Excel表头校验失败：第" + (startCol + 1) + "-" + (endCol + 1) + "列应为合并单元格且包含【" + expectedContains + "】, 但未检测到对应的合并区域");
+        }
+        Row firstRow = sheet.getRow(region.getFirstRow());
+        Cell firstCell = firstRow != null ? firstRow.getCell(region.getFirstColumn()) : null;
+        String actual = normalizeCellString(firstCell);
+        if (!containsIgnoreCase(actual, expectedContains)) {
+            throw new IllegalArgumentException("Excel表头校验失败：第" + (startCol + 1) + "-" + (endCol + 1) + "列合并单元格应包含【" + expectedContains + "】, 实际为【" + (actual == null ? "空" : actual) + "】");
+        }
+    }
+
+    private CellRangeAddress findMergedRegion(Sheet sheet, int rowIndex, int startCol, int endCol) {
+        for (CellRangeAddress region : sheet.getMergedRegions()) {
+            boolean rowInRange = rowIndex >= region.getFirstRow() && rowIndex <= region.getLastRow();
+            boolean colMatch = region.getFirstColumn() == startCol && region.getLastColumn() == endCol;
+            if (rowInRange && colMatch) {
+                return region;
+            }
+        }
+        return null;
+    }
+
+    private String normalizeCellString(Cell cell) {
+        if (cell == null) return null;
+        String s = cell.toString();
+        return s == null ? null : s.trim();
+    }
+
+    private boolean containsIgnoreCase(String src, String needle) {
+        if (src == null || needle == null) return false;
+        return src.toLowerCase().contains(needle.toLowerCase());
+    }
+
+    private boolean equalsIgnoreCaseSafe(String a, String b) {
+        if (a == null && b == null) return true;
+        if (a == null || b == null) return false;
+        return a.equalsIgnoreCase(b);
     }
 }
 
