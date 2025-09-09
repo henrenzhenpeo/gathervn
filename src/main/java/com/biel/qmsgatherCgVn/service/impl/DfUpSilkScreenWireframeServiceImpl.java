@@ -13,6 +13,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.apache.poi.ss.util.CellRangeAddress; // 新增：用于检测表头合并单元格
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -39,6 +40,11 @@ public class DfUpSilkScreenWireframeServiceImpl extends ServiceImpl<DfUpSilkScre
         Workbook workbook = WorkbookFactory.create(file.getInputStream()); // ✅ 自动识别 xls/xlsx
 
         Sheet sheet = workbook.getSheetAt(0); // 读取第一个sheet
+        // 公式求值，确保公式单元格能返回正确的数值结果（包含 0）
+        workbook.getCreationHelper().createFormulaEvaluator().evaluateAll();
+
+        // 新增：表头校验（表头在第2行，从第2列开始）
+        validateHeader(sheet);
 
         int startRow = 8; // 从第9行开始（索引是8）
         for (int r = startRow; r <= sheet.getLastRowNum(); r++) {
@@ -106,8 +112,40 @@ public class DfUpSilkScreenWireframeServiceImpl extends ServiceImpl<DfUpSilkScre
     private Double getDoubleCellValue(Cell cell) {
         if (cell == null) return null;
         try {
-            return cell.getCellType() == CellType.NUMERIC ? cell.getNumericCellValue()
-                    : Double.parseDouble(cell.toString());
+            switch (cell.getCellType()) {
+                case NUMERIC:
+                    return cell.getNumericCellValue();
+                case STRING: {
+                    String s = cell.getStringCellValue();
+                    if (s == null) return null;
+                    s = s.trim();
+                    // 常见“空值”占位
+                    if (s.isEmpty() || "-".equals(s)) return null;
+                    // 去千分位逗号
+                    s = s.replace(",", "");
+                    return Double.parseDouble(s);
+                }
+                case FORMULA:
+                    // 优先取缓存数值（evaluateAll 后通常有效；结果为 0 也能取到 0.0）
+                    try {
+                        return cell.getNumericCellValue();
+                    } catch (IllegalStateException ex) {
+                        // 不是数值则尝试按字符串解析
+                        String fs = null;
+                        try { fs = cell.getStringCellValue(); } catch (Exception ignore) {}
+                        if (fs == null) fs = cell.toString();
+                        if (fs == null) return null;
+                        fs = fs.trim();
+                        if (fs.isEmpty() || "-".equals(fs)) return null;
+                        fs = fs.replace(",", "");
+                        return Double.parseDouble(fs);
+                    }
+                case BLANK:
+                case BOOLEAN:
+                case ERROR:
+                default:
+                    return null;
+            }
         } catch (Exception e) {
             return null;
         }
@@ -140,6 +178,76 @@ public class DfUpSilkScreenWireframeServiceImpl extends ServiceImpl<DfUpSilkScre
         }
 
         return null;
+    }
+
+    /**
+     * 表头默认在第2行（索引1），从第2列开始校验：
+     *  - 第2-9列（索引1-8）：合并单元格，标题需包含“位置八点”
+     *  - 第10-13列（索引9-12）：合并单元格，标题需包含“四个R角”
+     *  - 第14列（索引13）：标题需包含“2D镭码位置”
+     *  - 第15-17列（索引14-16）：合并单元格，标题需包含“丝印调机专用”
+     */
+    private void validateHeader(Sheet sheet) {
+        int headerRowIndex = 1; // 第二行
+        Row headerRow = sheet.getRow(headerRowIndex);
+        if (headerRow == null) {
+            throw new IllegalArgumentException("Excel表头校验失败：未找到第2行表头（索引1）");
+        }
+
+        // 2-9列 合并：位置八点
+        assertMergedHeaderFuzzy(sheet, headerRowIndex, 1, 8, "位置八点");
+
+        // 10-13列 合并：四个R角
+        assertMergedHeaderFuzzy(sheet, headerRowIndex, 9, 12, "四个R角");
+
+        // 14列：2D镭码位置（单列）
+        assertSingleHeaderFuzzy(headerRow, 13, "2D镭码位置");
+
+        // 15-17列 合并：丝印调机专用
+        assertMergedHeaderFuzzy(sheet, headerRowIndex, 14, 16, "丝印调机专用");
+    }
+
+    private void assertSingleHeaderFuzzy(Row headerRow, int colIndex, String expectedContains) {
+        Cell cell = headerRow.getCell(colIndex);
+        String actual = normalizeCellString(cell);
+        if (!containsIgnoreCase(actual, expectedContains)) {
+            throw new IllegalArgumentException("Excel表头校验失败：第" + (colIndex + 1) + "列应包含【" + expectedContains + "】, 实际为【" + (actual == null ? "空" : actual) + "】");
+        }
+    }
+
+    private void assertMergedHeaderFuzzy(Sheet sheet, int rowIndex, int startCol, int endCol, String expectedContains) {
+        CellRangeAddress region = findMergedRegion(sheet, rowIndex, startCol, endCol);
+        if (region == null) {
+            throw new IllegalArgumentException("Excel表头校验失败：第" + (startCol + 1) + "-" + (endCol + 1) + "列应为合并单元格且包含【" + expectedContains + "】, 但未检测到对应的合并区域");
+        }
+        Row firstRow = sheet.getRow(region.getFirstRow());
+        Cell firstCell = firstRow != null ? firstRow.getCell(region.getFirstColumn()) : null;
+        String actual = normalizeCellString(firstCell);
+        if (!containsIgnoreCase(actual, expectedContains)) {
+            throw new IllegalArgumentException("Excel表头校验失败：第" + (startCol + 1) + "-" + (endCol + 1) + "列合并单元格应包含【" + expectedContains + "】, 实际为【" + (actual == null ? "空" : actual) + "】");
+        }
+    }
+
+    private CellRangeAddress findMergedRegion(Sheet sheet, int rowIndex, int startCol, int endCol) {
+        for (CellRangeAddress region : sheet.getMergedRegions()) {
+            boolean rowInRange = rowIndex >= region.getFirstRow() && rowIndex <= region.getLastRow();
+            boolean colMatch = region.getFirstColumn() == startCol && region.getLastColumn() == endCol;
+            if (rowInRange && colMatch) {
+                return region;
+            }
+        }
+        return null;
+    }
+
+    private String normalizeCellString(Cell cell) {
+        if (cell == null) return null;
+        String s = cell.toString();
+        return s == null ? null : s.trim();
+    }
+
+    private boolean containsIgnoreCase(String src, String needle) {
+        if (src == null || needle == null) return false;
+        return src.toLowerCase().contains(needle.toLowerCase());
     }
 }
 
