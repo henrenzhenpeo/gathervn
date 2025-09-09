@@ -1,4 +1,14 @@
 spring:
+  activemq:
+    # ActiveMQ Classic broker 地址（示例）
+    broker-url: tcp://localhost:61616
+    user: admin
+    password: admin
+    pool:
+      # 最大连接数
+      max-connections: 20
+      # 连接空闲超时时间(毫秒)
+      idle-timeout: 30000
   application:
     name: gateway
   mvc:
@@ -36,3 +46,10 @@ mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
     map-underscore-to-camel-case: true
+
+app:
+  mq:
+    # 默认的 MQ 路由队列名，可按需覆盖
+    queues:
+      bottom-gap-chamfer: bottom_gap_chamfer
+      chamfer-hypotenuse: chamfer_hypotenuse

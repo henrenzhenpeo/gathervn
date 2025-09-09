@@ -6,12 +6,19 @@ import com.biel.qmsgatherCgVn.mapper.DfUpChamferHypotenuseMapper;
 import com.biel.qmsgatherCgVn.service.DfUpChamferHypotenuseService;
 import org.apache.poi.ss.usermodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
+// 移除: import org.springframework.beans.factory.annotation.Value;
+// 移除: import org.springframework.jms.core.JmsTemplate;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.biel.qmsgatherCgVn.event.DataImportedEvent;
+
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -27,6 +34,15 @@ public class DfUpChamferHypotenuseServiceImpl extends ServiceImpl<DfUpChamferHyp
 
     @Autowired
     private DfUpChamferHypotenuseMapper dfUpChamferHypotenuseMapper;
+
+    // 改为事件发布器，解耦合MQ
+    @Autowired
+    private ApplicationEventPublisher eventPublisher;
+
+    // 移除: private JmsTemplate jmsTemplate;
+    // 移除: @Value("${app.mq.queue:tking_queue}") private String mqQueueName;
+
+    private static final int MQ_BATCH_SIZE = 200;
     @Override
     public void importExcel(MultipartFile file, String factory, String model, String process, String testProject, String uploadName, String batchId,String createTime) throws Exception {
 
@@ -39,6 +55,7 @@ public class DfUpChamferHypotenuseServiceImpl extends ServiceImpl<DfUpChamferHyp
         Date createTimeDate = parseCreateTime(createTime);
 
         int startRow = 11; // 从第12行开始（索引是11）
+        List<DfUpChamferHypotenuse> mqBatch = new ArrayList<>(MQ_BATCH_SIZE);
         for (int r = startRow; r <= sheet.getLastRowNum(); r++) {
             Row row = sheet.getRow(r);
 
@@ -61,11 +78,11 @@ public class DfUpChamferHypotenuseServiceImpl extends ServiceImpl<DfUpChamferHyp
             entity.setLongUr2(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)), 3));
             entity.setLongLr3(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)), 3));
             entity.setShortLr4(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)), 3));
-            entity.setShortLl5(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)), 3));
             entity.setLongLl6(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)), 3));
             entity.setLongUl7(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)), 3));
             entity.setShortUl8(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)), 3));
-            // 平均值：保留4位小数
+            entity.setShortLl5(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)), 3));
+
             entity.setAvg(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)), 4));
             entity.setStd1to4(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)), 3));
             entity.setStd2to7(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)), 3));
@@ -82,9 +99,21 @@ public class DfUpChamferHypotenuseServiceImpl extends ServiceImpl<DfUpChamferHyp
             entity.setCreateTime(createTimeDate);
 
             dfUpChamferHypotenuseMapper.insert(entity);
-        }
-    }
 
+            // 批量事件发布（由监听器统一发送到MQ）
+            mqBatch.add(entity);
+            if (mqBatch.size() >= MQ_BATCH_SIZE) {
+                eventPublisher.publishEvent(new DataImportedEvent<>(new ArrayList<>(mqBatch), DfUpChamferHypotenuse.class));
+                mqBatch.clear();
+            }
+        }
+
+        if (!mqBatch.isEmpty()) {
+            eventPublisher.publishEvent(new DataImportedEvent<>(new ArrayList<>(mqBatch), DfUpChamferHypotenuse.class));
+            mqBatch.clear();
+        }
+
+    }
     private String determineShift(Date date) {
         if (date == null) return null;
 
