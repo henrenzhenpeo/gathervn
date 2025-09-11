@@ -145,6 +145,7 @@ public class DfUpScreenPrintWireftameIcpServiceImpl extends ServiceImpl<DfUpScre
 
                 // 兼容 / 和 - 两种日期分隔符
                 val = val.replace("/", "-");
+                val = val.replace("-", "/");
 
                 // SimpleDateFormat 不支持自动识别多个格式，可尝试多个解析
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");

@@ -126,6 +126,7 @@ public class DfUpWireFrameInkClimbingServiceImpl extends ServiceImpl<DfUpWireFra
 
                 // 清理格式：将 2025/6/20 8:30:35 -> 2025-06-20 08:30:35
                 val = val.replace("/", "-");
+                val = val.replace(" ", "");
 
                 // 解析格式：支持不补零格式的时间（注意单个数字）
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-M-d H:m:s");
