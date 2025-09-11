@@ -137,6 +137,11 @@
              <artifactId>easyexcel</artifactId>
              <version>3.1.1</version>
          </dependency>
+        <dependency>
+            <groupId>org.hibernate.validator</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>6.2.5.Final</version>
+        </dependency>
 
 
         <!-- EasyPoi -->
