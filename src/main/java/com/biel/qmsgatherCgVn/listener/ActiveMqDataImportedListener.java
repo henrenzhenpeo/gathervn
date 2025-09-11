@@ -2,6 +2,7 @@ package com.biel.qmsgatherCgVn.listener;
 
 import com.biel.qmsgatherCgVn.domain.DfUpBottomGapChamfer;
 import com.biel.qmsgatherCgVn.domain.DfUpChamferHypotenuse;
+import com.biel.qmsgatherCgVn.domain.DfUpScreenPrintWireftameIcp;
 import com.biel.qmsgatherCgVn.event.DataImportedEvent;
 import com.biel.qmsgatherCgVn.mq.ActiveMqDispatcher;
 import org.springframework.context.event.EventListener;
@@ -30,5 +31,10 @@ public class ActiveMqDataImportedListener {
         dispatcher.dispatch(batch, DfUpChamferHypotenuse.class);
     }
 
-
+    @EventListener(condition = "#root.args[0].entityType == T(com.biel.qmsgatherCgVn.domain.DfUpScreenPrintWireftameIcp)")
+    public void onScreenPrintWireftameIcp(DataImportedEvent<DfUpScreenPrintWireftameIcp> event) {
+        List<DfUpScreenPrintWireftameIcp> batch = event.getPayload();
+        if (batch == null || batch.isEmpty()) return;
+        dispatcher.dispatch(batch, DfUpScreenPrintWireftameIcp.class);
+    }
 }

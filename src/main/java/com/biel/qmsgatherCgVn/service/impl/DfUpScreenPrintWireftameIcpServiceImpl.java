@@ -3,7 +3,9 @@ package com.biel.qmsgatherCgVn.service.impl;
 import cn.afterturn.easypoi.excel.ExcelImportUtil;
 import cn.afterturn.easypoi.excel.entity.ImportParams;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.biel.qmsgatherCgVn.domain.DfUpChamferHypotenuse;
 import com.biel.qmsgatherCgVn.domain.DfUpScreenPrintWireftameIcp;
+import com.biel.qmsgatherCgVn.event.DataImportedEvent;
 import com.biel.qmsgatherCgVn.service.DfUpScreenPrintWireftameIcpService;
 import com.biel.qmsgatherCgVn.mapper.DfUpScreenPrintWireftameIcpMapper;
 import com.biel.qmsgatherCgVn.util.PoiZipSecurity;
@@ -17,10 +19,12 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.ss.util.CellRangeAddress;  // ← 新增：用于读取合并单元格区域
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -37,6 +41,11 @@ public class DfUpScreenPrintWireftameIcpServiceImpl extends ServiceImpl<DfUpScre
     @Autowired
     private DfUpScreenPrintWireftameIcpMapper mapper;
 
+    @Autowired
+    private ApplicationEventPublisher eventPublisher;
+
+    private static final int MQ_BATCH_SIZE = 200;
+
     @Override
     public void importExcel(MultipartFile file,String factory, String model,String process,String testProject,String uploadName,String batchId) throws Exception {
         PoiZipSecurity.configure();
@@ -48,6 +57,7 @@ public class DfUpScreenPrintWireftameIcpServiceImpl extends ServiceImpl<DfUpScre
         validateHeader(sheet);
 
         int startRow = 5; // 从第9行开始（索引是8）
+        List<DfUpScreenPrintWireftameIcp> mqBatch = new ArrayList<>();
         for (int r = startRow; r <= sheet.getLastRowNum(); r++) {
             Row row = sheet.getRow(r);
 
@@ -100,8 +110,18 @@ public class DfUpScreenPrintWireftameIcpServiceImpl extends ServiceImpl<DfUpScre
 
             // 保存
             mapper.insert(entity);
-        }
 
+            // 批量事件发布（由监听器统一发送到MQ）
+            mqBatch.add(entity);
+            if (mqBatch.size() >= MQ_BATCH_SIZE) {
+                eventPublisher.publishEvent(new DataImportedEvent<>(new ArrayList<>(mqBatch), DfUpScreenPrintWireftameIcp.class));
+                mqBatch.clear();
+            }
+        }
+        if (!mqBatch.isEmpty()) {
+            eventPublisher.publishEvent(new DataImportedEvent<>(new ArrayList<>(mqBatch), DfUpScreenPrintWireftameIcp.class));
+            mqBatch.clear();
+        }
         workbook.close();
     }
 
@@ -145,7 +165,6 @@ public class DfUpScreenPrintWireftameIcpServiceImpl extends ServiceImpl<DfUpScre
 
                 // 兼容 / 和 - 两种日期分隔符
                 val = val.replace("/", "-");
-                val = val.replace("-", "/");
 
                 // SimpleDateFormat 不支持自动识别多个格式，可尝试多个解析
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
