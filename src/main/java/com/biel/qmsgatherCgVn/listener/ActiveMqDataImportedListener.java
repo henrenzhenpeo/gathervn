@@ -3,6 +3,7 @@ package com.biel.qmsgatherCgVn.listener;
 import com.biel.qmsgatherCgVn.domain.DfUpBottomGapChamfer;
 import com.biel.qmsgatherCgVn.domain.DfUpChamferHypotenuse;
 import com.biel.qmsgatherCgVn.domain.DfUpScreenPrintWireftameIcp;
+import com.biel.qmsgatherCgVn.domain.DfUpScreenPrintingVarnish; // 新增
 import com.biel.qmsgatherCgVn.event.DataImportedEvent;
 import com.biel.qmsgatherCgVn.mq.ActiveMqDispatcher;
 import org.springframework.context.event.EventListener;
@@ -36,5 +37,13 @@ public class ActiveMqDataImportedListener {
         List<DfUpScreenPrintWireftameIcp> batch = event.getPayload();
         if (batch == null || batch.isEmpty()) return;
         dispatcher.dispatch(batch, DfUpScreenPrintWireftameIcp.class);
+    }
+
+    // 新增：丝印光油事件分发
+    @EventListener(condition = "#root.args[0].entityType == T(com.biel.qmsgatherCgVn.domain.DfUpScreenPrintingVarnish)")
+    public void onScreenPrintingVarnish(DataImportedEvent<com.biel.qmsgatherCgVn.domain.DfUpScreenPrintingVarnish> event) {
+        List<com.biel.qmsgatherCgVn.domain.DfUpScreenPrintingVarnish> batch = event.getPayload();
+        if (batch == null || batch.isEmpty()) return;
+        dispatcher.dispatch(batch, com.biel.qmsgatherCgVn.domain.DfUpScreenPrintingVarnish.class);
     }
 }

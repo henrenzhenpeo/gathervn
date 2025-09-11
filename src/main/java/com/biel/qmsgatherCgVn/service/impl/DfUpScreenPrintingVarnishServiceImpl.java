@@ -12,6 +12,10 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher; // 新增
+import com.biel.qmsgatherCgVn.event.DataImportedEvent;    // 新增
+import java.util.ArrayList;                               // 新增
+import java.util.List;                                    // 新增
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -29,36 +33,43 @@ public class DfUpScreenPrintingVarnishServiceImpl extends ServiceImpl<DfUpScreen
     @Autowired
     private DfUpScreenPrintingVarnishMapper dfUpScreenPrintingVarnishMapper;
 
+    @Autowired
+    private ApplicationEventPublisher eventPublisher; // 新增：事件发布器（解耦发送）
+
+    private static final int MQ_BATCH_SIZE = 200; // 新增：与其他模块一致
     @Override
     public void importExcel(MultipartFile file, String factory, String model, String process, String testProject, String uploadName, String batchId) throws Exception {
         PoiZipSecurity.configure();
         try (Workbook workbook = WorkbookFactory.create(file.getInputStream())) { // ✅ 自动识别 xls/xlsx，异常也会关闭
             Sheet sheet = workbook.getSheetAt(0); // 读取第一个sheet
-
+    
             // 表头校验：表头在第3行（索引2），从第2列开始校验
             validateHeader(sheet);
-
+    
+            // 新增：批量事件缓存
+            List<DfUpScreenPrintingVarnish> mqBatch = new ArrayList<>(MQ_BATCH_SIZE);
+    
             int startRow = 8; // 从第9行开始（索引是8）
             for (int r = startRow; r <= sheet.getLastRowNum(); r++) {
                 Row row = sheet.getRow(r);
-
+    
                 if (com.biel.qmsgatherCgVn.util.excel.ExcelSheetUtils.isRowEmpty(row)) continue; // 跳过空行
                 // 首列日期只解析一次并缓存
                 Date parsedDate = com.biel.qmsgatherCgVn.util.excel.ExcelCellParsers.getDateCellValue(row.getCell(0));
                 if (parsedDate == null) continue;
-
+    
                 DfUpScreenPrintingVarnish entity = new DfUpScreenPrintingVarnish();
                 int i = 0;
-
+    
                 entity.setFactory(factory);
                 entity.setModel(model);
                 entity.setProcess(process);
                 entity.setTestProject(testProject);
                 entity.setBatchId(batchId);
-
+    
                 entity.setDate(parsedDate); // 使用缓存结果，避免重复解析
                 i++; // 手动推进列索引，保持与后续列的对齐
-
+    
                 entity.setOnePointy2(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
                 entity.setTwoPointy1(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
                 entity.setThreePoint(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
@@ -82,12 +93,25 @@ public class DfUpScreenPrintingVarnishServiceImpl extends ServiceImpl<DfUpScreen
                 entity.setMachineCode(ExcelCellParsers.getStringCellValue(row.getCell(i++)));
                 entity.setState(ExcelCellParsers.getStringCellValue(row.getCell(i++)));
                 entity.setState(ExcelCellParsers.getStringCellValue(row.getCell(i++)));
-
+    
                 entity.setUploadName(uploadName);
                 entity.setCreateTime(new Date());
-
+    
                 // 保存
                 dfUpScreenPrintingVarnishMapper.insert(entity);
+    
+                // 新增：批量事件发布（由监听器统一发送到MQ）
+                mqBatch.add(entity);
+                if (mqBatch.size() >= MQ_BATCH_SIZE) {
+                    eventPublisher.publishEvent(new DataImportedEvent<>(new ArrayList<>(mqBatch), DfUpScreenPrintingVarnish.class));
+                    mqBatch.clear();
+                }
+            }
+    
+            // 新增：收尾发布
+            if (!mqBatch.isEmpty()) {
+                eventPublisher.publishEvent(new DataImportedEvent<>(new ArrayList<>(mqBatch), DfUpScreenPrintingVarnish.class));
+                mqBatch.clear();
             }
         }
     }
