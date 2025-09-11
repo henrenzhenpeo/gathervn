@@ -6,8 +6,6 @@ import com.biel.qmsgatherCgVn.mapper.DfUpChamferHypotenuseMapper;
 import com.biel.qmsgatherCgVn.service.DfUpChamferHypotenuseService;
 import org.apache.poi.ss.usermodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
-// 移除: import org.springframework.beans.factory.annotation.Value;
-// 移除: import org.springframework.jms.core.JmsTemplate;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -38,10 +36,6 @@ public class DfUpChamferHypotenuseServiceImpl extends ServiceImpl<DfUpChamferHyp
     // 改为事件发布器，解耦合MQ
     @Autowired
     private ApplicationEventPublisher eventPublisher;
-
-    // 移除: private JmsTemplate jmsTemplate;
-    // 移除: @Value("${app.mq.queue:tking_queue}") private String mqQueueName;
-
     private static final int MQ_BATCH_SIZE = 200;
     @Override
     public void importExcel(MultipartFile file, String factory, String model, String process, String testProject, String uploadName, String batchId,String createTime) throws Exception {

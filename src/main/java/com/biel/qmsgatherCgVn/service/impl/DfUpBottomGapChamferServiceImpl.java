@@ -6,8 +6,6 @@ import com.biel.qmsgatherCgVn.mapper.DfUpBottomGapChamferMapper;
 import com.biel.qmsgatherCgVn.service.DfUpBottomGapChamferService;
 import org.apache.poi.ss.usermodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
-// 移除: import org.springframework.beans.factory.annotation.Value;
-// 移除: import org.springframework.jms.core.JmsTemplate;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -37,9 +35,6 @@ public class DfUpBottomGapChamferServiceImpl extends ServiceImpl<DfUpBottomGapCh
     // 移除直接MQ依赖，改为事件发布器
     @Autowired
     private ApplicationEventPublisher eventPublisher;
-
-    // 移除: private JmsTemplate jmsTemplate;
-    // 移除: private String mqQueueName;
 
     private static final int MQ_BATCH_SIZE = 200;
     @Override
