@@ -106,8 +106,8 @@ public class DfUpScreenPrintingVarnishServiceImpl extends ServiceImpl<DfUpScreen
         ExcelHeaderValidator.assertSingleHeaderFuzzy(headerRow, 7, "6点");
 
         // 合并块（模糊匹配）
-        ExcelHeaderValidator.assertMergedHeaderFuzzy(sheet, headerRowIndex, 3, 5, "3点，凹槽，四点");
-        ExcelHeaderValidator.assertMergedHeaderFuzzy(sheet, headerRowIndex, 8, 9, "7点，8点");
+        ExcelHeaderValidator.assertMergedHeaderFuzzy(sheet, headerRowIndex, 3, 5, "3点");
+        ExcelHeaderValidator.assertMergedHeaderFuzzy(sheet, headerRowIndex, 8, 9, "7点");
 
         // 两列均需模糊匹配“2D码到视窗”
         ExcelHeaderValidator.assertSingleHeaderFuzzy(headerRow, 10, "2D码到视窗");
