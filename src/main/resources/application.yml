@@ -51,5 +51,4 @@ app:
   mq:
     # 默认的 MQ 路由队列名，可按需覆盖
     queues:
-      bottom-gap-chamfer: bottom_gap_chamfer
-      chamfer-hypotenuse: chamfer_hypotenuse
+      all_data_queue: Report_ProductGague_J10-1_J10-1-4

@@ -16,6 +16,10 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.context.ApplicationEventPublisher; // 新增
+import com.biel.qmsgatherCgVn.event.DataImportedEvent;    // 新增
+import java.util.ArrayList;                                // 新增
+import java.util.List;                                     // 新增
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -29,9 +33,13 @@ import java.util.Date;
 public class DfUpWireFrameInkClimbingServiceImpl extends ServiceImpl<DfUpWireFrameInkClimbingMapper, DfUpWireFrameInkClimbing>
     implements DfUpWireFrameInkClimbingService{
 
-
     @Autowired
     private DfUpWireFrameInkClimbingMapper dfUpWireFrameInkClimbingMapper;
+
+    @Autowired
+    private ApplicationEventPublisher publisher; // 新增
+
+    private static final int MQ_BATCH_SIZE = 200; // 新增，与现有模块一致
 
     @Override
     public void importExcel(MultipartFile file, String factory, String model, String process, String testProject,String uploadName, String batchId) throws Exception {
@@ -45,6 +53,8 @@ public class DfUpWireFrameInkClimbingServiceImpl extends ServiceImpl<DfUpWireFra
         // 调整：表头在第一行（索引0）
         Row headerRow = sheet.getRow(0);
         validateHeader(headerRow);
+
+        List<DfUpWireFrameInkClimbing> mqBatch = new ArrayList<>(MQ_BATCH_SIZE); // 新增
 
         for (int r = startRow; r <= sheet.getLastRowNum(); r++) {
             Row row = sheet.getRow(r);
@@ -76,11 +86,23 @@ public class DfUpWireFrameInkClimbingServiceImpl extends ServiceImpl<DfUpWireFra
 
             // 保存
             dfUpWireFrameInkClimbingMapper.insert(entity);
+
+            // 新增：加入 MQ 批次并按阈值发布
+            mqBatch.add(entity);
+            if (mqBatch.size() >= MQ_BATCH_SIZE) {
+                publishBatch(mqBatch);
+                mqBatch.clear();
+            }
+        }
+
+        // 新增：收尾发布剩余
+        if (!mqBatch.isEmpty()) {
+            publishBatch(mqBatch);
+            mqBatch.clear();
         }
 
         workbook.close();
     }
-
 
     // 表头校验（校验第2~6列为：长边1、长边2、凹槽、凹槽短边、短边）
     private void validateHeader(Row headerRow) {
@@ -139,6 +161,11 @@ public class DfUpWireFrameInkClimbingServiceImpl extends ServiceImpl<DfUpWireFra
         return null;
     }
 
+    // 新增：发布事件封装
+    private void publishBatch(List<DfUpWireFrameInkClimbing> batch) {
+        if (batch == null || batch.isEmpty()) return;
+        publisher.publishEvent(new DataImportedEvent<>(new ArrayList<>(batch), DfUpWireFrameInkClimbing.class));
+    }
 }
 
 

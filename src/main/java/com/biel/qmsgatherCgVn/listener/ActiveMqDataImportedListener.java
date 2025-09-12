@@ -5,6 +5,7 @@ import com.biel.qmsgatherCgVn.domain.DfUpChamferHypotenuse;
 import com.biel.qmsgatherCgVn.domain.DfUpScreenPrintWireftameIcp;
 import com.biel.qmsgatherCgVn.domain.DfUpScreenPrintingVarnish; // 新增
 import com.biel.qmsgatherCgVn.domain.DfUpSilkScreenWireframe; // 新增
+import com.biel.qmsgatherCgVn.domain.DfUpWireFrameInkClimbing; // 新增
 import com.biel.qmsgatherCgVn.event.DataImportedEvent;
 import com.biel.qmsgatherCgVn.mq.ActiveMqDispatcher;
 import org.springframework.context.event.EventListener;
@@ -62,5 +63,13 @@ public class ActiveMqDataImportedListener {
         List<DfUpSilkScreenWireframe> batch = event.getPayload();
         if (batch == null || batch.isEmpty()) return;
         dispatcher.dispatch(batch, DfUpSilkScreenWireframe.class);
+    }
+
+    // 新增：线框油墨爬高事件分发
+    @EventListener(condition = "#root.args[0].entityType == T(com.biel.qmsgatherCgVn.domain.DfUpWireFrameInkClimbing)")
+    public void onWireFrameInkClimbing(DataImportedEvent<DfUpWireFrameInkClimbing> event) {
+        List<DfUpWireFrameInkClimbing> batch = event.getPayload();
+        if (batch == null || batch.isEmpty()) return;
+        dispatcher.dispatch(batch, DfUpWireFrameInkClimbing.class);
     }
 }
