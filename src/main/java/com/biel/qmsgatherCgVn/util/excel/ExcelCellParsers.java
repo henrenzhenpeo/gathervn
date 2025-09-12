@@ -64,20 +64,46 @@ public final class ExcelCellParsers {
     public static Date getDateCellValue(Cell cell) {
         if (cell == null) return null;
 
-        try {
-            if (cell.getCellType() == CellType.NUMERIC && DateUtil.isCellDateFormatted(cell)) {
-                return cell.getDateCellValue();
-            } else if (cell.getCellType() == CellType.STRING) {
-                String val = cell.getStringCellValue().trim();
-                if (val.isEmpty()) return null;
-                val = val.replace("/", "-");
-                val = val.replace(",", " ");
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-M-d H:m:s");
-                return sdf.parse(val);
-            }
-        } catch (Exception ignore) {
+        // Excel 数值型且为日期格式：直接取日期
+        if (cell.getCellType() == CellType.NUMERIC && DateUtil.isCellDateFormatted(cell)) {
+            return cell.getDateCellValue();
         }
-        return null;
+
+        // 严格字符串解析：仅支持
+        // 1) yyyy/M/d,HH:mm:ss（示例：2025/6/20,8:30:35）
+        // 2) yyyy/M/d HH:mm:ss（示例：2025/6/20 8:30:35）
+        // 说明：M、d 为 1-2 位；H 允许 1-2 位；mm、ss 必须为 2 位
+        if (cell.getCellType() == CellType.STRING) {
+            String val = cell.getStringCellValue();
+            if (val != null) val = val.trim();
+
+            if (val == null || val.isEmpty()) {
+                throw new IllegalArgumentException(
+                    "日期字符串为空。仅支持的格式：yyyy/M/d,HH:mm:ss 或 yyyy/M/d HH:mm:ss（其中月份与日期可为1或2位数字）。"
+                );
+            }
+
+            String[] patterns = {
+                "yyyy/M/d,H:mm:ss",   // 逗号，无空格
+                "yyyy/M/d H:mm:ss"    // 空格
+            };
+
+            for (String p : patterns) {
+                SimpleDateFormat sdf = new SimpleDateFormat(p);
+                sdf.setLenient(false);
+                java.text.ParsePosition pos = new java.text.ParsePosition(0);
+                Date parsed = sdf.parse(val, pos);
+                if (parsed != null && pos.getIndex() == val.length()) {
+                    return parsed;
+                }
+            }
+
+            throw new IllegalArgumentException(
+                "无效的日期格式：\"" + val + "\"。仅支持：yyyy/M/d,HH:mm:ss 或 yyyy/M/d HH:mm:ss（其中月份与日期可为1或2位数字）。"
+            );
+        }
+
+        throw new IllegalArgumentException("不支持的单元格类型用于日期解析：" + cell.getCellType());
     }
 
     /**
