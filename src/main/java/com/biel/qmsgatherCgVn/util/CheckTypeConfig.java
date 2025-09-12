@@ -23,10 +23,15 @@ public final class CheckTypeConfig {
         MAPPING.put("CPK", 1);
         MAPPING.put("FAI", 4);
         MAPPING.put("首检", 3);
-        MAPPING.put("隔离", 7);
+        MAPPING.put("GL", 7);
+        MAPPING.put("GL-QJ", 13);
         MAPPING.put("待料", 8);
-        MAPPING.put("停机", 9);
-        MAPPING.put("调机", 2);
+        MAPPING.put("TJ2", 9);
+        MAPPING.put("TJ", 2);
+        MAPPING.put("TJ-NG", 10);
+        MAPPING.put("TJ-OK", 11);
+        MAPPING.put("TJP", 12);
+        MAPPING.put("HSL", 14);
     }
 
     /**
