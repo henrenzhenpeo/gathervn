@@ -4,6 +4,7 @@ import com.biel.qmsgatherCgVn.domain.DfUpScreenPrintingVarnish;
 import com.biel.qmsgatherCgVn.mq.AbstractPayloadBuilder;
 import com.biel.qmsgatherCgVn.mq.PayloadBuilder;
 import com.biel.qmsgatherCgVn.mq.SendMode;
+import com.biel.qmsgatherCgVn.util.CheckTypeConfig;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -35,7 +36,7 @@ public class ScreenPrintingVarnishPayloadBuilder extends AbstractPayloadBuilder<
         Map<String, Object> msg = new HashMap<>();
         msg.put("CheckDevCode", null);                     // 按既有约定：null
         msg.put("ItemName", e.getTestProject());           // 测量项目
-        msg.put("CheckType", e.getRemark());                // 默认映射为 state（如需用备注请改为 e.getRemark()）
+        msg.put("CheckType", CheckTypeConfig.mapForPayload(e.getRemark()));
         msg.put("MachineCode", e.getMachineCode());        // 机台号
         msg.put("ProcessNO", e.getProcess());              // 工序
         msg.put("CheckTime", format(e.getDate()));         // yyyy-MM-dd HH:mm:ss

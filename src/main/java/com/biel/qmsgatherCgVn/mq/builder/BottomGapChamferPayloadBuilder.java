@@ -9,6 +9,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.*;
 
+import com.biel.qmsgatherCgVn.util.CheckTypeConfig; // 新增：公共映射工具
+
 @Component
 public class BottomGapChamferPayloadBuilder extends AbstractPayloadBuilder<DfUpBottomGapChamfer> implements PayloadBuilder<DfUpBottomGapChamfer> {
 
@@ -36,7 +38,8 @@ public class BottomGapChamferPayloadBuilder extends AbstractPayloadBuilder<DfUpB
         // 按你的规则映射
         msg.put("CheckDevCode", null);                     // null
         msg.put("ItemName", e.getTestProject());           // testProject
-        msg.put("CheckType", e.getRemark());               // remark
+        // 原：msg.put("CheckType", e.getRemark());
+        msg.put("CheckType", CheckTypeConfig.mapForPayload(e.getRemark())); // 统一映射（CPK->1，FAI->4，未知类型回退为原始字符串）
         msg.put("MachineCode", e.getMachineCode());        // machineCode
         msg.put("ProcessNO", e.getProcess());              // process
         msg.put("CheckTime", format(e.getDate()));         // date -> yyyy-MM-dd HH:mm:ss

@@ -4,6 +4,7 @@ import com.biel.qmsgatherCgVn.domain.DfUpScreenPrintingbm;
 import com.biel.qmsgatherCgVn.mq.AbstractPayloadBuilder;
 import com.biel.qmsgatherCgVn.mq.PayloadBuilder;
 import com.biel.qmsgatherCgVn.mq.SendMode;
+import com.biel.qmsgatherCgVn.util.CheckTypeConfig;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -35,7 +36,7 @@ public class ScreenPrintingBmPayloadBuilder extends AbstractPayloadBuilder<DfUpS
         Map<String, Object> msg = new HashMap<>();
         msg.put("CheckDevCode", null);               // 按既有约定：null
         msg.put("ItemName", e.getTestProject());     // 测试项目
-        msg.put("CheckType", e.getState());          // 默认映射为状态（如需改为其它字段可调整）
+        msg.put("CheckType", CheckTypeConfig.mapForPayload(e.getState()));
         msg.put("MachineCode", e.getMachineCode());  // 机台号
         msg.put("ProcessNO", e.getProcess());        // 工序
         msg.put("CheckTime", format(e.getDate()));   // yyyy-MM-dd HH:mm:ss

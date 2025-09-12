@@ -4,6 +4,7 @@ import com.biel.qmsgatherCgVn.domain.DfUpScreenPrintWireftameIcp;
 import com.biel.qmsgatherCgVn.mq.AbstractPayloadBuilder;
 import com.biel.qmsgatherCgVn.mq.PayloadBuilder;
 import com.biel.qmsgatherCgVn.mq.SendMode;
+import com.biel.qmsgatherCgVn.util.CheckTypeConfig;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -35,8 +36,7 @@ public class ScreenPrintWireftameIcpPayloadBuilder extends AbstractPayloadBuilde
         Map<String, Object> msg = new HashMap<>();
         msg.put("CheckDevCode", null);                     // 要求：null
         msg.put("ItemName", e.getTestProject());           // testProject
-        msg.put("CheckType", e.getState());                // 先默认映射 state（如需改为其他字段请告知）
-        msg.put("MachineCode", e.getMachineCode());        // 机台号
+        msg.put("CheckType", CheckTypeConfig.mapForPayload(e.getState()));        msg.put("MachineCode", e.getMachineCode());        // 机台号
         msg.put("ProcessNO", e.getProcess());              // 工序
         msg.put("CheckTime", format(e.getDate()));         // yyyy-MM-dd HH:mm:ss
 
