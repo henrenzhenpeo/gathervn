@@ -58,53 +58,57 @@ public final class ExcelCellParsers {
     }
 
     /**
-     * 解析日期：支持 Excel 日期数值，以及字符串日期（/ 替换为 -，格式 yyyy-M-d H:m:s）
-     * 解析失败返回 null。
-     */
-    public static Date getDateCellValue(Cell cell) {
-        if (cell == null) return null;
+ * 解析日期：支持 Excel 日期数值，以及字符串日期（/ 替换为 -，格式 yyyy-M-d H:m:s）
+ * 解析失败返回 null。
+ */
+public static Date getDateCellValue(Cell cell) {
+    if (cell == null) return null;
 
-        // Excel 数值型且为日期格式：直接取日期
-        if (cell.getCellType() == CellType.NUMERIC && DateUtil.isCellDateFormatted(cell)) {
-            return cell.getDateCellValue();
-        }
+    // Excel 数值型且为日期格式：直接取日期
+    if (cell.getCellType() == CellType.NUMERIC && DateUtil.isCellDateFormatted(cell)) {
+        return cell.getDateCellValue();
+    }
 
-        // 严格字符串解析：仅支持
-        // 1) yyyy/M/d,HH:mm:ss（示例：2025/6/20,8:30:35）
-        // 2) yyyy/M/d HH:mm:ss（示例：2025/6/20 8:30:35）
-        // 说明：M、d 为 1-2 位；H 允许 1-2 位；mm、ss 必须为 2 位
-        if (cell.getCellType() == CellType.STRING) {
-            String val = cell.getStringCellValue();
-            if (val != null) val = val.trim();
+    // 严格字符串解析：仅支持
+    // 1) yyyy/M/d,HH:mm:ss（示例：2025/6/20,8:30:35）
+    // 2) yyyy/M/d HH:mm:ss（示例：2025/6/20 8:30:35）
+    // 3) yyyy/M/d,HH:mm（示例：2025/6/20,8:30）- 新增支持
+    // 4) yyyy/M/d HH:mm（示例：2025/6/20 8:30）- 新增支持
+    if (cell.getCellType() == CellType.STRING) {
+        String val = cell.getStringCellValue();
+        if (val != null) val = val.trim();
 
-            if (val == null || val.isEmpty()) {
-                throw new IllegalArgumentException(
-                    "日期字符串为空。仅支持的格式：yyyy/M/d,HH:mm:ss 或 yyyy/M/d HH:mm:ss（其中月份与日期可为1或2位数字）。"
-                );
-            }
-
-            String[] patterns = {
-                "yyyy/M/d,H:mm:ss",   // 逗号，无空格
-                "yyyy/M/d H:mm:ss"    // 空格
-            };
-
-            for (String p : patterns) {
-                SimpleDateFormat sdf = new SimpleDateFormat(p);
-                sdf.setLenient(false);
-                java.text.ParsePosition pos = new java.text.ParsePosition(0);
-                Date parsed = sdf.parse(val, pos);
-                if (parsed != null && pos.getIndex() == val.length()) {
-                    return parsed;
-                }
-            }
-
+        if (val == null || val.isEmpty()) {
             throw new IllegalArgumentException(
-                "无效的日期格式：\"" + val + "\"。仅支持：yyyy/M/d,HH:mm:ss 或 yyyy/M/d HH:mm:ss（其中月份与日期可为1或2位数字）。"
+                "日期字符串为空。仅支持的格式：yyyy/M/d,HH:mm:ss 或 yyyy/M/d HH:mm:ss（其中月份与日期可为1或2位数字）。"
             );
         }
 
-        throw new IllegalArgumentException("不支持的单元格类型用于日期解析：" + cell.getCellType());
+        String[] patterns = {
+            "yyyy/M/d,HH:mm:ss",   // 逗号，无空格，含秒
+            "yyyy/M/d HH:mm:ss",   // 空格，含秒
+            "yyyy/M/d,HH:mm",      // 逗号，无空格，不含秒
+            "yyyy/M/d HH:mm"       // 空格，不含秒
+        };
+
+        for (String p : patterns) {
+            SimpleDateFormat sdf = new SimpleDateFormat(p);
+            sdf.setLenient(false);
+            java.text.ParsePosition pos = new java.text.ParsePosition(0);
+            Date parsed = sdf.parse(val, pos);
+            if (parsed != null && pos.getIndex() == val.length()) {
+                return parsed;
+            }
+        }
+
+        throw new IllegalArgumentException(
+            "无效的日期格式：\"" + val + "\"。仅支持：yyyy/M/d,HH:mm:ss 或 yyyy/M/d HH:mm:ss（其中月份与日期可为1或2位数字）。"
+        );
     }
+
+    throw new IllegalArgumentException("不支持的单元格类型用于日期解析：" + cell.getCellType());
+}
+
 
     /**
      * 标准化 Cell 的字符串：toString 并 trim；null 安全。
