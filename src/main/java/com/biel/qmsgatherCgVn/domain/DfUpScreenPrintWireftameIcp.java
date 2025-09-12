@@ -25,7 +25,7 @@ public class DfUpScreenPrintWireftameIcp {
     /**
      * 时间
      */
-    @Excel(name = "时间")
+    @Excel(name = "时间", exportFormat = "yyyy-MM-dd HH:mm:ss")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date date;
 
@@ -199,7 +199,7 @@ public class DfUpScreenPrintWireftameIcp {
     /**
      * 上传时间
      */
-    @Excel(name = "上传时间")
+    @Excel(name = "上传时间", exportFormat = "yyyy-MM-dd HH:mm:ss")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date uploadCreate;
 

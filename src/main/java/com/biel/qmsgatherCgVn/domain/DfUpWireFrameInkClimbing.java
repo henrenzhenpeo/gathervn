@@ -25,7 +25,7 @@ public class DfUpWireFrameInkClimbing {
     /**
      * 时间日期
      */
-    @Excel(name = "时间日期")
+    @Excel(name = "时间日期", exportFormat = "yyyy-MM-dd HH:mm:ss")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date date;
 
@@ -104,7 +104,7 @@ public class DfUpWireFrameInkClimbing {
     /**
      * 创建时间
      */
-    @Excel(name = "创建时间")
+    @Excel(name = "创建时间", exportFormat = "yyyy-MM-dd HH:mm:ss")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date createTime;
 
