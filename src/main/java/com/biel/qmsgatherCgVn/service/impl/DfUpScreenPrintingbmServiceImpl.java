@@ -11,6 +11,10 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher; // 新增
+import com.biel.qmsgatherCgVn.event.DataImportedEvent;    // 新增
+import java.util.ArrayList;                               // 新增
+import java.util.List;                                    // 新增
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -33,6 +37,11 @@ public class DfUpScreenPrintingbmServiceImpl extends ServiceImpl<DfUpScreenPrint
     @Autowired
     private DfUpScreenPrintingbmMapper dfUpScreenPrintingbmMapper;
 
+    @Autowired
+    private ApplicationEventPublisher eventPublisher; // 新增：事件发布器
+
+    private static final int MQ_BATCH_SIZE = 200;     // 新增：批量大小与其他模块保持一致
+
     @Override
     public void importExcel(MultipartFile file, String factory, String model, String process, String testProject,String uploadName, String batchId) throws Exception {
         PoiZipSecurity.configure();
@@ -41,6 +50,9 @@ public class DfUpScreenPrintingbmServiceImpl extends ServiceImpl<DfUpScreenPrint
     
             // 表头校验：表头在第2行（索引1），从第2列开始校验
             validateHeader(sheet);
+    
+            // 新增：批量事件缓存
+            List<DfUpScreenPrintingbm> mqBatch = new ArrayList<>(MQ_BATCH_SIZE);
     
             int startRow = 8; // 从第9行开始（索引是8）
             for (int r = startRow; r <= sheet.getLastRowNum(); r++) {
@@ -92,6 +104,19 @@ public class DfUpScreenPrintingbmServiceImpl extends ServiceImpl<DfUpScreenPrint
                 entity.setCreateTime(new Date());
     
                 dfUpScreenPrintingbmMapper.insert(entity);
+    
+                // 新增：批量事件发布（由监听器统一发送到MQ）
+                mqBatch.add(entity);
+                if (mqBatch.size() >= MQ_BATCH_SIZE) {
+                    eventPublisher.publishEvent(new DataImportedEvent<>(new ArrayList<>(mqBatch), DfUpScreenPrintingbm.class));
+                    mqBatch.clear();
+                }
+            }
+    
+            // 新增：收尾发布
+            if (!mqBatch.isEmpty()) {
+                eventPublisher.publishEvent(new DataImportedEvent<>(new ArrayList<>(mqBatch), DfUpScreenPrintingbm.class));
+                mqBatch.clear();
             }
         }
     }

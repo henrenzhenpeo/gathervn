@@ -1,7 +1,6 @@
 package com.biel.qmsgatherCgVn.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.biel.qmsgatherCgVn.domain.DfUpScreenPrintingbm;
 import com.biel.qmsgatherCgVn.domain.DfUpSilkScreenWireframe;
 import com.biel.qmsgatherCgVn.service.DfUpSilkScreenWireframeService;
 import com.biel.qmsgatherCgVn.mapper.DfUpSilkScreenWireframeMapper;
@@ -15,6 +14,10 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.ss.util.CellRangeAddress; // 新增：用于检测表头合并单元格
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher; // 新增
+import com.biel.qmsgatherCgVn.event.DataImportedEvent;    // 新增
+import java.util.ArrayList;                                // 新增
+import java.util.List;                                     // 新增
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -30,9 +33,13 @@ import java.util.Date;
 public class DfUpSilkScreenWireframeServiceImpl extends ServiceImpl<DfUpSilkScreenWireframeMapper, DfUpSilkScreenWireframe>
     implements DfUpSilkScreenWireframeService{
 
-
     @Autowired
     private DfUpSilkScreenWireframeMapper dfUpSilkScreenWireframeMapper;
+
+    @Autowired
+    private ApplicationEventPublisher publisher; // 新增
+
+    private static final int MQ_BATCH_SIZE = 200; // 新增，与现有模块保持一致
 
     @Override
     public void importExcel(MultipartFile file, String factory, String model, String process, String testProject,String uploadName, String batchId) throws Exception {
@@ -47,6 +54,7 @@ public class DfUpSilkScreenWireframeServiceImpl extends ServiceImpl<DfUpSilkScre
         validateHeader(sheet);
 
         int startRow = 8; // 从第9行开始（索引是8）
+        List<DfUpSilkScreenWireframe> mqBatch = new ArrayList<>(MQ_BATCH_SIZE); // 新增
         for (int r = startRow; r <= sheet.getLastRowNum(); r++) {
             Row row = sheet.getRow(r);
 
@@ -68,7 +76,6 @@ public class DfUpSilkScreenWireframeServiceImpl extends ServiceImpl<DfUpSilkScre
             entity.setThreePointx(getDoubleCellValue(row.getCell(i++)));
             entity.setFourPointx(getDoubleCellValue(row.getCell(i++)));
 
-//            entity.setFourPointx(getDoubleCellValue(row.getCell(i++)));
             entity.setFivePointy1(getDoubleCellValue(row.getCell(i++)));
             entity.setSixPointy2(getDoubleCellValue(row.getCell(i++)));
 
@@ -94,6 +101,19 @@ public class DfUpSilkScreenWireframeServiceImpl extends ServiceImpl<DfUpSilkScre
 
             // 保存
             dfUpSilkScreenWireframeMapper.insert(entity);
+
+            // 新增：加入 MQ 批次并按阈值发布
+            mqBatch.add(entity);
+            if (mqBatch.size() >= MQ_BATCH_SIZE) {
+                publishBatch(mqBatch);
+                mqBatch.clear();
+            }
+        }
+
+        // 新增：收尾发布剩余
+        if (!mqBatch.isEmpty()) {
+            publishBatch(mqBatch);
+            mqBatch.clear();
         }
 
         workbook.close();
@@ -249,6 +269,12 @@ public class DfUpSilkScreenWireframeServiceImpl extends ServiceImpl<DfUpSilkScre
     private boolean containsIgnoreCase(String src, String needle) {
         if (src == null || needle == null) return false;
         return src.toLowerCase().contains(needle.toLowerCase());
+    }
+
+    // 新增：发布事件的封装（复制一份避免引用外部可变集合）
+    private void publishBatch(List<DfUpSilkScreenWireframe> batch) {
+        if (batch == null || batch.isEmpty()) return;
+        publisher.publishEvent(new DataImportedEvent<>(new ArrayList<>(batch), DfUpSilkScreenWireframe.class));
     }
 }
 

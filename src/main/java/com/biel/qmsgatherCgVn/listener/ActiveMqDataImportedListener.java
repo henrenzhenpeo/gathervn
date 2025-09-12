@@ -4,6 +4,7 @@ import com.biel.qmsgatherCgVn.domain.DfUpBottomGapChamfer;
 import com.biel.qmsgatherCgVn.domain.DfUpChamferHypotenuse;
 import com.biel.qmsgatherCgVn.domain.DfUpScreenPrintWireftameIcp;
 import com.biel.qmsgatherCgVn.domain.DfUpScreenPrintingVarnish; // 新增
+import com.biel.qmsgatherCgVn.domain.DfUpSilkScreenWireframe; // 新增
 import com.biel.qmsgatherCgVn.event.DataImportedEvent;
 import com.biel.qmsgatherCgVn.mq.ActiveMqDispatcher;
 import org.springframework.context.event.EventListener;
@@ -39,11 +40,27 @@ public class ActiveMqDataImportedListener {
         dispatcher.dispatch(batch, DfUpScreenPrintWireftameIcp.class);
     }
 
+    // 新增：丝印BM2事件分发
+    @EventListener(condition = "#root.args[0].entityType == T(com.biel.qmsgatherCgVn.domain.DfUpScreenPrintingbm)")
+    public void onScreenPrintingBm(DataImportedEvent<com.biel.qmsgatherCgVn.domain.DfUpScreenPrintingbm> event) {
+        List<com.biel.qmsgatherCgVn.domain.DfUpScreenPrintingbm> batch = event.getPayload();
+        if (batch == null || batch.isEmpty()) return;
+        dispatcher.dispatch(batch, com.biel.qmsgatherCgVn.domain.DfUpScreenPrintingbm.class);
+    }
+
     // 新增：丝印光油事件分发
     @EventListener(condition = "#root.args[0].entityType == T(com.biel.qmsgatherCgVn.domain.DfUpScreenPrintingVarnish)")
     public void onScreenPrintingVarnish(DataImportedEvent<com.biel.qmsgatherCgVn.domain.DfUpScreenPrintingVarnish> event) {
         List<com.biel.qmsgatherCgVn.domain.DfUpScreenPrintingVarnish> batch = event.getPayload();
         if (batch == null || batch.isEmpty()) return;
         dispatcher.dispatch(batch, com.biel.qmsgatherCgVn.domain.DfUpScreenPrintingVarnish.class);
+    }
+
+    // 新增：丝印线框事件分发
+    @EventListener(condition = "#root.args[0].entityType == T(com.biel.qmsgatherCgVn.domain.DfUpSilkScreenWireframe)")
+    public void onSilkScreenWireframe(DataImportedEvent<DfUpSilkScreenWireframe> event) {
+        List<DfUpSilkScreenWireframe> batch = event.getPayload();
+        if (batch == null || batch.isEmpty()) return;
+        dispatcher.dispatch(batch, DfUpSilkScreenWireframe.class);
     }
 }
