@@ -12,7 +12,7 @@ import java.util.*;
 @Component
 public class ScreenPrintingVarnishPayloadBuilder extends AbstractPayloadBuilder<DfUpScreenPrintingVarnish> implements PayloadBuilder<DfUpScreenPrintingVarnish> {
 
-    @Value("${app.mq.queues.screen-printing-varnish:screen_printing_varnish}")
+    @Value("${app.mq.queues.all_data_queue}")
     private String queueName;
 
     @Override

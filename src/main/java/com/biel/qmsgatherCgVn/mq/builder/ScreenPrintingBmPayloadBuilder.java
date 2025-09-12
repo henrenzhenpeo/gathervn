@@ -12,7 +12,7 @@ import java.util.*;
 @Component
 public class ScreenPrintingBmPayloadBuilder extends AbstractPayloadBuilder<DfUpScreenPrintingbm> implements PayloadBuilder<DfUpScreenPrintingbm> {
 
-    @Value("${app.mq.queues.screen-printing-bm:screen_printing_bm}")
+    @Value("${app.mq.queues.all_data_queue}")
     private String queueName;
 
     @Override

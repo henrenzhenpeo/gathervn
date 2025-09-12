@@ -12,7 +12,7 @@ import java.util.*;
 @Component
 public class SilkScreenWireframePayloadBuilder extends AbstractPayloadBuilder<DfUpSilkScreenWireframe> implements PayloadBuilder<DfUpSilkScreenWireframe> {
 
-    @Value("${app.mq.queues.silk-screen-wireframe:silk_screen_wireframe}")
+    @Value("${app.mq.queues.all_data_queue}")
     private String queueName;
 
     @Override

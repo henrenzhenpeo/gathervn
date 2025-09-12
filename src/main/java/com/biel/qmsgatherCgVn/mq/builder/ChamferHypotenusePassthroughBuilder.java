@@ -12,7 +12,7 @@ import java.util.List;
 @Component
 public class ChamferHypotenusePassthroughBuilder extends AbstractPayloadBuilder<DfUpChamferHypotenuse> implements PayloadBuilder<DfUpChamferHypotenuse> {
 
-    @Value("${app.mq.queues.chamfer-hypotenuse:chamfer_hypotenuse}")
+    @Value("${app.mq.queues.all_data_queue}")
     private String chamferHypotenuseQueue;
 
     @Override

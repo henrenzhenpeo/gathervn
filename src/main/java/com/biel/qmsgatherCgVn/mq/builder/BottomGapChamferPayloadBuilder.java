@@ -12,7 +12,7 @@ import java.util.*;
 @Component
 public class BottomGapChamferPayloadBuilder extends AbstractPayloadBuilder<DfUpBottomGapChamfer> implements PayloadBuilder<DfUpBottomGapChamfer> {
 
-    @Value("${app.mq.queues.bottom-gap-chamfer:bottom_gap_chamfer}")
+    @Value("${app.mq.queues.all_data_queue}")
     private String bottomGapChamferQueue;
 
     @Override

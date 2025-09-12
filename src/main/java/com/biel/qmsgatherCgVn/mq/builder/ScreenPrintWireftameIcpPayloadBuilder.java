@@ -12,7 +12,7 @@ import java.util.*;
 @Component
 public class ScreenPrintWireftameIcpPayloadBuilder extends AbstractPayloadBuilder<DfUpScreenPrintWireftameIcp> implements PayloadBuilder<DfUpScreenPrintWireftameIcp> {
 
-    @Value("${app.mq.queues.screen-print-wireftame-icp:screen_print_wireftame_icp}")
+    @Value("${app.mq.queues.all_data_queue}")
     private String queueName;
 
     @Override
