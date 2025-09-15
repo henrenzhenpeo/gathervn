@@ -7,7 +7,6 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.api.R;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.biel.qmsgatherCgVn.domain.DfUpInkDensity;
-import com.biel.qmsgatherCgVn.domain.DfUpResistance;
 import com.biel.qmsgatherCgVn.service.DfUpInkDensityService;
 import com.biel.qmsgatherCgVn.util.DateUtil;
 import com.biel.qmsgatherCgVn.util.Result;

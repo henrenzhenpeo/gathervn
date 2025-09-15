@@ -1,7 +1,6 @@
 package com.biel.qmsgatherCgVn.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.biel.qmsgatherCgVn.domain.DfUpSilkScreenWireframe;
 import com.biel.qmsgatherCgVn.domain.DfUpTxPvdOverflowPlating;
 import com.biel.qmsgatherCgVn.service.DfUpTxPvdOverflowPlatingService;
 import com.biel.qmsgatherCgVn.mapper.DfUpTxPvdOverflowPlatingMapper;

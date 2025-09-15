@@ -6,8 +6,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.api.R;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.biel.qmsgatherCgVn.domain.DfUpResistance;
-import com.biel.qmsgatherCgVn.domain.DfUpScreenPrintingVarnish;
 import com.biel.qmsgatherCgVn.domain.DfUpScreenPrintingbm;
 import com.biel.qmsgatherCgVn.service.DfUpScreenPrintingbmService;
 import io.swagger.annotations.Api;

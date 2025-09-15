@@ -4,8 +4,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.api.R;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.biel.qmsgatherCgVn.domain.DfUpBaige;
-import com.biel.qmsgatherCgVn.domain.DfUpSilkScreenWireframe;
 import com.biel.qmsgatherCgVn.domain.DfUpWaterDrop;
 import com.biel.qmsgatherCgVn.service.DfUpWaterDropService;
 import com.biel.qmsgatherCgVn.util.DateUtil;

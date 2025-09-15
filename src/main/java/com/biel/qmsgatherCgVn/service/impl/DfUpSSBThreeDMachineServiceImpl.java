@@ -2,7 +2,6 @@ package com.biel.qmsgatherCgVn.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.biel.qmsgatherCgVn.domain.DfUpSSBThreeDMachine;
-import com.biel.qmsgatherCgVn.domain.DfUpScreenPrintWireftameIcp;
 import com.biel.qmsgatherCgVn.event.DataImportedEvent;
 import com.biel.qmsgatherCgVn.mapper.DfUpSSBThreeDMachineMapper;
 import com.biel.qmsgatherCgVn.service.DfUpSSBThreeDMachineService;

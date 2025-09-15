@@ -7,7 +7,6 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.api.R;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.biel.qmsgatherCgVn.domain.DfUpSSBThreeDMachine;
-import com.biel.qmsgatherCgVn.domain.vo.DfUpChamferHypotenuseVo;
 import com.biel.qmsgatherCgVn.domain.vo.DfUpSSBThreeDMachineVo;
 import com.biel.qmsgatherCgVn.service.DfUpSSBThreeDMachineService;
 import io.swagger.annotations.Api;
