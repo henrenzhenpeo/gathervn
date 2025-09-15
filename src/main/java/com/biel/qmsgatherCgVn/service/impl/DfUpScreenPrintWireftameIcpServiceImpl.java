@@ -1,9 +1,9 @@
 package com.biel.qmsgatherCgVn.service.impl;
 
-import cn.afterturn.easypoi.excel.ExcelImportUtil;
-import cn.afterturn.easypoi.excel.entity.ImportParams;
+
+
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.biel.qmsgatherCgVn.domain.DfUpChamferHypotenuse;
+
 import com.biel.qmsgatherCgVn.domain.DfUpScreenPrintWireftameIcp;
 import com.biel.qmsgatherCgVn.event.DataImportedEvent;
 import com.biel.qmsgatherCgVn.mapper.DfUpScreenPrintWireftameIcpMapper;
@@ -13,18 +13,14 @@ import com.biel.qmsgatherCgVn.util.excel.ExcelCellParsers;
 import com.biel.qmsgatherCgVn.util.excel.ExcelHeaderValidator;
 import com.biel.qmsgatherCgVn.util.excel.ExcelSheetUtils;
 import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.ss.util.CellRangeAddress;  // ← 新增：用于读取合并单元格区域
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 /**
 * @author dafenqi

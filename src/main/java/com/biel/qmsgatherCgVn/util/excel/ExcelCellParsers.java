@@ -4,7 +4,10 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.DateUtil;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -127,5 +130,79 @@ public static Date getDateCellValue(Cell cell) {
     public static String getStringCellValue(Cell cell) {
         if (cell == null) return null;
         return cell.toString().trim();
+    }
+
+    public static Integer getIntegerCellValue(Cell cell) {
+        if (cell == null) {
+            //System.out.println("单元格为空");
+            return 0;
+        }
+
+        try {
+            switch (cell.getCellType()) {
+                case NUMERIC:
+                    int value = (int) cell.getNumericCellValue();
+                    //System.out.println("读取到数值: " + value);
+                    return value;
+                case STRING:
+                    String strValue = cell.getStringCellValue().trim();
+                    //System.out.println("读取到字符串: '" + strValue + "'");
+                    if (strValue.isEmpty()) {
+                        return 0;
+                    }
+                    return Integer.parseInt(strValue);
+                case FORMULA:
+                    // 处理公式单元格 - 获取公式计算后的值
+                    //System.out.println("检测到公式单元格");
+                    switch (cell.getCachedFormulaResultType()) {
+                        case NUMERIC:
+                            int formulaValue = (int) cell.getNumericCellValue();
+                            //System.out.println("公式计算结果: " + formulaValue);
+                            return formulaValue;
+                        case STRING:
+                            String formulaStrValue = cell.getStringCellValue().trim();
+                            //System.out.println("公式字符串结果: '" + formulaStrValue + "'");
+                            if (formulaStrValue.isEmpty()) {
+                                return 0;
+                            }
+                            return Integer.parseInt(formulaStrValue);
+                        default:
+                            //System.out.println("公式结果类型不支持: " + cell.getCachedFormulaResultType());
+                            return 0;
+                    }
+                default:
+                    //System.out.println("不支持的单元格类型: " + cell.getCellType());
+                    return 0;
+            }
+        } catch (Exception e) {
+            //System.out.println("解析单元格异常: " + e.getMessage());
+            return 0;
+        }
+    }
+
+    public static String determineShift(Date date) {
+        if (date == null) return null;
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+
+        // 7点到19点是A班次，19点到次日7点是B班次
+        if (hour >= 7 && hour < 19) {
+            return "A班";
+        } else {
+            return "B班";
+        }
+    }
+
+    /**
+     * 保留指定小数位数
+     */
+    public double roundToDecimalPlaces(double value, int decimalPlaces) {
+        if (Double.isNaN(value) || Double.isInfinite(value)) {
+            return 0.0;
+        }
+        BigDecimal bd = BigDecimal.valueOf(value);
+        return bd.setScale(decimalPlaces, RoundingMode.HALF_UP).doubleValue();
     }
 }
