@@ -1,11 +1,6 @@
 package com.biel.qmsgatherCgVn.listener;
 
-import com.biel.qmsgatherCgVn.domain.DfUpBottomGapChamfer;
-import com.biel.qmsgatherCgVn.domain.DfUpChamferHypotenuse;
-import com.biel.qmsgatherCgVn.domain.DfUpScreenPrintWireftameIcp;
-import com.biel.qmsgatherCgVn.domain.DfUpScreenPrintingVarnish; // 新增
-import com.biel.qmsgatherCgVn.domain.DfUpSilkScreenWireframe; // 新增
-import com.biel.qmsgatherCgVn.domain.DfUpWireFrameInkClimbing; // 新增
+import com.biel.qmsgatherCgVn.domain.*;
 import com.biel.qmsgatherCgVn.event.DataImportedEvent;
 import com.biel.qmsgatherCgVn.mq.ActiveMqDispatcher;
 import org.springframework.context.event.EventListener;
@@ -81,5 +76,14 @@ public class ActiveMqDataImportedListener {
         if (batch == null || batch.isEmpty()) return;
         dispatcher.dispatch(batch, DfUpWireFrameInkClimbing.class);
         log.info("[DfUpWireFrameInkClimbing] ActiveMQ转发成功：批次条数={}", batch.size());
+    }
+
+    // 新增：SSB3D机事件分发
+    @EventListener(condition = "#root.args[0].entityType == T(com.biel.qmsgatherCgVn.domain.DfUpSSBThreeDMachine)")
+    public void onSSBThreeDMachine(DataImportedEvent<DfUpSSBThreeDMachine> event) {
+        List<DfUpSSBThreeDMachine> batch = event.getPayload();
+        if (batch == null || batch.isEmpty()) return;
+        dispatcher.dispatch(batch, DfUpSSBThreeDMachine.class);
+        log.info("[DfUpSSBThreeDMachine] ActiveMQ转发成功：批次条数={}", batch.size());
     }
 }

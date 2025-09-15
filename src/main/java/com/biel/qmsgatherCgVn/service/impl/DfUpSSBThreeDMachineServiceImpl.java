@@ -2,11 +2,14 @@ package com.biel.qmsgatherCgVn.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.biel.qmsgatherCgVn.domain.DfUpSSBThreeDMachine;
+import com.biel.qmsgatherCgVn.domain.DfUpScreenPrintWireftameIcp;
+import com.biel.qmsgatherCgVn.event.DataImportedEvent;
 import com.biel.qmsgatherCgVn.mapper.DfUpSSBThreeDMachineMapper;
 import com.biel.qmsgatherCgVn.service.DfUpSSBThreeDMachineService;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -31,6 +34,11 @@ public class DfUpSSBThreeDMachineServiceImpl extends ServiceImpl<DfUpSSBThreeDMa
     @Autowired
     private DfUpSSBThreeDMachineMapper dfUpSSBThreeDMachineMapper;
 
+    @Autowired
+    private ApplicationEventPublisher publisher;
+
+    private static final int MQ_BATCH_SIZE = 200;
+
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void importExcel(MultipartFile file, String factory, String model, String process, String testProject, String uploadName, String batchId,String createTime) throws Exception {
@@ -44,6 +52,7 @@ public class DfUpSSBThreeDMachineServiceImpl extends ServiceImpl<DfUpSSBThreeDMa
         Map<String, String> mergedCellValues = getMergedCellValues(sheet);
 
         int startRow = 11;
+        List<DfUpSSBThreeDMachine> mqBatch = new ArrayList<>();
         for (int r = startRow; r <= sheet.getLastRowNum(); r++) {
             Row row = sheet.getRow(r);
             if (row == null) continue;
@@ -86,6 +95,17 @@ public class DfUpSSBThreeDMachineServiceImpl extends ServiceImpl<DfUpSSBThreeDMa
             entity.setCreateTime(new Date());
 
             dfUpSSBThreeDMachineMapper.insert(entity);
+
+            // 批量事件发布（由监听器统一发送到MQ）
+            mqBatch.add(entity);
+            if (mqBatch.size() >= MQ_BATCH_SIZE) {
+                publisher.publishEvent(new DataImportedEvent<>(new ArrayList<>(mqBatch), DfUpSSBThreeDMachine.class));
+                mqBatch.clear();
+            }
+        }
+        if (!mqBatch.isEmpty()) {
+            publisher.publishEvent(new DataImportedEvent<>(new ArrayList<>(mqBatch), DfUpSSBThreeDMachine.class));
+            mqBatch.clear();
         }
     }
 
