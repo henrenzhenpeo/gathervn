@@ -4,10 +4,14 @@ import com.biel.qmsgatherCgVn.domain.DfUpChamferHypotenuse;
 import com.biel.qmsgatherCgVn.mq.AbstractPayloadBuilder;
 import com.biel.qmsgatherCgVn.mq.PayloadBuilder;
 import com.biel.qmsgatherCgVn.mq.SendMode;
+import com.biel.qmsgatherCgVn.util.CheckTypeConfig;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Component
 public class ChamferHypotenusePassthroughBuilder extends AbstractPayloadBuilder<DfUpChamferHypotenuse> implements PayloadBuilder<DfUpChamferHypotenuse> {
@@ -27,18 +31,46 @@ public class ChamferHypotenusePassthroughBuilder extends AbstractPayloadBuilder<
 
     @Override
     public SendMode sendMode() {
-        return SendMode.BATCH; // 批量发送一次
+        return SendMode.PER_ITEM; // 批量发送一次
     }
 
     @Override
     public Object buildPayload(DfUpChamferHypotenuse e) {
-        // 不会走到（BATCH 模式直接走 buildBatchPayload）
-        return e;
+        Map<String, Object> msg = new HashMap<>();
+        msg.put("CheckDevCode", null);               // 按既有约定：null
+        msg.put("ItemName", e.getTestProject());     // 测试项目
+        msg.put("CheckType", CheckTypeConfig.mapForPayload(e.getState()));
+        msg.put("MachineCode", e.getMachineCode());  // 机台号
+        msg.put("ProcessNO", e.getProcess());        // 工序
+        msg.put("CheckTime", format(e.getDate()));   // yyyy-MM-dd HH:mm:ss
+
+        List<Map<String, Object>> items = new ArrayList<>();
+        addItem(items, "短边右上1", e.getShortUr1());
+        addItem(items, "短边右下4", e.getShortLr4());
+        addItem(items, "短边左上8", e.getShortUl8());
+        addItem(items, "短边左下5", e.getShortLl5());
+        addItem(items, "长边右上2", e.getLongUr2());
+        addItem(items, "长边右下3", e.getLongLr3());
+        addItem(items, "长边左上7", e.getLongUl7());
+        addItem(items, "长边左下6", e.getLongLl6());
+        addItem(items, "平均值", e.getAvg());
+        addItem(items, "1-4差值", e.getStd1to4());
+        addItem(items, "2-7差值", e.getStd2to7());
+        addItem(items, "3-6差值", e.getStd3to6());
+        addItem(items, "5-8差值", e.getStd5to8());
+        msg.put("CheckItemInfos", items);
+
+        return msg;
     }
 
-    @Override
-    public Object buildBatchPayload(List<DfUpChamferHypotenuse> batch) {
-        // 直接批量发送原始列表
-        return batch;
+
+
+    private void addItem(List<Map<String, Object>> list, String name, Double value) {
+        if (value != null) {
+            Map<String, Object> item = new HashMap<>();
+            item.put("ItemName", name);
+            item.put("CheckValue", value);
+            list.add(item);
+        }
     }
 }
