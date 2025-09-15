@@ -68,34 +68,35 @@ public final class ExcelCellParsers {
  * 解析日期：支持 Excel 日期数值，以及字符串日期（/ 替换为 -，格式 yyyy-M-d H:m:s）
  * 解析失败返回 null。
  */
+// 所属类：ExcelCellParsers
 public static Date getDateCellValue(Cell cell) {
     if (cell == null) return null;
+
+    // 新增：空白单元格直接视为无日期，返回 null
+    if (cell.getCellType() == CellType.BLANK) {
+        return null;
+    }
 
     // Excel 数值型且为日期格式：直接取日期
     if (cell.getCellType() == CellType.NUMERIC && DateUtil.isCellDateFormatted(cell)) {
         return cell.getDateCellValue();
     }
 
-    // 严格字符串解析：仅支持
-    // 1) yyyy/M/d,HH:mm:ss（示例：2025/6/20,8:30:35）
-    // 2) yyyy/M/d HH:mm:ss（示例：2025/6/20 8:30:35）
-    // 3) yyyy/M/d,HH:mm（示例：2025/6/20,8:30）- 新增支持
-    // 4) yyyy/M/d HH:mm（示例：2025/6/20 8:30）- 新增支持
+    // 严格字符串解析
     if (cell.getCellType() == CellType.STRING) {
         String val = cell.getStringCellValue();
         if (val != null) val = val.trim();
 
+        // 调整：空字符串直接返回 null，由调用方决定是否跳过该行
         if (val == null || val.isEmpty()) {
-            throw new IllegalArgumentException(
-                "日期字符串为空。仅支持的格式：yyyy/M/d,HH:mm:ss 或 yyyy/M/d HH:mm:ss（其中月份与日期可为1或2位数字）。"
-            );
+            return null;
         }
 
         String[] patterns = {
-            "yyyy/M/d,HH:mm:ss",   // 逗号，无空格，含秒
-            "yyyy/M/d HH:mm:ss",   // 空格，含秒
-            "yyyy/M/d,HH:mm",      // 逗号，无空格，不含秒
-            "yyyy/M/d HH:mm"       // 空格，不含秒
+            "yyyy/M/d,HH:mm:ss",
+            "yyyy/M/d HH:mm:ss",
+            "yyyy/M/d,HH:mm",
+            "yyyy/M/d HH:mm"
         };
 
         for (String p : patterns) {
@@ -113,6 +114,7 @@ public static Date getDateCellValue(Cell cell) {
         );
     }
 
+    // 其他类型（如布尔、错误等）仍视为不支持
     throw new IllegalArgumentException("不支持的单元格类型用于日期解析：" + cell.getCellType());
 }
 
