@@ -9,12 +9,16 @@ import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Map;
 
 /**
  * 通用的 Excel 单元格解析工具
  */
 public final class ExcelCellParsers {
     //private ExcelCellParsers() {}
+
+
+
 
     /**
      * 解析数值：支持 NUMERIC、STRING（去空格、千分位、短横线“-”）以及 FORMULA。
@@ -130,6 +134,19 @@ public static Date getDateCellValue(Cell cell) {
     public static String getStringCellValue(Cell cell) {
         if (cell == null) return null;
         return cell.toString().trim();
+    }
+
+    /**
+     * 读取字符串单元格值（支持合并单元格）
+     */
+    public static String getStringCellValue(Cell cell, Map<String, String> mergedCellValues, int rowNum, int colNum) {
+        // 先检查是否属于合并区域
+        String key = rowNum + "_" + colNum;
+        if (mergedCellValues.containsKey(key)) {
+            return mergedCellValues.get(key); // 返回合并区域的首行值
+        }
+        // 非合并区域，正常读取
+        return getStringCellValue(cell);
     }
 
     public static Integer getIntegerCellValue(Cell cell) {

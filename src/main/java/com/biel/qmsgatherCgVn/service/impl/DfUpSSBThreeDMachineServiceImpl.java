@@ -15,6 +15,9 @@ import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import static com.biel.qmsgatherCgVn.util.excel.ExcelCellParsers.determineShift;
+import static com.biel.qmsgatherCgVn.util.excel.ExcelCellParsers.getStringCellValue;
+
 /**
  * Excel导入服务实现（处理合并单元格）
  *
@@ -33,7 +36,7 @@ public class DfUpSSBThreeDMachineServiceImpl extends ServiceImpl<DfUpSSBThreeDMa
         Workbook workbook = WorkbookFactory.create(file.getInputStream());
         Sheet sheet = workbook.getSheetAt(0);
 
-        Date createTimeDate = parseCreateTime(createTime);
+        //Date createTimeDate = parseCreateTime(createTime);
 
         // 关键步骤1：收集所有合并区域的信息（行范围、列、值）
         Map<String, String> mergedCellValues = getMergedCellValues(sheet);
@@ -78,7 +81,7 @@ public class DfUpSSBThreeDMachineServiceImpl extends ServiceImpl<DfUpSSBThreeDMa
 
             entity.setClasses(determineShift(recordDate));
             entity.setUploadName(uploadName);
-            entity.setCreateTime(createTimeDate);
+            entity.setCreateTime(new Date());
 
             dfUpSSBThreeDMachineMapper.insert(entity);
         }
@@ -117,6 +120,7 @@ public class DfUpSSBThreeDMachineServiceImpl extends ServiceImpl<DfUpSSBThreeDMa
     /**
      * 读取字符串单元格值（支持合并单元格）
      */
+/*
     private String getStringCellValue(Cell cell, Map<String, String> mergedCellValues, int rowNum, int colNum) {
         // 先检查是否属于合并区域
         String key = rowNum + "_" + colNum;
@@ -126,6 +130,7 @@ public class DfUpSSBThreeDMachineServiceImpl extends ServiceImpl<DfUpSSBThreeDMa
         // 非合并区域，正常读取
         return getStringCellValue(cell);
     }
+*/
 
     /**
      * 读取日期单元格值（支持合并单元格）
@@ -182,7 +187,7 @@ public class DfUpSSBThreeDMachineServiceImpl extends ServiceImpl<DfUpSSBThreeDMa
     }
 
     // 以下为原有方法（略有调整）
-    private String determineShift(Date date) {
+/*    private String determineShift(Date date) {
         if (date == null) return null;
 
         Calendar calendar = Calendar.getInstance();
@@ -194,7 +199,7 @@ public class DfUpSSBThreeDMachineServiceImpl extends ServiceImpl<DfUpSSBThreeDMa
         } else {
             return "B";
         }
-    }
+    }*/
 
     private boolean isRowEmpty(Row row) {
         if (row == null) return true;
@@ -246,14 +251,14 @@ public class DfUpSSBThreeDMachineServiceImpl extends ServiceImpl<DfUpSSBThreeDMa
         }
     }
 
-    private String getStringCellValue(Cell cell) {
+/*    private String getStringCellValue(Cell cell) {
         if (cell == null) return null;
         if (cell.getCellType() == CellType.NUMERIC) {
             // 处理数字类型的字符串（如"1#"可能被误判为数字）
             return String.valueOf(cell.getNumericCellValue()).trim();
         }
         return cell.toString().trim();
-    }
+    }*/
 
     private Date getDateCellValue(Cell cell) {
         if (cell == null) return null;
@@ -301,7 +306,7 @@ public class DfUpSSBThreeDMachineServiceImpl extends ServiceImpl<DfUpSSBThreeDMa
         return null;
     }
 
-    private Date parseCreateTime(String val) {
+/*    private Date parseCreateTime(String val) {
         if (val == null) return null;
         val = val.trim();
         if (val.isEmpty()) return null;
@@ -329,8 +334,11 @@ public class DfUpSSBThreeDMachineServiceImpl extends ServiceImpl<DfUpSSBThreeDMa
             e.printStackTrace();
         }
         return null;
-    }
+    }*/
 
+    /**
+     * 舍入到指定小数位数
+     */
     private double roundToDecimalPlaces(double value, int decimalPlaces) {
         if (Double.isNaN(value) || Double.isInfinite(value)) {
             return 0.0;
