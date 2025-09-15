@@ -21,6 +21,8 @@ import java.util.List;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
+import static com.biel.qmsgatherCgVn.util.excel.ExcelCellParsers.*;
+
 /**
  * TODO
  *
@@ -46,7 +48,7 @@ public class DfUpChamferHypotenuseServiceImpl extends ServiceImpl<DfUpChamferHyp
         // 表头校验：斜边倒角要求包含“短边右上1”
         validateExcelHeader(sheet, "平均值");
 
-        Date createTimeDate = parseCreateTime(createTime);
+        //Date createTimeDate = parseCreateTime(createTime);
 
         int startRow = 11; // 从第12行开始（索引是11）
         List<DfUpChamferHypotenuse> mqBatch = new ArrayList<>(MQ_BATCH_SIZE);
@@ -90,7 +92,7 @@ public class DfUpChamferHypotenuseServiceImpl extends ServiceImpl<DfUpChamferHyp
 
             entity.setClasses(determineShift(recordDate));
             entity.setUploadName(uploadName);
-            entity.setCreateTime(createTimeDate);
+            entity.setCreateTime(new Date());
 
             dfUpChamferHypotenuseMapper.insert(entity);
 
@@ -108,20 +110,7 @@ public class DfUpChamferHypotenuseServiceImpl extends ServiceImpl<DfUpChamferHyp
         }
 
     }
-    private String determineShift(Date date) {
-        if (date == null) return null;
 
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        int hour = calendar.get(Calendar.HOUR_OF_DAY);
-
-        // 8点到20点是A班次，20点到次日8点是B班次
-        if (hour >= 7 && hour < 19) {
-            return "A";
-        } else {
-            return "B";
-        }
-    }
     private boolean isRowEmpty(Row row) {
         if (row == null) return true;
         for (Cell cell : row) {
@@ -132,176 +121,6 @@ public class DfUpChamferHypotenuseServiceImpl extends ServiceImpl<DfUpChamferHyp
         return false;
     }
 
-private Double getDoubleCellValue(Cell cell) {
-    if (cell == null) return 0.0;
-
-    try {
-        switch (cell.getCellType()) {
-            case NUMERIC:
-                return cell.getNumericCellValue();
-            case STRING:
-                String stringValue = cell.getStringCellValue().trim();
-                if (stringValue.isEmpty()) {
-                    return 0.0;
-                }
-                // 直接使用 Double.parseDouble，它能自动识别负数
-                return Double.parseDouble(stringValue);
-            case FORMULA:
-                switch (cell.getCachedFormulaResultType()) {
-                    case NUMERIC:
-                        return cell.getNumericCellValue();
-                    case STRING:
-                        String formulaStrValue = cell.getStringCellValue().trim();
-                        if (formulaStrValue.isEmpty()) {
-                            return 0.0;
-                        }
-                        return Double.parseDouble(formulaStrValue);
-                    default:
-                        return 0.0;
-                }
-            default:
-                return 0.0;
-        }
-    } catch (NumberFormatException e) {
-        // 处理数字格式异常，返回默认值而不是让程序崩溃
-        return 0.0;
-    } catch (Exception e) {
-        // 捕获其他可能的异常
-        return 0.0;
-    }
-}
-
-
-    public Integer getIntegerCellValue(Cell cell) {
-        if (cell == null) {
-            //System.out.println("单元格为空");
-            return 0;
-        }
-
-        try {
-            switch (cell.getCellType()) {
-                case NUMERIC:
-                    int value = (int) cell.getNumericCellValue();
-                    //System.out.println("读取到数值: " + value);
-                    return value;
-                case STRING:
-                    String strValue = cell.getStringCellValue().trim();
-                    //System.out.println("读取到字符串: '" + strValue + "'");
-                    if (strValue.isEmpty()) {
-                        return 0;
-                    }
-                    return Integer.parseInt(strValue);
-                case FORMULA:
-                    // 处理公式单元格 - 获取公式计算后的值
-                    //System.out.println("检测到公式单元格");
-                    switch (cell.getCachedFormulaResultType()) {
-                        case NUMERIC:
-                            int formulaValue = (int) cell.getNumericCellValue();
-                            //System.out.println("公式计算结果: " + formulaValue);
-                            return formulaValue;
-                        case STRING:
-                            String formulaStrValue = cell.getStringCellValue().trim();
-                            //System.out.println("公式字符串结果: '" + formulaStrValue + "'");
-                            if (formulaStrValue.isEmpty()) {
-                                return 0;
-                            }
-                            return Integer.parseInt(formulaStrValue);
-                        default:
-                            //System.out.println("公式结果类型不支持: " + cell.getCachedFormulaResultType());
-                            return 0;
-                    }
-                default:
-                    //System.out.println("不支持的单元格类型: " + cell.getCellType());
-                    return 0;
-            }
-        } catch (Exception e) {
-            //System.out.println("解析单元格异常: " + e.getMessage());
-            return 0;
-        }
-    }
-
-    private String getStringCellValue(Cell cell) {
-        if (cell == null) return null;
-        return cell.toString().trim();
-    }
-
-    private Date getDateCellValue(Cell cell) {
-        if (cell == null) return null;
-
-        try {
-            if (cell.getCellType() == CellType.NUMERIC && DateUtil.isCellDateFormatted(cell)) {
-                return cell.getDateCellValue();
-            } else if (cell.getCellType() == CellType.STRING) {
-                String val = cell.getStringCellValue().trim();
-                if (val.isEmpty()) return null;
-
-                // 清理格式：将 2025/6/20 8:30:35 -> 2025-06-20 08:30:35
-                val = val.replace("/", "-");
-
-                // 处理多种可能的日期格式
-                // 格式1: 2025-08-19,20:54 -> 2025-08-19 20:54:00
-                if (val.contains(",")) {
-                    // 替换逗号为时间分隔符
-                    val = val.replace(",", " ");
-                    // 如果没有秒数，则添加默认秒数
-                    if (val.split(":").length == 2) {
-                        val += ":00";
-                    }
-                }
-
-                // 尝试多种日期格式进行解析
-                SimpleDateFormat[] formats = {
-                        new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"),
-                        new SimpleDateFormat("yyyy-MM-dd HH:mm"),
-                        new SimpleDateFormat("yyyy-M-d H:m:s")
-                };
-
-                for (SimpleDateFormat sdf : formats) {
-                    try {
-                        return sdf.parse(val);
-                    } catch (Exception e) {
-                        // 继续尝试下一个格式
-                    }
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace(); // 可记录日志
-        }
-
-        return null;
-
-    }
-
-    private Date parseCreateTime(String val) {
-        if (val == null) return null;
-        val = val.trim();
-        if (val.isEmpty()) return null;
-
-        try {
-            // 兼容常见分隔符和格式
-            val = val.replace("/", "-").replace("T", " ");
-            // 处理 "yyyy-MM-dd,HH:mm:ss" 之类
-            if (val.contains(",")) {
-                val = val.replace(",", " ");
-            }
-
-            SimpleDateFormat[] formats = new SimpleDateFormat[] {
-                    new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"),
-                    new SimpleDateFormat("yyyy-MM-dd HH:mm"),
-                    new SimpleDateFormat("yyyy-M-d H:m:s")
-            };
-
-            for (SimpleDateFormat sdf : formats) {
-                try {
-                    return sdf.parse(val);
-                } catch (Exception ignore) { }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-    
     /**
      * 保留指定小数位数
      */
