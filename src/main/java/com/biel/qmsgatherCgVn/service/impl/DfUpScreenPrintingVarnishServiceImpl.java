@@ -17,6 +17,7 @@ import com.biel.qmsgatherCgVn.event.DataImportedEvent;    // 新增
 import java.util.ArrayList;                               // 新增
 import java.util.List;                                    // 新增
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
@@ -38,6 +39,7 @@ public class DfUpScreenPrintingVarnishServiceImpl extends ServiceImpl<DfUpScreen
 
     private static final int MQ_BATCH_SIZE = 200; // 新增：与其他模块一致
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void importExcel(MultipartFile file, String factory, String model, String process, String testProject, String uploadName, String batchId) throws Exception {
         PoiZipSecurity.configure();
         try (Workbook workbook = WorkbookFactory.create(file.getInputStream())) { // ✅ 自动识别 xls/xlsx，异常也会关闭
@@ -144,7 +146,5 @@ public class DfUpScreenPrintingVarnishServiceImpl extends ServiceImpl<DfUpScreen
     }
 
 }
-
-
 
 

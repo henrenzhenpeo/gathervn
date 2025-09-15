@@ -8,6 +8,7 @@ import org.apache.poi.ss.usermodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.biel.qmsgatherCgVn.event.DataImportedEvent;
@@ -39,6 +40,7 @@ public class DfUpBottomGapChamferServiceImpl extends ServiceImpl<DfUpBottomGapCh
 
     private static final int MQ_BATCH_SIZE = 200;
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void importExcel(MultipartFile file, String factory, String model, String process, String testProject, String uploadName, String batchId,String createTime) throws Exception{
 
         Workbook workbook = WorkbookFactory.create(file.getInputStream()); // ✅ 自动识别 xls/xlsx
