@@ -4,6 +4,7 @@ import com.biel.qmsgatherCgVn.domain.DfUpBottomGapChamfer;
 import com.biel.qmsgatherCgVn.mq.AbstractPayloadBuilder;
 import com.biel.qmsgatherCgVn.mq.PayloadBuilder;
 import com.biel.qmsgatherCgVn.mq.SendMode;
+import com.biel.qmsgatherCgVn.util.CheckProcessName;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -41,7 +42,7 @@ public class BottomGapChamferPayloadBuilder extends AbstractPayloadBuilder<DfUpB
         // 原：msg.put("CheckType", e.getRemark());
         msg.put("CheckType", CheckTypeConfig.mapForPayload(e.getRemark())); // 统一映射（CPK->1，FAI->4，未知类型回退为原始字符串）
         msg.put("MachineCode", e.getMachineCode());        // machineCode
-        msg.put("ProcessNO", e.getProcess());              // process
+        msg.put("ProcessNO", CheckProcessName.mapForProcessName(e.getProcess()));
         msg.put("CheckTime", format(e.getDate()));         // date -> yyyy-MM-dd HH:mm:ss
 
         List<Map<String, Object>> items = new ArrayList<>();

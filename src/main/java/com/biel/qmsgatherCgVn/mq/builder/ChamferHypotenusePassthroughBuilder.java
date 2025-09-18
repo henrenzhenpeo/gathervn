@@ -4,6 +4,7 @@ import com.biel.qmsgatherCgVn.domain.DfUpChamferHypotenuse;
 import com.biel.qmsgatherCgVn.mq.AbstractPayloadBuilder;
 import com.biel.qmsgatherCgVn.mq.PayloadBuilder;
 import com.biel.qmsgatherCgVn.mq.SendMode;
+import com.biel.qmsgatherCgVn.util.CheckProcessName;
 import com.biel.qmsgatherCgVn.util.CheckTypeConfig;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -41,7 +42,7 @@ public class ChamferHypotenusePassthroughBuilder extends AbstractPayloadBuilder<
         msg.put("ItemName", e.getTestProject());     // 测试项目
         msg.put("CheckType", CheckTypeConfig.mapForPayload(e.getState()));
         msg.put("MachineCode", e.getMachineCode());  // 机台号
-        msg.put("ProcessNO", e.getProcess());        // 工序
+        msg.put("ProcessNO", CheckProcessName.mapForProcessName(e.getProcess()));
         msg.put("CheckTime", format(e.getDate()));   // yyyy-MM-dd HH:mm:ss
 
         List<Map<String, Object>> items = new ArrayList<>();

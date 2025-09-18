@@ -4,6 +4,7 @@ import com.biel.qmsgatherCgVn.domain.DfUpSilkScreenWireframe;
 import com.biel.qmsgatherCgVn.mq.AbstractPayloadBuilder;
 import com.biel.qmsgatherCgVn.mq.PayloadBuilder;
 import com.biel.qmsgatherCgVn.mq.SendMode;
+import com.biel.qmsgatherCgVn.util.CheckProcessName;
 import com.biel.qmsgatherCgVn.util.CheckTypeConfig;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -38,7 +39,7 @@ public class SilkScreenWireframePayloadBuilder extends AbstractPayloadBuilder<Df
         msg.put("ItemName", e.getTestProject());
         msg.put("CheckType", CheckTypeConfig.mapForPayload(e.getState()));
         msg.put("MachineCode", e.getMachineCode());
-        msg.put("ProcessNO", e.getProcess());
+        msg.put("ProcessNO", CheckProcessName.mapForProcessName(e.getProcess()));
         msg.put("CheckTime", format(e.getDate()));
 
         List<Map<String, Object>> items = new ArrayList<>();
