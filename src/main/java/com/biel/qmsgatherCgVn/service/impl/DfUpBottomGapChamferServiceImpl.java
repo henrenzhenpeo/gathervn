@@ -22,6 +22,10 @@ import java.util.List;
 
 import static com.biel.qmsgatherCgVn.util.excel.ExcelCellParsers.*;
 
+import java.io.InputStream;
+import org.apache.commons.io.IOUtils;
+import java.io.IOException;
+
 /**
  * TODO
  *
@@ -43,70 +47,82 @@ public class DfUpBottomGapChamferServiceImpl extends ServiceImpl<DfUpBottomGapCh
     @Transactional(rollbackFor = Exception.class)
     public void importExcel(MultipartFile file, String factory, String model, String process, String testProject, String uploadName, String batchId,String createTime) throws Exception{
 
-        Workbook workbook = WorkbookFactory.create(file.getInputStream()); // ✅ 自动识别 xls/xlsx
+        InputStream is = null;
+        Workbook workbook = null;
+        boolean isHandedOver = false; // 标记 InputStream 是否已交由 Workbook 管理
+        try {
+            is = file.getInputStream();
+            workbook = WorkbookFactory.create(is); // ✅ 自动识别 xls/xlsx
+            isHandedOver = true; // 成功创建后，Workbook 负责关闭底层流
 
-        Sheet sheet = workbook.getSheetAt(0); // 读取第一个sheet
-        // 表头校验：底倒角要求包含“下长边底倒角1”
-        validateExcelHeader(sheet, "下长边底倒角1");
+            Sheet sheet = workbook.getSheetAt(0); // 读取第一个sheet
+            // 表头校验：底倒角要求包含“下长边底倒角1”
+            validateExcelHeader(sheet, "下长边底倒角1");
 
-        //Date createTimeDate = parseCreateTime(createTime);
+            //Date createTimeDate = parseCreateTime(createTime);
 
-        int startRow = 12; // 从第13行开始（索引是12）
-        List<DfUpBottomGapChamfer> mqBatch = new ArrayList<>(MQ_BATCH_SIZE);
-        for (int r = startRow; r <= sheet.getLastRowNum(); r++) {
-            Row row = sheet.getRow(r);
+            int startRow = 12; // 从第13行开始（索引是12）
+            List<DfUpBottomGapChamfer> mqBatch = new ArrayList<>(MQ_BATCH_SIZE);
+            for (int r = startRow; r <= sheet.getLastRowNum(); r++) {
+                Row row = sheet.getRow(r);
 
-            if (row == null) continue; // 不跳过非空的行
-            Cell dateCell = row.getCell(0);
-            if (dateCell == null || getDateCellValue(dateCell) == null) continue;
-            DfUpBottomGapChamfer entity = new DfUpBottomGapChamfer();
-            int i = 0;
+                if (row == null) continue; // 不跳过非空的行
+                Cell dateCell = row.getCell(0);
+                if (dateCell == null || getDateCellValue(dateCell) == null) continue;
+                DfUpBottomGapChamfer entity = new DfUpBottomGapChamfer();
+                int i = 0;
 
-            entity.setFactory(factory);
-            entity.setModel(model);
-            entity.setProcess(process);
-            entity.setTestProject(testProject);
-            entity.setBatchId(batchId);
+                entity.setFactory(factory);
+                entity.setModel(model);
+                entity.setProcess(process);
+                entity.setTestProject(testProject);
+                entity.setBatchId(batchId);
 
-            Date recordDate = getDateCellValue(row.getCell(i++));
-            entity.setDate(recordDate);
-            entity.setUpperLongSideBottomChamfer1(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)),3));
-            entity.setUpperLongSideBottomChamfer2(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)),3));
-            entity.setUpperLongSideBottomChamfer3(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)),3));
-            entity.setRightShortSideBottomChamfer1(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)),3));
-            entity.setGrooveBottomChamfer2(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)),3));
-            entity.setRightShortSideBottomChamfer3(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)),3));
-            entity.setLowerLongSideBottomChamfer1(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)),3));
-            entity.setLowerLongSideBottomChamfer2(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)),3));
-            entity.setLowerLongSideBottomChamfer3(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)),3));
-            entity.setLeftShortSideBottomChamfer1(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)),3));
-            entity.setLeftShortSideBottomChamfer2(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)),3));
-            entity.setLeftShortSideBottomChamfer3(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)),3));
+                Date recordDate = getDateCellValue(row.getCell(i++));
+                entity.setDate(recordDate);
+                entity.setUpperLongSideBottomChamfer1(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)),3));
+                entity.setUpperLongSideBottomChamfer2(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)),3));
+                entity.setUpperLongSideBottomChamfer3(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)),3));
+                entity.setRightShortSideBottomChamfer1(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)),3));
+                entity.setGrooveBottomChamfer2(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)),3));
+                entity.setRightShortSideBottomChamfer3(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)),3));
+                entity.setLowerLongSideBottomChamfer1(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)),3));
+                entity.setLowerLongSideBottomChamfer2(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)),3));
+                entity.setLowerLongSideBottomChamfer3(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)),3));
+                entity.setLeftShortSideBottomChamfer1(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)),3));
+                entity.setLeftShortSideBottomChamfer2(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)),3));
+                entity.setLeftShortSideBottomChamfer3(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)),3));
 
-            entity.setMachineCode(getStringCellValue(row.getCell(i++)));
-            entity.setState(getStringCellValue(row.getCell(i++)));
-            entity.setTestNumber(getIntegerCellValue(row.getCell(i++)));
-            entity.setRemark(getStringCellValue(row.getCell(i++)));
+                entity.setMachineCode(getStringCellValue(row.getCell(i++)));
+                entity.setState(getStringCellValue(row.getCell(i++)));
+                entity.setTestNumber(getIntegerCellValue(row.getCell(i++)));
+                entity.setRemark(getStringCellValue(row.getCell(i++)));
 
-            entity.setClasses(determineShift(recordDate));
-            entity.setUploadName(uploadName);
-            entity.setCreateTime(new Date());
+                entity.setClasses(determineShift(recordDate));
+                entity.setUploadName(uploadName);
+                entity.setCreateTime(new Date());
 
-            dfUpBottomGapChamferMapper.insert(entity);
+                dfUpBottomGapChamferMapper.insert(entity);
 
-            // MQ 批量事件发布（解耦合为事件）
-            mqBatch.add(entity);
-            if (mqBatch.size() >= MQ_BATCH_SIZE) {
+                // MQ 批量事件发布（解耦合为事件）
+                mqBatch.add(entity);
+                if (mqBatch.size() >= MQ_BATCH_SIZE) {
+                    eventPublisher.publishEvent(new DataImportedEvent<>(new ArrayList<>(mqBatch), DfUpBottomGapChamfer.class));
+                    mqBatch.clear();
+                }
+            }
+
+            if (!mqBatch.isEmpty()) {
                 eventPublisher.publishEvent(new DataImportedEvent<>(new ArrayList<>(mqBatch), DfUpBottomGapChamfer.class));
                 mqBatch.clear();
             }
+        } finally {
+            // 先关 Workbook（它会负责底层流的关闭）；仅当 Workbook 未创建成功时，才关闭 is
+            IOUtils.closeQuietly(workbook);
+            if (!isHandedOver) {
+                IOUtils.closeQuietly(is);
+            }
         }
-
-        if (!mqBatch.isEmpty()) {
-            eventPublisher.publishEvent(new DataImportedEvent<>(new ArrayList<>(mqBatch), DfUpBottomGapChamfer.class));
-            mqBatch.clear();
-        }
-
     }
 
     private boolean isRowEmpty(Row row) {
