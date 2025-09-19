@@ -1,20 +1,25 @@
 package com.biel.qmsgatherCgVn.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.biel.qmsgatherCgVn.domain.DfUpBottomGapChamfer;
 import com.biel.qmsgatherCgVn.domain.DfUpRadiumCodeSize;
+import com.biel.qmsgatherCgVn.event.DataImportedEvent;
 import com.biel.qmsgatherCgVn.mapper.DfUpRediumCodeSizeMapper;
 import com.biel.qmsgatherCgVn.service.DfUpRediumCodeSizeService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 /**
  * TODO
@@ -28,32 +33,38 @@ public class DfUpRediumCodeSizeServiceImpl extends ServiceImpl<DfUpRediumCodeSiz
 
     @Autowired
     private DfUpRediumCodeSizeMapper dfUpRediumCodeSizeMapper;
+
+    @Autowired
+    private ApplicationEventPublisher eventPublisher;
+
+    private static final int MQ_BATCH_SIZE = 200;
     @Override
     public void importExcel(MultipartFile file, String factory, String model, String process, String testProject, String uploadName, String batchId,String createTime) throws Exception {
             Workbook workbook = WorkbookFactory.create(file.getInputStream()); // ✅ 自动识别 xls/xlsx
-            
+
             Sheet sheet = workbook.getSheetAt(0); // 读取第一个sheet
             // 表头校验：镭码尺寸要求包含“二维码长”
             validateExcelHeader(sheet, "二维码长");
 
             Date createTimeDate = parseCreateTime(createTime);
-            
+
             int startRow = 11; // 从第12行开始（索引是11）
+            List<DfUpRadiumCodeSize> mqBatch = new ArrayList<>(MQ_BATCH_SIZE);
             for (int r = startRow; r <= sheet.getLastRowNum(); r++) {
                 Row row = sheet.getRow(r);
-    
+
                 if (row == null) continue; // 不跳过非空的行
                 Cell dateCell = row.getCell(0);
                 if (dateCell == null || getDateCellValue(dateCell) == null) continue;
                 DfUpRadiumCodeSize entity = new DfUpRadiumCodeSize();
                 int i = 0;
-    
+
                 entity.setFactory(factory);
                 entity.setModel(model);
                 entity.setProcess(process);
                 entity.setTestProject(testProject);
                 entity.setBatchId(batchId);
-    
+
                 Date recordDate = getDateCellValue(row.getCell(i++));
                 entity.setDate(recordDate);
                 entity.setQrCodeLength(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)),3));
@@ -62,7 +73,7 @@ public class DfUpRediumCodeSizeServiceImpl extends ServiceImpl<DfUpRediumCodeSiz
                 entity.setXWhitePlateToGlassCenter(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)), 3));
                 entity.setLeftDistance(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)), 3));
                 entity.setRightDistance(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)), 3));
-    
+
                 entity.setMachineCode(getStringCellValue(row.getCell(i++)));
                 entity.setState(getStringCellValue(row.getCell(i++)));
                 entity.setTestNumber(getIntegerCellValue(row.getCell(i++)));
@@ -71,9 +82,20 @@ public class DfUpRediumCodeSizeServiceImpl extends ServiceImpl<DfUpRediumCodeSiz
                 entity.setClasses(determineShift(recordDate));
                 entity.setUploadName(uploadName);
                 entity.setCreateTime(createTimeDate);
-    
+
                 dfUpRediumCodeSizeMapper.insert(entity);
+
+                // MQ 批量事件发布（解耦合为事件）
+                mqBatch.add(entity);
+                if (mqBatch.size() >= MQ_BATCH_SIZE) {
+                    eventPublisher.publishEvent(new DataImportedEvent<>(new ArrayList<>(mqBatch), DfUpRadiumCodeSize.class));
+                    mqBatch.clear();
+                }
             }
+        if (!mqBatch.isEmpty()) {
+            eventPublisher.publishEvent(new DataImportedEvent<>(new ArrayList<>(mqBatch), DfUpRadiumCodeSize.class));
+            mqBatch.clear();
+        }
             workbook.close();
     }
 

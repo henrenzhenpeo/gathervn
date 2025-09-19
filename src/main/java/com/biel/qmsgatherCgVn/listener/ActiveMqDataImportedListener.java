@@ -18,6 +18,17 @@ public class ActiveMqDataImportedListener {
     @Resource
     private ActiveMqDispatcher dispatcher;
 
+    @EventListener(condition = "#root.args[0].entityType == T(com.biel.qmsgatherCgVn.domain.DfUpRadiumCodeSize)")
+    public void onRadiumCodeSize(DataImportedEvent<DfUpRadiumCodeSize> event) {
+        List<DfUpRadiumCodeSize> batch = event.getPayload();
+        if (batch == null || batch.isEmpty()) return;
+        try {
+            dispatcher.dispatch(batch, DfUpRadiumCodeSize.class);
+            log.info("[DfUpRadiumCodeSize] ActiveMQ转发成功：批次条数={}", batch.size());
+        } catch (Exception e) {
+            log.error("[DfUpRadiumCodeSize] ActiveMQ转发失败：", e);
+        }
+    }
     @EventListener(condition = "#root.args[0].entityType == T(com.biel.qmsgatherCgVn.domain.DfUpBottomGapChamfer)")
     public void onBottomGapChamfer(DataImportedEvent<DfUpBottomGapChamfer> event) {
         List<DfUpBottomGapChamfer> batch = event.getPayload();
