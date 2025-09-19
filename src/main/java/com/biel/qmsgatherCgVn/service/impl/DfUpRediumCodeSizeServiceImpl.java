@@ -7,12 +7,14 @@ import com.biel.qmsgatherCgVn.event.DataImportedEvent;
 import com.biel.qmsgatherCgVn.mapper.DfUpRediumCodeSizeMapper;
 import com.biel.qmsgatherCgVn.service.DfUpRediumCodeSizeService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.IOUtils;
 import org.apache.poi.ss.usermodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
@@ -40,7 +42,13 @@ public class DfUpRediumCodeSizeServiceImpl extends ServiceImpl<DfUpRediumCodeSiz
     private static final int MQ_BATCH_SIZE = 200;
     @Override
     public void importExcel(MultipartFile file, String factory, String model, String process, String testProject, String uploadName, String batchId,String createTime) throws Exception {
-            Workbook workbook = WorkbookFactory.create(file.getInputStream()); // ✅ 自动识别 xls/xlsx
+        InputStream is = null;
+        Workbook workbook = null;
+        boolean isHandedOver = false;
+        try {
+            is = file.getInputStream();
+            workbook = WorkbookFactory.create(is); // ✅ 自动识别 xls/xlsx
+            isHandedOver = true;
 
             Sheet sheet = workbook.getSheetAt(0); // 读取第一个sheet
             // 表头校验：镭码尺寸要求包含“二维码长”
@@ -67,9 +75,9 @@ public class DfUpRediumCodeSizeServiceImpl extends ServiceImpl<DfUpRediumCodeSiz
 
                 Date recordDate = getDateCellValue(row.getCell(i++));
                 entity.setDate(recordDate);
-                entity.setQrCodeLength(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)),3));
-                entity.setQrCodeWidth(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)),3));
-                entity.setBarcodeToglass(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)),3));
+                entity.setQrCodeLength(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)), 3));
+                entity.setQrCodeWidth(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)), 3));
+                entity.setBarcodeToglass(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)), 3));
                 entity.setXWhitePlateToGlassCenter(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)), 3));
                 entity.setLeftDistance(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)), 3));
                 entity.setRightDistance(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)), 3));
@@ -92,11 +100,16 @@ public class DfUpRediumCodeSizeServiceImpl extends ServiceImpl<DfUpRediumCodeSiz
                     mqBatch.clear();
                 }
             }
-        if (!mqBatch.isEmpty()) {
-            eventPublisher.publishEvent(new DataImportedEvent<>(new ArrayList<>(mqBatch), DfUpRadiumCodeSize.class));
-            mqBatch.clear();
+            if (!mqBatch.isEmpty()) {
+                eventPublisher.publishEvent(new DataImportedEvent<>(new ArrayList<>(mqBatch), DfUpRadiumCodeSize.class));
+                mqBatch.clear();
+            }
+        }finally {
+            IOUtils.closeQuietly(workbook);
+            if (!isHandedOver) {
+                IOUtils.closeQuietly(is);
+            }
         }
-            workbook.close();
     }
 
     private String determineShift(Date date) {
