@@ -46,23 +46,23 @@ public class ScreenPrintingVarnishPayloadBuilder extends AbstractPayloadBuilder<
         List<Map<String, Object>> items = new ArrayList<>();
         addItem(items, "1点Y2", e.getOnePointy2());
         addItem(items, "2点Y1", e.getTwoPointy1());
-        addItem(items, "3点", e.getThreePoint());
-        addItem(items, "aoc", e.getGroove());
-        addItem(items, "四点x", e.getFourPointx());
+        addItem(items, "3点X", e.getThreePoint());
+        addItem(items, "凹槽X", e.getGroove());
+        addItem(items, "四点X", e.getFourPointx());
         addItem(items, "5点Y1", e.getFivePointy1());
         addItem(items, "6点Y2", e.getSixPointy2());
-        addItem(items, "7点", e.getSevenPoint());
-        addItem(items, "8点x", e.getEightPointx());
+        addItem(items, "7点X", e.getSevenPoint());
+        addItem(items, "8点X", e.getEightPointx());
 
-        addItem(items, "2D码到视窗1", e.getTwoCodeWindow1());
-        addItem(items, "2D码到视窗2", e.getTwoCodeWindow2());
-        addItem(items, "光油上边到基准1", e.getLightOilTopReference1());
-        addItem(items, "光油上边到基准2", e.getLightOilTopReference2());
+        addItem(items, "2D码到视窗", e.getTwoCodeWindow1());
+        addItem(items, "2D码到视窗", e.getTwoCodeWindow2());
+        addItem(items, "光油上边距", e.getLightOilTopReference1());
+        addItem(items, "光油上边距", e.getLightOilTopReference2());
 
-        addItem(items, "光油内边到玻璃中心距离1", e.getTwoCodeCenter1());
-        addItem(items, "光油内边到玻璃中心距离2", e.getTwoCodeCenter2());
-        addItem(items, "2D码上到玻中心1", e.getTwoCodeTopCenter1());
-        addItem(items, "2D码上到玻中心2", e.getTwoCodeTopCenter2());
+        addItem(items, "光油内边中心距", e.getTwoCodeCenter1());
+        addItem(items, "光油内边中心距", e.getTwoCodeCenter2());
+        addItem(items, "（2D码）上端中心距", e.getTwoCodeTopCenter1());
+        addItem(items, "（2D码）下端中心距", e.getTwoCodeTopCenter2());
 
         addItem(items, "调机x", e.getDebugMachinex());
         addItem(items, "调机y1", e.getDebugMachiney1());

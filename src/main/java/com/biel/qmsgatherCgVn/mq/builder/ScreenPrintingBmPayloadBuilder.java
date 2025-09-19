@@ -44,14 +44,14 @@ public class ScreenPrintingBmPayloadBuilder extends AbstractPayloadBuilder<DfUpS
         msg.put("CheckTime", format(e.getDate()));   // yyyy-MM-dd HH:mm:ss
 
         List<Map<String, Object>> items = new ArrayList<>();
-        addItem(items, "1点y2", e.getOnePointy2());
-        addItem(items, "2点y1", e.getTwoPointy1());
-        addItem(items, "3点x", e.getThreePointx());
-        addItem(items, "4点x", e.getFourPointx());
-        addItem(items, "5点y1", e.getFivePointy1());
-        addItem(items, "6点y2", e.getSixPointy2());
-        addItem(items, "7点x", e.getSevenPointx());
-        addItem(items, "8点x", e.getEightPointx());
+        addItem(items, "1点Y2", e.getOnePointy2());
+        addItem(items, "2点Y1", e.getTwoPointy1());
+        addItem(items, "3点X", e.getThreePointx());
+        addItem(items, "4点X", e.getFourPointx());
+        addItem(items, "5点Y1", e.getFivePointy1());
+        addItem(items, "6点Y2", e.getSixPointy2());
+        addItem(items, "7点X", e.getSevenPointx());
+        addItem(items, "8点X", e.getEightPointx());
 
         addItem(items, "视窗长1", e.getWindowLength1());
         addItem(items, "视窗长2", e.getWindowLength2());
