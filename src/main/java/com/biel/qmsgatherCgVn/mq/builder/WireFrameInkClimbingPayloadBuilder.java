@@ -4,6 +4,7 @@ import com.biel.qmsgatherCgVn.domain.DfUpWireFrameInkClimbing;
 import com.biel.qmsgatherCgVn.mq.AbstractPayloadBuilder;
 import com.biel.qmsgatherCgVn.mq.PayloadBuilder;
 import com.biel.qmsgatherCgVn.mq.SendMode;
+import com.biel.qmsgatherCgVn.util.CheckMachineCode;
 import com.biel.qmsgatherCgVn.util.CheckProcessName;
 import com.biel.qmsgatherCgVn.util.CheckTypeConfig;
 import org.springframework.beans.factory.annotation.Value;
@@ -38,7 +39,7 @@ public class WireFrameInkClimbingPayloadBuilder extends AbstractPayloadBuilder<D
         msg.put("CheckDevCode", null);
         msg.put("ItemName", e.getTestProject());
         msg.put("CheckType", CheckTypeConfig.mapForPayload(e.getState()));
-        msg.put("MachineCode", e.getMachineCode());
+        msg.put("MachineCode", CheckMachineCode.mapForMachineCode(e.getMachineCode()));
         msg.put("ProcessNO", CheckProcessName.mapForProcessName(e.getProcess()));
         msg.put("CheckTime", format(e.getDate()));
 
