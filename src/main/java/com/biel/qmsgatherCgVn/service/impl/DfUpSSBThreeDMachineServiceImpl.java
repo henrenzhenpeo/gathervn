@@ -5,6 +5,8 @@ import com.biel.qmsgatherCgVn.domain.DfUpSSBThreeDMachine;
 import com.biel.qmsgatherCgVn.event.DataImportedEvent;
 import com.biel.qmsgatherCgVn.mapper.DfUpSSBThreeDMachineMapper;
 import com.biel.qmsgatherCgVn.service.DfUpSSBThreeDMachineService;
+import lombok.val;
+import org.apache.commons.io.IOUtils;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
@@ -42,10 +45,14 @@ public class DfUpSSBThreeDMachineServiceImpl extends ServiceImpl<DfUpSSBThreeDMa
     @Transactional(rollbackFor = Exception.class)
     public void importExcel(MultipartFile file, String factory, String model, String process, String testProject, String uploadName, String batchId,String createTime) throws Exception {
 
-        Workbook workbook = WorkbookFactory.create(file.getInputStream());
-        Sheet sheet = workbook.getSheetAt(0);
+        InputStream is = null;
+        Workbook workbook = null;
+        try {
+            is = file.getInputStream();
+            workbook = WorkbookFactory.create(is); // 自动识别 xls/xlsx
 
-        //Date createTimeDate = parseCreateTime(createTime);
+            Sheet sheet = workbook.getSheetAt(0);
+            workbook.getCreationHelper().createFormulaEvaluator().evaluateAll();
 
         // 关键步骤1：收集所有合并区域的信息（行范围、列、值）
         Map<String, String> mergedCellValues = getMergedCellValues(sheet);
@@ -105,6 +112,14 @@ public class DfUpSSBThreeDMachineServiceImpl extends ServiceImpl<DfUpSSBThreeDMa
         if (!mqBatch.isEmpty()) {
             publisher.publishEvent(new DataImportedEvent<>(new ArrayList<>(mqBatch), DfUpSSBThreeDMachine.class));
             mqBatch.clear();
+        }
+    } finally {
+            // 语义更清晰：workbook 非空 → 只关 workbook；否则（创建失败）→ 只关 is
+            if (workbook != null) {
+                IOUtils.closeQuietly(workbook); // 会连带关闭底层输入资源 <mcreference link="https://stackoverflow.com/questions/12261014/close-filehandle-for-workbook-apache-poi" index="3">3</mcreference>
+            } else {
+                IOUtils.closeQuietly(is);
+            }
         }
     }
 
