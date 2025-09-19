@@ -42,6 +42,7 @@ public final class CheckTypeConfig {
         MAPPING.put("调机片", 12);
         MAPPING.put("HSL", 14);
         MAPPING.put("换砂轮", 14);
+        MAPPING.put("投位", 15);
     }
 
     /**
