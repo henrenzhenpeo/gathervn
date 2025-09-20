@@ -84,6 +84,7 @@ public class DfUpTxPvdOverflowPlatingController {
         if (StringUtils.isNotEmpty(startTestDate) && StringUtils.isNotEmpty(endTestDate)) {
             dfUpTxPvdOverflowPlatingQueryWrapper.between("date", startTestDate, endTestDate);
         }
+        dfUpTxPvdOverflowPlatingQueryWrapper.orderByDesc("date");
 
         // 执行分页查询
         IPage<DfUpTxPvdOverflowPlating> pageResult = dfUpTxPvdOverflowPlatingService.page(

@@ -87,6 +87,7 @@ public class DfUpScreenPrintWireftameIcpController {
             dfUpScreenPrintWireftameIcpQueryWrapper.between("date", startTestDate, endTestDate);
         }
 
+        dfUpScreenPrintWireftameIcpQueryWrapper.orderByDesc("date");
         // 执行分页查询
         IPage<DfUpScreenPrintWireftameIcp> pageResult = dfUpScreenPrintWireftameIcpService.page(
                 new Page<>(page, limit),

@@ -86,6 +86,8 @@ public class DfUpFileMaterialSizeController {
             dfUpFileMaterialSizeQueryWrapper.between("date", startTestDate, endTestDate);
         }
 
+        dfUpFileMaterialSizeQueryWrapper.orderByDesc("date");
+
         // 执行分页查询
         IPage<DfUpFileMaterialSize> pageResult = dfUpFileMaterialSizeService.page(
                 new Page<>(page, limit),

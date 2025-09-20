@@ -67,10 +67,10 @@ public class DfUpBaigeController {
             @RequestParam(value = "endTestDate", required = false) String endTestDate,
             @RequestParam(value = "page", defaultValue = "1") int page,
             @RequestParam(value = "limit", defaultValue = "10") int limit) {
-
+    
         // 创建查询条件
         QueryWrapper<DfUpBaige> dfUpBaigeQueryWrapper = new QueryWrapper<>();
-
+    
         // 构建查询条件
         if (StringUtils.isNotEmpty(process)) {
             dfUpBaigeQueryWrapper.eq("process", process);
@@ -84,17 +84,20 @@ public class DfUpBaigeController {
         if (StringUtils.isNotEmpty(stage)) {
             dfUpBaigeQueryWrapper.eq("stage", stage);
         }
-
+    
         if (StringUtils.isNotEmpty(startTestDate) && StringUtils.isNotEmpty(endTestDate)) {
             dfUpBaigeQueryWrapper.between("date", startTestDate, endTestDate);
         }
-
+    
+        // 确保按时间字段降序（从最新到最旧）
+        dfUpBaigeQueryWrapper.orderByDesc("date");
+    
         // 执行分页查询
         IPage<DfUpBaige> pageResult = dfUpBaigeService.page(
                 new Page<>(page, limit),
                 dfUpBaigeQueryWrapper
         );
-
+    
         return R.ok(pageResult);
     }
 

@@ -77,6 +77,7 @@ public class DfUpWaterDropAsCoatingController {
         if (StringUtils.isNotEmpty(startTestDate) && StringUtils.isNotEmpty(endTestDate)) {
             dfUpWaterDropAsCoatingQueryWrapper.between("date", startTestDate, endTestDate);
         }
+        dfUpWaterDropAsCoatingQueryWrapper.orderByDesc("date");
 
         // 执行分页查询
         IPage<DfUpWaterDropAsCoating> pageResult = dfUpWaterDropAsCoatingService.page(

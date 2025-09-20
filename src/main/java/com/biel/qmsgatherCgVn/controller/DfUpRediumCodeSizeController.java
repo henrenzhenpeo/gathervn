@@ -89,6 +89,7 @@ public class DfUpRediumCodeSizeController {
             dfUpRadiumCodeSizeQueryWrapper.between("date", startTestDate, endTestDate);
         }
 
+        dfUpRadiumCodeSizeQueryWrapper.orderByDesc("date");
         // 执行分页查询
         IPage<DfUpRadiumCodeSize> pageResult = dfUpRediumCodeSizeService.page(
                 new Page<>(page, limit),

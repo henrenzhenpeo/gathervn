@@ -78,6 +78,7 @@ public class DfUpWaterDropController {
         if (StringUtils.isNotEmpty(startTestDate) && StringUtils.isNotEmpty(endTestDate)) {
             dfUpWaterDropQueryWrapper.between("date", startTestDate, endTestDate);
         }
+        dfUpWaterDropQueryWrapper.orderByDesc("date");
 
         // 执行分页查询
         IPage<DfUpWaterDrop> pageResult = dfUpWaterDropService.page(

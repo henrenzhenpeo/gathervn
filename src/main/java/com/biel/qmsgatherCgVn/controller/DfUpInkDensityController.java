@@ -88,6 +88,7 @@ public class DfUpInkDensityController {
             dfUpInkDensityQueryWrapper.between("date", startTestDate, endTestDate);
         }
 
+        dfUpInkDensityQueryWrapper.orderByDesc("date");
         // 执行分页查询
         IPage<DfUpInkDensity> pageResult = dfUpInkDensityService.page(
                 new Page<>(page, limit),

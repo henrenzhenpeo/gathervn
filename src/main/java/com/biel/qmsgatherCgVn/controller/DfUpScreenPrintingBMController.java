@@ -86,6 +86,7 @@ public class DfUpScreenPrintingBMController {
             dfUpScreenPrintingbmQueryWrapper.between("date", startTestDate, endTestDate);
         }
 
+        dfUpScreenPrintingbmQueryWrapper.orderByDesc("date");
         // 执行分页查询
         IPage<DfUpScreenPrintingbm> pageResult = dfUpScreenPrintingbmService.page(
                 new Page<>(page, limit),

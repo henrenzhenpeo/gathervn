@@ -86,6 +86,7 @@ public class DfUpWireFrameInkClimbingController {
         if (StringUtils.isNotEmpty(startTestDate) && StringUtils.isNotEmpty(endTestDate)) {
             dfUpWireFrameInkClimbingQueryWrapper.between("date", startTestDate, endTestDate);
         }
+        dfUpWireFrameInkClimbingQueryWrapper.orderByDesc("date");
 
         // 执行分页查询
         IPage<DfUpWireFrameInkClimbing> pageResult = dfUpWireFrameInkClimbingService.page(

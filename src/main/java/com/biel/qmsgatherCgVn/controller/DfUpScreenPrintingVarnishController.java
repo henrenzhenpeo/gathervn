@@ -85,6 +85,7 @@ public class DfUpScreenPrintingVarnishController {
         if (StringUtils.isNotEmpty(startTestDate) && StringUtils.isNotEmpty(endTestDate)) {
             dfUpScreenPrintingVarnishQueryWrapper.between("date", startTestDate, endTestDate);
         }
+        dfUpScreenPrintingVarnishQueryWrapper.orderByDesc("date");
 
         // 执行分页查询
         IPage<DfUpScreenPrintingVarnish> pageResult = dfUpScreenPrintingVarnishService.page(

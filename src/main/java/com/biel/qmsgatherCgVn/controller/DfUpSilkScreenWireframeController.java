@@ -85,6 +85,7 @@ public class DfUpSilkScreenWireframeController {
         if (StringUtils.isNotEmpty(startTestDate) && StringUtils.isNotEmpty(endTestDate)) {
             dfUpSilkScreenWireframeQueryWrapper.between("date", startTestDate, endTestDate);
         }
+        dfUpSilkScreenWireframeQueryWrapper.orderByDesc("date");
 
         // 执行分页查询
         IPage<DfUpSilkScreenWireframe> pageResult = dfUpSilkScreenWireframeService.page(

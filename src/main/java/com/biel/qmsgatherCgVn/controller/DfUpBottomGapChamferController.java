@@ -88,6 +88,8 @@ public class DfUpBottomGapChamferController {
             dfUpBottomGapChamferQueryWrapper.between("date", startTestDate, endTestDate);
         }
 
+        dfUpBottomGapChamferQueryWrapper.orderByDesc("date");
+
         // 执行分页查询
         IPage<DfUpBottomGapChamfer> pageResult = dfUpBottomGapChamferService.page(
                 new Page<>(page, limit),

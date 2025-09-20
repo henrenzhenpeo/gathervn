@@ -88,6 +88,7 @@ public class DfUpSSBThreeDMachineController {
         if (StringUtils.isNotEmpty(startTestDate) && StringUtils.isNotEmpty(endTestDate)) {
             dfUpSSBThreeDMachineQueryWrapper.between("date", startTestDate, endTestDate);
         }
+        dfUpSSBThreeDMachineQueryWrapper.orderByDesc("date");
 
         // 执行分页查询
         IPage<DfUpSSBThreeDMachine> pageResult = dfUpSSBThreeDMachineService.page(

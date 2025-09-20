@@ -88,6 +88,7 @@ public class DfUpChamferHypotenuseController {
             dfUpChamferHypotenuseQueryWrapper.between("date", startTestDate, endTestDate);
         }
 
+        dfUpChamferHypotenuseQueryWrapper.orderByDesc("date");
         // 执行分页查询
         IPage<DfUpChamferHypotenuse> pageResult = dfUpChamferHypotenuseService.page(
                 new Page<>(page, limit),

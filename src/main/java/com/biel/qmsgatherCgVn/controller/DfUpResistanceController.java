@@ -87,6 +87,7 @@ public class DfUpResistanceController {
             dfUpResistanceQueryWrapper.between("test_time", startTestDate, endTestDate);
         }
 
+        dfUpResistanceQueryWrapper.orderByDesc("test_time");
         // 执行分页查询
         IPage<DfUpResistance> pageResult = dfUpResistanceService.page(
                 new Page<>(page, limit),
