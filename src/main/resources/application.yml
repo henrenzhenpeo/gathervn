@@ -46,9 +46,10 @@ mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
     map-underscore-to-camel-case: true
+    default-executor-type: BATCH
 
 app:
   mq:
     # 默认的 MQ 路由队列名，可按需覆盖
     queues:
-      all_data_queue: Report_ProductGague_J10-1_J10-1-4
+      all_data_queue: Report_ProductGague_VN-CG
