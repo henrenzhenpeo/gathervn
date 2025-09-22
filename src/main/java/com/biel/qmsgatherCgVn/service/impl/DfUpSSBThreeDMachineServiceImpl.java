@@ -40,6 +40,8 @@ public class DfUpSSBThreeDMachineServiceImpl extends ServiceImpl<DfUpSSBThreeDMa
     private ApplicationEventPublisher publisher;
 
     private static final int MQ_BATCH_SIZE = 200;
+    // 新增：数据库批量写入大小（可根据 DB 性能调整）
+    private static final int DB_BATCH_SIZE = 1000;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -52,71 +54,84 @@ public class DfUpSSBThreeDMachineServiceImpl extends ServiceImpl<DfUpSSBThreeDMa
             workbook = WorkbookFactory.create(is); // 自动识别 xls/xlsx
 
             Sheet sheet = workbook.getSheetAt(0);
-            workbook.getCreationHelper().createFormulaEvaluator().evaluateAll();
+            // 去掉全量公式评估，避免大表卡顿
+            // workbook.getCreationHelper().createFormulaEvaluator().evaluateAll();
 
-        // 关键步骤1：收集所有合并区域的信息（行范围、列、值）
-        Map<String, String> mergedCellValues = getMergedCellValues(sheet);
+            // 关键步骤1：收集所有合并区域的信息（行范围、列、值）
+            Map<String, String> mergedCellValues = getMergedCellValues(sheet);
 
-        int startRow = 11;
-        List<DfUpSSBThreeDMachine> mqBatch = new ArrayList<>();
-        for (int r = startRow; r <= sheet.getLastRowNum(); r++) {
-            Row row = sheet.getRow(r);
-            if (row == null) continue;
+            int startRow = 11;
+            List<DfUpSSBThreeDMachine> mqBatch = new ArrayList<>();
+            // 新增：数据库批量列表
+            List<DfUpSSBThreeDMachine> dbBatch = new ArrayList<>(DB_BATCH_SIZE);
+            for (int r = startRow; r <= sheet.getLastRowNum(); r++) {
+                Row row = sheet.getRow(r);
+                if (row == null) continue;
 
-            Cell dateCell = row.getCell(0);
-            if (dateCell == null || getDateCellValue(dateCell, mergedCellValues, r, 0) == null) continue;
+                Cell dateCell = row.getCell(0);
+                if (dateCell == null || getDateCellValue(dateCell, mergedCellValues, r, 0) == null) continue;
 
-            DfUpSSBThreeDMachine entity = new DfUpSSBThreeDMachine();
-            int i = 0;
+                DfUpSSBThreeDMachine entity = new DfUpSSBThreeDMachine();
+                int i = 0;
 
-            entity.setFactory(factory);
-            entity.setModel(model);
-            entity.setProcess(process);
-            entity.setTestProject(testProject);
-            entity.setBatchId(batchId);
+                entity.setFactory(factory);
+                entity.setModel(model);
+                entity.setProcess(process);
+                entity.setTestProject(testProject);
+                entity.setBatchId(batchId);
 
-            // 关键步骤2：读取单元格时传入行号列号，检查是否属于合并区域
-            Date recordDate = getDateCellValue(row.getCell(i), mergedCellValues, r, i++);
-            entity.setDate(recordDate);
-            entity.setExternalLong1(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i), mergedCellValues, r, i++), 3));
-            entity.setExternalLong2(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i), mergedCellValues, r, i++), 3));
-            entity.setExternalWidth1(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i), mergedCellValues, r, i++), 3));
-            entity.setExternalWidth2(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i), mergedCellValues, r, i++), 3));
-            entity.setExternalWidth3(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i), mergedCellValues, r, i++), 3));
-            entity.setCutAngle(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i), mergedCellValues, r, i++), 3));
-            entity.setCutAngleLong(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i), mergedCellValues, r, i++), 3));
-            entity.setCutAngleWidth(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i), mergedCellValues, r, i++), 3));
-            entity.setQrCodeLength(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i), mergedCellValues, r, i++), 3));
-            entity.setQrCodeWidth(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i), mergedCellValues, r, i++), 3));
-            entity.setWhitePlateToglass(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i), mergedCellValues, r, i++), 3));
-            entity.setWhitePlateToGlassCenter(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i), mergedCellValues, r, i++), 3));
+                // 关键步骤2：读取单元格时传入行号列号，检查是否属于合并区域
+                Date recordDate = getDateCellValue(row.getCell(i), mergedCellValues, r, i++);
+                entity.setDate(recordDate);
+                entity.setExternalLong1(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i), mergedCellValues, r, i++), 3));
+                entity.setExternalLong2(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i), mergedCellValues, r, i++), 3));
+                entity.setExternalWidth1(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i), mergedCellValues, r, i++), 3));
+                entity.setExternalWidth2(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i), mergedCellValues, r, i++), 3));
+                entity.setExternalWidth3(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i), mergedCellValues, r, i++), 3));
+                entity.setCutAngle(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i), mergedCellValues, r, i++), 3));
+                entity.setCutAngleLong(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i), mergedCellValues, r, i++), 3));
+                entity.setCutAngleWidth(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i), mergedCellValues, r, i++), 3));
+                entity.setQrCodeLength(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i), mergedCellValues, r, i++), 3));
+                entity.setQrCodeWidth(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i), mergedCellValues, r, i++), 3));
+                entity.setWhitePlateToglass(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i), mergedCellValues, r, i++), 3));
+                entity.setWhitePlateToGlassCenter(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i), mergedCellValues, r, i++), 3));
 
-            entity.setMachineCode(getStringCellValue(row.getCell(i), mergedCellValues, r, i++));
-            entity.setState(getStringCellValue(row.getCell(i), mergedCellValues, r, i++));
-            entity.setTestNumber(getIntegerCellValue(row.getCell(i), mergedCellValues, r, i++));
-            entity.setRemark(getStringCellValue(row.getCell(i), mergedCellValues, r, i++));
+                entity.setMachineCode(getStringCellValue(row.getCell(i), mergedCellValues, r, i++));
+                entity.setState(getStringCellValue(row.getCell(i), mergedCellValues, r, i++));
+                entity.setTestNumber(getIntegerCellValue(row.getCell(i), mergedCellValues, r, i++));
+                entity.setRemark(getStringCellValue(row.getCell(i), mergedCellValues, r, i++));
 
-            entity.setClasses(determineShift(recordDate));
-            entity.setUploadName(uploadName);
-            entity.setCreateTime(new Date());
+                entity.setClasses(determineShift(recordDate));
+                entity.setUploadName(uploadName);
+                entity.setCreateTime(new Date());
 
-            dfUpSSBThreeDMachineMapper.insert(entity);
+                // 原来是：dfUpSSBThreeDMachineMapper.insert(entity);
+                dbBatch.add(entity);
+                if (dbBatch.size() >= DB_BATCH_SIZE) {
+                    this.saveBatch(dbBatch, DB_BATCH_SIZE);
+                    dbBatch.clear();
+                }
 
-            // 批量事件发布（由监听器统一发送到MQ）
-            mqBatch.add(entity);
-            if (mqBatch.size() >= MQ_BATCH_SIZE) {
+                // 批量事件发布（由监听器统一发送到MQ）
+                mqBatch.add(entity);
+                if (mqBatch.size() >= MQ_BATCH_SIZE) {
+                    publisher.publishEvent(new DataImportedEvent<>(new ArrayList<>(mqBatch), DfUpSSBThreeDMachine.class));
+                    mqBatch.clear();
+                }
+            }
+            if (!mqBatch.isEmpty()) {
                 publisher.publishEvent(new DataImportedEvent<>(new ArrayList<>(mqBatch), DfUpSSBThreeDMachine.class));
                 mqBatch.clear();
             }
-        }
-        if (!mqBatch.isEmpty()) {
-            publisher.publishEvent(new DataImportedEvent<>(new ArrayList<>(mqBatch), DfUpSSBThreeDMachine.class));
-            mqBatch.clear();
-        }
-    } finally {
+            // 刷新尾批次
+            if (!dbBatch.isEmpty()) {
+                this.saveBatch(dbBatch, DB_BATCH_SIZE);
+                dbBatch.clear();
+            }
+        } finally {
             // 语义更清晰：workbook 非空 → 只关 workbook；否则（创建失败）→ 只关 is
             if (workbook != null) {
-                IOUtils.closeQuietly(workbook); // 会连带关闭底层输入资源 <mcreference link="https://stackoverflow.com/questions/12261014/close-filehandle-for-workbook-apache-poi" index="3">3</mcreference>
+                IOUtils.closeQuietly(workbook); // 会连带关闭底层输入资源
             } else {
                 IOUtils.closeQuietly(is);
             }
@@ -132,18 +147,17 @@ public class DfUpSSBThreeDMachineServiceImpl extends ServiceImpl<DfUpSSBThreeDMa
         List<CellRangeAddress> mergedRegions = sheet.getMergedRegions();
 
         for (CellRangeAddress region : mergedRegions) {
-            int firstRow = region.getFirstRow(); // 合并区域起始行
-            int lastRow = region.getLastRow();   // 合并区域结束行
-            int firstCol = region.getFirstColumn(); // 合并区域起始列
-            int lastCol = region.getLastColumn();   // 合并区域结束列
+            int firstRow = region.getFirstRow();
+            int lastRow = region.getLastRow();
+            int firstCol = region.getFirstColumn();
+            int lastCol = region.getLastColumn();
 
-            // 获取合并区域首行首列的单元格值（合并区域的实际值）
             Row firstRowObj = sheet.getRow(firstRow);
             if (firstRowObj == null) continue;
             Cell firstCell = firstRowObj.getCell(firstCol);
-            String value = getStringCellValue(firstCell); // 用原始方法获取首行值
+            // 空安全：首格可能为空
+            String value = (firstCell == null) ? null : getStringCellValue(firstCell);
 
-            // 记录合并区域内所有单元格的位置，映射到首行值
             for (int r = firstRow; r <= lastRow; r++) {
                 for (int c = firstCol; c <= lastCol; c++) {
                     mergedValues.put(r + "_" + c, value);
@@ -315,6 +329,8 @@ public class DfUpSSBThreeDMachineServiceImpl extends ServiceImpl<DfUpSSBThreeDMa
      * 解析字符串为日期（提取通用逻辑）
      */
     private Date parseDateFromString(String val) {
+        if (val == null) return null;
+        val = val.trim();
         if (val.isEmpty()) return null;
 
         val = val.replace("/", "-");
@@ -375,6 +391,15 @@ public class DfUpSSBThreeDMachineServiceImpl extends ServiceImpl<DfUpSSBThreeDMa
     /**
      * 舍入到指定小数位数
      */
+    /**
+     * 对可能为 null 的 Double 进行安全舍入，避免自动拆箱引发 NPE
+     */
+    private double roundToDecimalPlaces(Double value, int decimalPlaces) {
+        if (value == null || Double.isNaN(value) || Double.isInfinite(value)) {
+            return 0.0;
+        }
+        return roundToDecimalPlaces(value.doubleValue(), decimalPlaces);
+    }
     private double roundToDecimalPlaces(double value, int decimalPlaces) {
         if (Double.isNaN(value) || Double.isInfinite(value)) {
             return 0.0;
