@@ -48,7 +48,7 @@ public class RediumCodeSizePayloadBuilder extends AbstractPayloadBuilder<DfUpRad
         msg.put("CheckDevCode", null);               // 按既有约定：null
         msg.put("ItemName", e.getTestProject());     // 测试项目
         msg.put("CheckType", CheckTypeConfig.mapForPayload(e.getState()));
-        msg.put("MachineCode", CheckMachineCode.mapForMachineCode(e.getMachineCode()));
+        msg.put("MachineCode", transformMachineCode(e.getMachineCode()));
         msg.put("ProcessNO", CheckProcessName.mapForProcessName(e.getProcess()));
         msg.put("CheckTime", format(e.getDate()));   // yyyy-MM-dd HH:mm:ss
 
@@ -71,5 +71,24 @@ public class RediumCodeSizePayloadBuilder extends AbstractPayloadBuilder<DfUpRad
             item.put("CheckValue", value);
             list.add(item);
         }
+    }
+
+    private String transformMachineCode(String originalMachineCode) {
+        if (originalMachineCode == null) {
+            return null;
+        }
+
+        String transformedCode = originalMachineCode;
+
+        // 将 "-1" 替换为 "-L"
+        if (transformedCode.endsWith("-1")) {
+            transformedCode = transformedCode.replace("-1", "-L");
+        }
+        // 将 "-2" 替换为 "-R"
+        else if (transformedCode.endsWith("-2")) {
+            transformedCode = transformedCode.replace("-2", "-R");
+        }
+
+        return transformedCode;
     }
 }

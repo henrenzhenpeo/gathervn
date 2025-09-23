@@ -42,7 +42,7 @@ public class BottomGapChamferPayloadBuilder extends AbstractPayloadBuilder<DfUpB
         msg.put("ItemName", e.getTestProject());           // testProject
         // 原：msg.put("CheckType", e.getRemark());
         msg.put("CheckType", CheckTypeConfig.mapForPayload(e.getRemark())); // 统一映射（CPK->1，FAI->4，未知类型回退为原始字符串）
-        msg.put("MachineCode", CheckMachineCode.mapForMachineCode(e.getMachineCode()));        // machineCode
+        msg.put("MachineCode", transformMachineCode(e.getMachineCode()));        // machineCode
         msg.put("ProcessNO", CheckProcessName.mapForProcessName(e.getProcess()));
         msg.put("CheckTime", format(e.getDate()));         // date -> yyyy-MM-dd HH:mm:ss
 
@@ -71,5 +71,24 @@ public class BottomGapChamferPayloadBuilder extends AbstractPayloadBuilder<DfUpB
             item.put("CheckValue", value);
             list.add(item);
         }
+    }
+
+    private String transformMachineCode(String originalMachineCode) {
+        if (originalMachineCode == null) {
+            return null;
+        }
+
+        String transformedCode = originalMachineCode;
+
+        // 将 "-1" 替换为 "-L"
+        if (transformedCode.endsWith("-1")) {
+            transformedCode = transformedCode.replace("-1", "-L");
+        }
+        // 将 "-2" 替换为 "-R"
+        else if (transformedCode.endsWith("-2")) {
+            transformedCode = transformedCode.replace("-2", "-R");
+        }
+
+        return transformedCode;
     }
 }
