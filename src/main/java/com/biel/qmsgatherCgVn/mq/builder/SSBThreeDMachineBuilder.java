@@ -50,7 +50,7 @@ public class SSBThreeDMachineBuilder extends AbstractPayloadBuilder<DfUpSSBThree
         msg.put("ItemName", e.getTestProject());           // testProject
         // 原：msg.put("CheckType", e.getRemark());
         msg.put("CheckType", CheckTypeConfig.mapForPayload(e.getState())); // 统一映射（CPK->1，FAI->4，未知类型回退为原始字符串）
-        msg.put("MachineCode", CheckMachineCode.mapForMachineCode(e.getMachineCode()));
+        msg.put("MachineCode", e.getMachineCode());
         msg.put("ProcessNO", CheckProcessName.mapForProcessName(e.getProcess()));
         msg.put("CheckTime", format(e.getDate()));         // date -> yyyy-MM-dd HH:mm:ss
 
