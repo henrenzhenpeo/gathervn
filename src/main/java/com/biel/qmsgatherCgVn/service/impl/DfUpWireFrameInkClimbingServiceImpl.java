@@ -23,6 +23,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static com.biel.qmsgatherCgVn.util.excel.ExcelCellParsers.getDoubleCellValue;
+import static com.biel.qmsgatherCgVn.util.excel.ExcelCellParsers.roundToDecimalPlaces;
+
 /**
 * @author dafenqi
 * @description 针对表【df_up_wire_frame_ink_climbing(线框油墨爬高)】的数据库操作Service实现
@@ -74,11 +77,11 @@ public class DfUpWireFrameInkClimbingServiceImpl extends ServiceImpl<DfUpWireFra
                 entity.setDate(parsedDate);
                 i++; // 日期列已读取，推进列指针
 
-                entity.setLongSide1(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
-                entity.setLongSide2(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
-                entity.setGroove(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
-                entity.setShortGroove(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
-                entity.setShortSide(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
+                entity.setLongSide1(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)), 3));
+                entity.setLongSide2(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)), 3));
+                entity.setGroove(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)), 3));
+                entity.setShortGroove(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)), 3));
+                entity.setShortSide(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)), 3));
 
                 entity.setMachineCode(ExcelCellParsers.getStringCellValue(row.getCell(i++)));
                 entity.setState(ExcelCellParsers.getStringCellValue(row.getCell(i++)));

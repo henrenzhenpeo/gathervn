@@ -239,15 +239,15 @@ public static Date getDateCellValue(Cell cell) {
             return "B班";
         }
     }
-
-/*    *//**
-     * 保留指定小数位数
-     *//*
-    public double roundToDecimalPlaces(double value, int decimalPlaces) {
+    /**
+     * 舍入到指定小数位数
+     */
+    public static Double roundToDecimalPlaces(Double value, int decimalPlaces) {
+        if (value == null) return null;
         if (Double.isNaN(value) || Double.isInfinite(value)) {
             return 0.0;
         }
         BigDecimal bd = BigDecimal.valueOf(value);
         return bd.setScale(decimalPlaces, RoundingMode.HALF_UP).doubleValue();
-    }*/
+    }
 }

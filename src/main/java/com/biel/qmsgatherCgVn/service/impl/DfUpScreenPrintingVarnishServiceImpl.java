@@ -35,6 +35,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
 
+import static com.biel.qmsgatherCgVn.util.excel.ExcelCellParsers.getDoubleCellValue;
+import static com.biel.qmsgatherCgVn.util.excel.ExcelCellParsers.roundToDecimalPlaces;
+
 /**
  * @author dafenqi
  * @description 针对表【df_up_screen_printing_varnish(丝印光油)】的数据库操作Service实现
@@ -121,27 +124,26 @@ public class DfUpScreenPrintingVarnishServiceImpl extends ServiceImpl<DfUpScreen
                         entity.setDate(parsedDate);
                         i++;
 
-                        entity.setOnePointy2(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
-                        entity.setTwoPointy1(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
-                        entity.setThreePoint(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
-                        entity.setGroove(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
-                        entity.setFourPointx(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
-                        entity.setFivePointy1(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
-                        entity.setSixPointy2(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
-                        entity.setSevenPoint(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
-                        entity.setEightPointx(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
-                        entity.setTwoCodeWindow1(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
-                        entity.setTwoCodeWindow2(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
-                        entity.setLightOilTopReference1(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
-                        entity.setLightOilTopReference2(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
-                        entity.setTwoCodeCenter1(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
-                        entity.setTwoCodeCenter2(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
-                        entity.setTwoCodeTopCenter1(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
-                        entity.setTwoCodeTopCenter2(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
-                        entity.setDebugMachinex(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
-                        entity.setDebugMachiney1(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
-                        entity.setDebugMachiney2(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
-                        entity.setMachineCode(ExcelCellParsers.getStringCellValue(row.getCell(i++)));
+                        entity.setOnePointy2(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)), 3));
+                        entity.setTwoPointy1(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)), 3));
+                        entity.setThreePoint(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)), 3));
+                        entity.setGroove(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)), 3));
+                        entity.setFourPointx(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)), 3));
+                        entity.setFivePointy1(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)), 3));
+                        entity.setSixPointy2(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)), 3));
+                        entity.setSevenPoint(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)), 3));
+                        entity.setEightPointx(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)), 3));
+                        entity.setTwoCodeWindow1(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)), 3));
+                        entity.setTwoCodeWindow2(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)), 3));
+                        entity.setLightOilTopReference1(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)), 3));
+                        entity.setLightOilTopReference2(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)), 3));
+                        entity.setTwoCodeCenter1(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)), 3));
+                        entity.setTwoCodeCenter2(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)), 3));
+                        entity.setTwoCodeTopCenter1(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)), 3));
+                        entity.setTwoCodeTopCenter2(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)), 3));
+                        entity.setDebugMachinex(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)), 4));
+                        entity.setDebugMachiney1(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)), 4));
+                        entity.setDebugMachiney2(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)), 4));
                         entity.setRemark(ExcelCellParsers.getStringCellValue(row.getCell(i++)));
                         entity.setState(ExcelCellParsers.getStringCellValue(row.getCell(i++)));
 

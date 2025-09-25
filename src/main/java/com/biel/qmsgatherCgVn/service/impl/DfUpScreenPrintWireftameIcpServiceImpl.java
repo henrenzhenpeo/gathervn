@@ -23,6 +23,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static com.biel.qmsgatherCgVn.util.excel.ExcelCellParsers.getDoubleCellValue;
+import static com.biel.qmsgatherCgVn.util.excel.ExcelCellParsers.roundToDecimalPlaces;
+
 /**
 * @author dafenqi
 * @description 针对表【df_up_screen_print_wireftame_icp(丝印线框icp)】的数据库操作Service实现
@@ -72,33 +75,34 @@ public class DfUpScreenPrintWireftameIcpServiceImpl extends ServiceImpl<DfUpScre
                 entity.setDate(parsedDate);
                 i++; // 日期列已读取，推进列指针
 
-                entity.setR1(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
-                entity.setR2(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
-                entity.setR3(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
-                entity.setR4(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
 
-                entity.setUpperLongSide1(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
-                entity.setUpperLongSide2(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
-                entity.setUpperLongSide3(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
+                entity.setR1(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)), 3));
+                entity.setR2(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)), 3));
+                entity.setR3(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)), 3));
+                entity.setR4(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)), 3));
 
-                entity.setLowerLongSide1(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
-                entity.setLowerLongSide2(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
-                entity.setLowerLongSide3(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
+                entity.setUpperLongSide1(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)), 3));
+                entity.setUpperLongSide2(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)), 3));
+                entity.setUpperLongSide3(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)), 3));
 
-                entity.setShortDegeGroove1(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
-                entity.setShortDegeGroove2(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
+                entity.setLowerLongSide1(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)), 3));
+                entity.setLowerLongSide2(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)), 3));
+                entity.setLowerLongSide3(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)), 3));
 
-                entity.setNoShortDegeGroove1(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
-                entity.setNoShortDegeGroove2(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
+                entity.setShortDegeGroove1(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)), 3));
+                entity.setShortDegeGroove2(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)), 3));
 
-                entity.setDegeGroove(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
+                entity.setNoShortDegeGroove1(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)), 3));
+                entity.setNoShortDegeGroove2(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)), 3));
 
-                entity.setLongAppearance1(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
-                entity.setLongAppearance2(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
-                entity.setExteriorWidth(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
-                entity.setExteriorWidth2(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
+                entity.setDegeGroove(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)), 3));
 
-                entity.setMaxValue(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
+                entity.setLongAppearance1(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)), 3));
+                entity.setLongAppearance2(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)), 3));
+                entity.setExteriorWidth(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)), 3));
+                entity.setExteriorWidth2(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)), 3));
+
+                entity.setMaxValue(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)), 3));
 
                 entity.setMachineCode(ExcelCellParsers.getStringCellValue(row.getCell(i++)));
                 entity.setState(ExcelCellParsers.getStringCellValue(row.getCell(i++)));

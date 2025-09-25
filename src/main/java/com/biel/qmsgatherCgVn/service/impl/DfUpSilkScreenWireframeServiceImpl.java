@@ -22,6 +22,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static com.biel.qmsgatherCgVn.util.excel.ExcelCellParsers.getDoubleCellValue;
+import static com.biel.qmsgatherCgVn.util.excel.ExcelCellParsers.roundToDecimalPlaces;
+
 /**
 * @author dafenqi
 * @description 针对表【df_up_silk_screen_wireframe(丝印线框)】的数据库操作Service实现
@@ -73,27 +76,27 @@ public class DfUpSilkScreenWireframeServiceImpl extends ServiceImpl<DfUpSilkScre
                 entity.setDate(parsedDate);
                 i++; // 日期列已读取，推进列指针
 
-                entity.setOnePointy2(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
-                entity.setTwoPointy1(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
-                entity.setThreePointx(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
-                entity.setFourPointx(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
+                entity.setOnePointy2(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)), 3));
+                entity.setTwoPointy1(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)), 3));
+                entity.setThreePointx(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)), 3));
+                entity.setFourPointx(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)), 3));
 
-                entity.setFivePointy1(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
-                entity.setSixPointy2(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
+                entity.setFivePointy1(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)), 3));
+                entity.setSixPointy2(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)), 3));
 
-                entity.setSevenPointx(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
-                entity.setEightPointx(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
+                entity.setSevenPointx(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)), 3));
+                entity.setEightPointx(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)), 3));
 
-                entity.setR1(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
-                entity.setR2(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
-                entity.setR3(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
-                entity.setR4(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
+                entity.setR1(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)), 3));
+                entity.setR2(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)), 3));
+                entity.setR3(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)), 3));
+                entity.setR4(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)), 3));
 
-                entity.setTwoRadiumCode(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
+                entity.setTwoRadiumCode(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)), 3));
 
-                entity.setDebugMachinex(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
-                entity.setDebugMachiney1(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
-                entity.setDebugMachiney2(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
+                entity.setDebugMachinex(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)), 3));
+                entity.setDebugMachiney1(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)), 3));
+                entity.setDebugMachiney2(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)), 3));
 
                 entity.setMachineCode(ExcelCellParsers.getStringCellValue(row.getCell(i++)));
                 entity.setState(ExcelCellParsers.getStringCellValue(row.getCell(i++)));
