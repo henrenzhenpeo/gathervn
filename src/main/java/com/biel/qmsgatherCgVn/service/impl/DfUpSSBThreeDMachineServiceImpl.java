@@ -21,8 +21,7 @@ import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-import static com.biel.qmsgatherCgVn.util.excel.ExcelCellParsers.determineShift;
-import static com.biel.qmsgatherCgVn.util.excel.ExcelCellParsers.getStringCellValue;
+import static com.biel.qmsgatherCgVn.util.excel.ExcelCellParsers.*;
 
 /**
  * Excel导入服务实现（处理合并单元格）
@@ -358,53 +357,4 @@ public class DfUpSSBThreeDMachineServiceImpl extends ServiceImpl<DfUpSSBThreeDMa
         return null;
     }
 
-/*    private Date parseCreateTime(String val) {
-        if (val == null) return null;
-        val = val.trim();
-        if (val.isEmpty()) return null;
-
-        try {
-            // 兼容常见分隔符和格式
-            val = val.replace("/", "-").replace("T", " ");
-            // 处理 "yyyy-MM-dd,HH:mm:ss" 之类
-            if (val.contains(",")) {
-                val = val.replace(",", " ");
-            }
-
-            SimpleDateFormat[] formats = new SimpleDateFormat[] {
-                    new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"),
-                    new SimpleDateFormat("yyyy-MM-dd HH:mm"),
-                    new SimpleDateFormat("yyyy-M-d H:m:s")
-            };
-
-            for (SimpleDateFormat sdf : formats) {
-                try {
-                    return sdf.parse(val);
-                } catch (Exception ignore) { }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }*/
-
-    /**
-     * 舍入到指定小数位数
-     */
-    /**
-     * 对可能为 null 的 Double 进行安全舍入，避免自动拆箱引发 NPE
-     */
-    private double roundToDecimalPlaces(Double value, int decimalPlaces) {
-        if (value == null || Double.isNaN(value) || Double.isInfinite(value)) {
-            return 0.0;
-        }
-        return roundToDecimalPlaces(value.doubleValue(), decimalPlaces);
-    }
-    private double roundToDecimalPlaces(double value, int decimalPlaces) {
-        if (Double.isNaN(value) || Double.isInfinite(value)) {
-            return 0.0;
-        }
-        BigDecimal bd = BigDecimal.valueOf(value);
-        return bd.setScale(decimalPlaces, RoundingMode.HALF_UP).doubleValue();
-    }
 }

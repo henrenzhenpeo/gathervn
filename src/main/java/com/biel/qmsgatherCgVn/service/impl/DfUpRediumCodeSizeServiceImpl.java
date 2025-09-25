@@ -23,6 +23,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import static com.biel.qmsgatherCgVn.util.excel.ExcelCellParsers.roundToDecimalPlaces;
+
 /**
  * TODO
  *
@@ -253,16 +255,6 @@ public class DfUpRediumCodeSizeServiceImpl extends ServiceImpl<DfUpRediumCodeSiz
         return null;
     }
 
-    /**
-     * 保留指定小数位数
-     */
-    private double roundToDecimalPlaces(double value, int decimalPlaces) {
-        if (Double.isNaN(value) || Double.isInfinite(value)) {
-            return 0.0;
-        }
-        BigDecimal bd = BigDecimal.valueOf(value);
-        return bd.setScale(decimalPlaces, RoundingMode.HALF_UP).doubleValue();
-    }
 
     // 表头通用校验（扫描前20行*每行前50列）
     private void validateExcelHeader(Sheet sheet, String requiredHeader) {
