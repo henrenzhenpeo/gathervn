@@ -4,7 +4,6 @@ import com.biel.qmsgatherCgVn.domain.DfUpBottomGapChamfer;
 import com.biel.qmsgatherCgVn.mq.AbstractPayloadBuilder;
 import com.biel.qmsgatherCgVn.mq.PayloadBuilder;
 import com.biel.qmsgatherCgVn.mq.SendMode;
-import com.biel.qmsgatherCgVn.util.CheckMachineCode;
 import com.biel.qmsgatherCgVn.util.CheckProcessName;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -13,6 +12,9 @@ import java.util.*;
 
 import com.biel.qmsgatherCgVn.util.CheckTypeConfig; // 新增：公共映射工具
 
+/**
+ * cnc3d底倒角数据转换器
+ */
 @Component
 public class BottomGapChamferPayloadBuilder extends AbstractPayloadBuilder<DfUpBottomGapChamfer> implements PayloadBuilder<DfUpBottomGapChamfer> {
 
@@ -41,7 +43,7 @@ public class BottomGapChamferPayloadBuilder extends AbstractPayloadBuilder<DfUpB
         msg.put("CheckDevCode", null);                     // null
         msg.put("ItemName", e.getTestProject());           // testProject
         // 原：msg.put("CheckType", e.getRemark());
-        msg.put("CheckType", CheckTypeConfig.mapForPayload(e.getRemark())); // 统一映射（CPK->1，FAI->4，未知类型回退为原始字符串）
+        msg.put("CheckType", CheckTypeConfig.mapForPayload(e.getState())); // 统一映射（CPK->1，FAI->4，未知类型回退为原始字符串）
         msg.put("MachineCode", transformMachineCode(e.getMachineCode()));        // machineCode
         msg.put("ProcessNO", CheckProcessName.mapForProcessName(e.getProcess()));
         msg.put("CheckTime", format(e.getDate()));         // date -> yyyy-MM-dd HH:mm:ss

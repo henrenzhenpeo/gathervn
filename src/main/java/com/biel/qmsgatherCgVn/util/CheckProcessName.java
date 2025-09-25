@@ -82,18 +82,29 @@ public class CheckProcessName {
      * - 未知 remark 返回原始字符串
      * - 空白 remark 返回 null
      */
-    public static Object mapForProcessName(String remark) {
+    public static Object mapForProcessName(String process) {
         try {
-            String code = resolve(remark);
-            if (code != null) return code;
-            if (remark != null && !remark.trim().isEmpty()) {
-                log.warn("Unknown CheckType remark: {}. Fallback to original string.", remark);
-                return remark;
+            // 解析工序名，获取对应的代码
+            String code = resolve(process);
+
+            // 若解析成功，返回解析得到的代码
+            if (code != null) {
+                return code;
             }
+
+            // 若解析失败，但工序名不为空且非空白字符串，记录警告日志并返回原工序名
+            if (process != null && !process.trim().isEmpty()) {
+                log.warn("未知的工序名: {}. 回退到原始字符串。", process);
+                return process;
+            }
+
+            // 工序名为空或空白字符串时，返回null
             return null;
+
         } catch (Exception ex) {
-            log.error("CheckType mapping error for remark={}, fallback to original.", remark, ex);
-            return remark;
+            // 处理映射过程中发生的异常，记录错误日志并返回原工序名
+            log.error("工序名[{}]映射出错，回退到原始值。", process, ex);
+            return process;
         }
     }
 

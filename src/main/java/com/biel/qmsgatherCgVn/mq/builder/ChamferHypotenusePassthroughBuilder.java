@@ -4,7 +4,6 @@ import com.biel.qmsgatherCgVn.domain.DfUpChamferHypotenuse;
 import com.biel.qmsgatherCgVn.mq.AbstractPayloadBuilder;
 import com.biel.qmsgatherCgVn.mq.PayloadBuilder;
 import com.biel.qmsgatherCgVn.mq.SendMode;
-import com.biel.qmsgatherCgVn.util.CheckMachineCode;
 import com.biel.qmsgatherCgVn.util.CheckProcessName;
 import com.biel.qmsgatherCgVn.util.CheckTypeConfig;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,6 +14,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ *  cnc3d斜边倒角
+ */
 @Component
 public class ChamferHypotenusePassthroughBuilder extends AbstractPayloadBuilder<DfUpChamferHypotenuse> implements PayloadBuilder<DfUpChamferHypotenuse> {
 
