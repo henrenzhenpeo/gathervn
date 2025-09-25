@@ -133,4 +133,17 @@ public class ActiveMqDataImportedListener {
             log.error("[DfUpSSBThreeDMachine] ActiveMQ转发失败：", e);
         }
     }
+
+    // 新增：RadiumCodeSize事件分发
+    @EventListener(condition = "#root.args[0].entityType == T(com.biel.qmsgatherCgVn.domain.DfUpLM0RadiumSize)")
+    public void onLM0RadiumCodeSize(DataImportedEvent<DfUpLM0RadiumSize> event) {
+        List<DfUpLM0RadiumSize> batch = event.getPayload();
+        if (batch == null || batch.isEmpty()) return;
+        try {
+            dispatcher.dispatch(batch, DfUpLM0RadiumSize.class);
+            log.info("[DfUpLM0RadiumSize] ActiveMQ转发成功：批次条数={}", batch.size());
+        } catch (Exception e) {
+            log.error("[DfUpLM0RadiumSize] ActiveMQ转发失败：", e);
+        }
+    }
 }
