@@ -93,10 +93,15 @@ public static Date getDateCellValue(Cell cell) {
         }
 
         String[] patterns = {
-            "yyyy/M/d,HH:mm:ss",
-            "yyyy/M/d HH:mm:ss",
-            "yyyy/M/d,HH:mm",
-            "yyyy/M/d HH:mm"
+                "yyyy/M/d,HH:mm:ss",
+                "yyyy/M/d HH:mm:ss",
+                "yyyy/M/d,HH:mm",
+                "yyyy/M/d HH:mm",
+                "yyyy/M/d",
+                "yyyy-MM-dd",
+                "yyyy-MM-dd HH:mm:ss",
+                "yyyy-MM-dd HH:mm",
+                "yyyyMMdd"
         };
 
         for (String p : patterns) {
@@ -110,7 +115,7 @@ public static Date getDateCellValue(Cell cell) {
         }
 
         throw new IllegalArgumentException(
-            "无效的日期格式：\"" + val + "\"。仅支持：yyyy/M/d,HH:mm:ss 或 yyyy/M/d HH:mm:ss（其中月份与日期可为1或2位数字）。"
+                "无效的日期格式：\"" + val + "\"。支持的格式包括：yyyy/M/d、yyyy-MM-dd、yyyyMMdd、yyyy-MM-dd HH:mm:ss 等"
         );
     }
 
