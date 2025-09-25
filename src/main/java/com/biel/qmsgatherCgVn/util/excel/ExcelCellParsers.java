@@ -135,7 +135,33 @@ public static Date getDateCellValue(Cell cell) {
      */
     public static String getStringCellValue(Cell cell) {
         if (cell == null) return null;
-        return cell.toString().trim();
+        try {
+            switch (cell.getCellType()) {
+                case STRING:
+                    return cell.getStringCellValue().trim();
+                case NUMERIC:
+                    double d = cell.getNumericCellValue();
+                    // 如果是整数，避免显示成 1.0
+                    if (d == Math.floor(d)) {
+                        return String.valueOf((long) d);
+                    }
+                    return String.valueOf(d);
+                case BOOLEAN:
+                    return String.valueOf(cell.getBooleanCellValue());
+                case FORMULA:
+                    try {
+                        return cell.getStringCellValue().trim();
+                    } catch (Exception ex) {
+                        return String.valueOf(cell.getNumericCellValue());
+                    }
+                case BLANK:
+                case ERROR:
+                default:
+                    return null;
+            }
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     /**
@@ -214,14 +240,14 @@ public static Date getDateCellValue(Cell cell) {
         }
     }
 
-    /**
+/*    *//**
      * 保留指定小数位数
-     */
+     *//*
     public double roundToDecimalPlaces(double value, int decimalPlaces) {
         if (Double.isNaN(value) || Double.isInfinite(value)) {
             return 0.0;
         }
         BigDecimal bd = BigDecimal.valueOf(value);
         return bd.setScale(decimalPlaces, RoundingMode.HALF_UP).doubleValue();
-    }
+    }*/
 }

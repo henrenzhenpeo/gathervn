@@ -10,6 +10,8 @@ import javax.annotation.Resource;
 import java.util.List;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.transaction.event.TransactionPhase;
+import org.springframework.transaction.event.TransactionalEventListener;
 
 @Component
 @Slf4j
@@ -79,8 +81,10 @@ public class ActiveMqDataImportedListener {
     }
 
     // 新增：丝印光油事件分发
-    @EventListener(condition = "#root.args[0].entityType == T(com.biel.qmsgatherCgVn.domain.DfUpScreenPrintingVarnish)")
-    public void onScreenPrintingVarnish(DataImportedEvent<com.biel.qmsgatherCgVn.domain.DfUpScreenPrintingVarnish> event) {
+    @TransactionalEventListener(
+            phase = TransactionPhase.AFTER_COMMIT,
+            condition = "#root.args[0].entityType == T(com.biel.qmsgatherCgVn.domain.DfUpScreenPrintingVarnish)"
+    )    public void onScreenPrintingVarnish(DataImportedEvent<com.biel.qmsgatherCgVn.domain.DfUpScreenPrintingVarnish> event) {
         List<com.biel.qmsgatherCgVn.domain.DfUpScreenPrintingVarnish> batch = event.getPayload();
         if (batch == null || batch.isEmpty()) return;
         try {

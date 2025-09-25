@@ -7,18 +7,31 @@ import com.biel.qmsgatherCgVn.mapper.DfUpScreenPrintingVarnishMapper;
 import com.biel.qmsgatherCgVn.util.PoiZipSecurity;
 import com.biel.qmsgatherCgVn.util.excel.ExcelCellParsers;
 import com.biel.qmsgatherCgVn.util.excel.ExcelHeaderValidator;
+import com.biel.qmsgatherCgVn.util.excel.ExcelSheetUtils;
+import com.github.pjfanning.xlsx.StreamingReader;
+import com.google.common.collect.Lists;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext; // 新增
 import org.springframework.context.ApplicationEventPublisher; // 新增
 import com.biel.qmsgatherCgVn.event.DataImportedEvent;    // 新增
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.ArrayList;                               // 新增
 import java.util.List;                                    // 新增
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 import org.springframework.web.multipart.MultipartFile;
+
 
 import java.util.Date;
 
@@ -28,6 +41,7 @@ import java.util.Date;
  * @createDate 2025-07-24 16:34:35
  */
 @Service
+@Slf4j
 public class DfUpScreenPrintingVarnishServiceImpl extends ServiceImpl<DfUpScreenPrintingVarnishMapper, DfUpScreenPrintingVarnish>
         implements DfUpScreenPrintingVarnishService {
 
@@ -35,92 +49,179 @@ public class DfUpScreenPrintingVarnishServiceImpl extends ServiceImpl<DfUpScreen
     private DfUpScreenPrintingVarnishMapper dfUpScreenPrintingVarnishMapper;
 
     @Autowired
-    private ApplicationEventPublisher eventPublisher; // 新增：事件发布器（解耦发送）
+    private ApplicationEventPublisher eventPublisher;
 
-    private static final int MQ_BATCH_SIZE = 200; // 新增：与其他模块一致
+    @Autowired
+    private ApplicationContext applicationContext; // 新增
+
+    private static final int MQ_BATCH_SIZE = 200;
+    private static final int DB_BATCH_SIZE = 1000;
+
     @Override
-    @Transactional(rollbackFor = Exception.class)
-    public void importExcel(MultipartFile file, String factory, String model, String process, String testProject, String uploadName, String batchId) throws Exception {
+    public void importExcel(MultipartFile file,
+                            String factory,
+                            String model,
+                            String process,
+                            String testProject,
+                            String uploadName,
+                            String batchId) throws Exception {
+
         PoiZipSecurity.configure();
-        try (Workbook workbook = WorkbookFactory.create(file.getInputStream())) { // ✅ 自动识别 xls/xlsx，异常也会关闭
-            Sheet sheet = workbook.getSheetAt(0); // 读取第一个sheet
-    
-            // 表头校验：表头在第3行（索引2），从第2列开始校验
-            validateHeader(sheet);
-    
-            // 新增：批量事件缓存
-            List<DfUpScreenPrintingVarnish> mqBatch = new ArrayList<>(MQ_BATCH_SIZE);
-    
-            int startRow = 8; // 从第9行开始（索引是8）
-            for (int r = startRow; r <= sheet.getLastRowNum(); r++) {
-                Row row = sheet.getRow(r);
-    
-                if (com.biel.qmsgatherCgVn.util.excel.ExcelSheetUtils.isRowEmpty(row)) continue; // 跳过空行
-                // 首列日期只解析一次并缓存
-                Date parsedDate = com.biel.qmsgatherCgVn.util.excel.ExcelCellParsers.getDateCellValue(row.getCell(0));
-                if (parsedDate == null) continue;
-    
-                DfUpScreenPrintingVarnish entity = new DfUpScreenPrintingVarnish();
-                int i = 0;
-    
-                entity.setFactory(factory);
-                entity.setModel(model);
-                entity.setProcess(process);
-                entity.setTestProject(testProject);
-                entity.setBatchId(batchId);
-    
-                entity.setDate(parsedDate); // 使用缓存结果，避免重复解析
-                i++; // 手动推进列索引，保持与后续列的对齐
-    
-                entity.setOnePointy2(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
-                entity.setTwoPointy1(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
-                entity.setThreePoint(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
-                entity.setGroove(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
-                entity.setFourPointx(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
-                entity.setFivePointy1(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
-                entity.setSixPointy2(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
-                entity.setSevenPoint(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
-                entity.setEightPointx(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
-                entity.setTwoCodeWindow1(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
-                entity.setTwoCodeWindow2(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
-                entity.setLightOilTopReference1(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
-                entity.setLightOilTopReference2(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
-                entity.setTwoCodeCenter1(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
-                entity.setTwoCodeCenter2(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
-                entity.setTwoCodeTopCenter1(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
-                entity.setTwoCodeTopCenter2(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
-                entity.setDebugMachinex(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
-                entity.setDebugMachiney1(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
-                entity.setDebugMachiney2(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
-                entity.setMachineCode(ExcelCellParsers.getStringCellValue(row.getCell(i++)));
-                entity.setRemark(ExcelCellParsers.getStringCellValue(row.getCell(i++)));
-                entity.setState(ExcelCellParsers.getStringCellValue(row.getCell(i++)));
-    
-                entity.setUploadName(uploadName);
-                entity.setCreateTime(new Date());
-    
-                // 保存
-                dfUpScreenPrintingVarnishMapper.insert(entity);
-    
-                // 新增：批量事件发布（由监听器统一发送到MQ）
-                mqBatch.add(entity);
-                if (mqBatch.size() >= MQ_BATCH_SIZE) {
-                    eventPublisher.publishEvent(new DataImportedEvent<>(new ArrayList<>(mqBatch), DfUpScreenPrintingVarnish.class));
-                    mqBatch.clear();
+
+        // 先把 MultipartFile 转存到临时文件（避免 getInputStream() 多次调用问题）
+        File tempFile = File.createTempFile("import-", ".xlsx");
+        file.transferTo(tempFile);
+
+        try {
+            // 第一步：普通方式读取表头，支持合并单元格校验
+            try (InputStream headerIs = new FileInputStream(tempFile);
+                 Workbook headerWb = WorkbookFactory.create(headerIs)) {
+                Sheet headerSheet = headerWb.getSheetAt(0);
+                validateHeader(headerSheet);  // ✅ 这里用原来的 validateHeader，不用改
+            }
+
+            // 第二步：流式读取数据部分
+            try (InputStream dataIs = new FileInputStream(tempFile);
+                 Workbook workbook = StreamingReader.builder()
+                         .rowCacheSize(500)
+                         .bufferSize(4096)
+                         .open(dataIs)) {
+
+                Sheet sheet = workbook.getSheetAt(0);
+
+                int rowIndex = 0;
+                int startRow = 9; // 从第9行开始读数据（索引8）
+                List<DfUpScreenPrintingVarnish> dbBatch = new ArrayList<>(DB_BATCH_SIZE);
+                Date importTime = new Date();
+
+                for (Row row : sheet) {
+                    rowIndex++;
+                    if (rowIndex < startRow) {
+                        continue;
+                    }
+                    if (ExcelSheetUtils.isRowEmpty(row)) {
+                        continue;
+                    }
+
+                    try {
+                        Date parsedDate = ExcelCellParsers.getDateCellValue(row.getCell(0));
+                        if (parsedDate == null) {
+                            continue;
+                        }
+
+                        DfUpScreenPrintingVarnish entity = new DfUpScreenPrintingVarnish();
+                        int i = 0;
+
+                        entity.setFactory(factory);
+                        entity.setModel(model);
+                        entity.setProcess(process);
+                        entity.setTestProject(testProject);
+                        entity.setBatchId(batchId);
+
+                        entity.setDate(parsedDate);
+                        i++;
+
+                        entity.setOnePointy2(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
+                        entity.setTwoPointy1(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
+                        entity.setThreePoint(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
+                        entity.setGroove(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
+                        entity.setFourPointx(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
+                        entity.setFivePointy1(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
+                        entity.setSixPointy2(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
+                        entity.setSevenPoint(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
+                        entity.setEightPointx(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
+                        entity.setTwoCodeWindow1(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
+                        entity.setTwoCodeWindow2(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
+                        entity.setLightOilTopReference1(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
+                        entity.setLightOilTopReference2(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
+                        entity.setTwoCodeCenter1(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
+                        entity.setTwoCodeCenter2(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
+                        entity.setTwoCodeTopCenter1(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
+                        entity.setTwoCodeTopCenter2(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
+                        entity.setDebugMachinex(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
+                        entity.setDebugMachiney1(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
+                        entity.setDebugMachiney2(ExcelCellParsers.getDoubleCellValue(row.getCell(i++)));
+                        entity.setMachineCode(ExcelCellParsers.getStringCellValue(row.getCell(i++)));
+                        entity.setRemark(ExcelCellParsers.getStringCellValue(row.getCell(i++)));
+                        entity.setState(ExcelCellParsers.getStringCellValue(row.getCell(i++)));
+
+                        entity.setUploadName(uploadName);
+                        entity.setCreateTime(importTime);
+
+                        dbBatch.add(entity);
+                        if (dbBatch.size() >= DB_BATCH_SIZE) {
+                            getSelf().saveBatchWithNewTx(dbBatch);
+                            dbBatch.clear();
+                        }
+
+                    } catch (Exception e) {
+                        log.error("第 {} 行解析失败，跳过该行，原因：{}", rowIndex, e.getMessage(), e);
+                        continue;
+                    }
+                }
+
+                if (!dbBatch.isEmpty()) {
+                    getSelf().saveBatchWithNewTx(dbBatch);
+                    dbBatch.clear();
                 }
             }
-    
-            // 新增：收尾发布
-            if (!mqBatch.isEmpty()) {
-                eventPublisher.publishEvent(new DataImportedEvent<>(new ArrayList<>(mqBatch), DfUpScreenPrintingVarnish.class));
-                mqBatch.clear();
+
+        } finally {
+            // 删除临时文件，避免磁盘泄露
+            if (tempFile.exists()) {
+                tempFile.delete();
             }
         }
     }
 
+    /**
+     * 获取当前类的代理对象，确保事务注解生效
+     */
+    private DfUpScreenPrintingVarnishServiceImpl getSelf() {
+        return applicationContext.getBean(DfUpScreenPrintingVarnishServiceImpl.class);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
+    public void saveBatchWithNewTx(List<DfUpScreenPrintingVarnish> batch) {
+        try {
+            this.saveBatch(batch);
+            log.info("保存数据库批次成功：{} 条", batch.size());
+
+            // 在事务提交前创建事件的副本
+            List<DfUpScreenPrintingVarnish> eventBatch = new ArrayList<>(batch);
+
+            TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+                @Override
+                public void afterCommit() {
+                    List<List<DfUpScreenPrintingVarnish>> mqChunks = Lists.partition(eventBatch, MQ_BATCH_SIZE);
+                    for (List<DfUpScreenPrintingVarnish> chunk : mqChunks) {
+                        eventPublisher.publishEvent(
+                                new DataImportedEvent<>(new ArrayList<>(chunk), DfUpScreenPrintingVarnish.class)
+                        );
+                    }
+                }
+            });
+
+        } catch (Exception e) {
+            log.error("保存数据库批次失败，批次大小：{}，错误：{}", batch.size(), e.getMessage(), e);
+            throw e;
+        }
+    }
+
     private void validateHeader(Sheet sheet) {
-        int headerRowIndex = 2; // 第三行
-        Row headerRow = sheet.getRow(headerRowIndex);
+        int headerRowIndex = 2; // 第三行（索引2）
+        Row headerRow = null;
+
+        for (Row row : sheet) {
+            if (row.getRowNum() == headerRowIndex) {
+                headerRow = row;
+                break;
+            }
+            if (row.getRowNum() > headerRowIndex) {
+                break; // 已经过头，不用再遍历
+            }
+        }
+
         if (headerRow == null) {
             throw new IllegalArgumentException("Excel表头校验失败：未找到第3行表头（索引2）");
         }
