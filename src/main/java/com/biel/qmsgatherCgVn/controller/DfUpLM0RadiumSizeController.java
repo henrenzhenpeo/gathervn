@@ -134,6 +134,7 @@ public class DfUpLM0RadiumSizeController {
         // 映射为 VO 列表（只保留 VO 字段）
         List<DfUpLM0RadiumSizeVo> exportList = dfUpLM0RadiumSizeList.stream().map(e -> {
             DfUpLM0RadiumSizeVo v = new DfUpLM0RadiumSizeVo();
+            v.setModel(e.getModel());
             v.setDate(e.getDate());
             v.setExternalLong(e.getExternalLong());
             v.setExternalWidth(e.getExternalWidth());

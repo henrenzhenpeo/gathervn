@@ -14,6 +14,14 @@ import java.util.Date;
  */
 @Data
 public class DfUpLM0RadiumSizeVo {
+
+    /**
+     * 模型
+     */
+    @Excel(name = "型号", orderNum = "0")
+    private String model;
+
+
     /**
      * 时间日期
      */
@@ -84,13 +92,13 @@ public class DfUpLM0RadiumSizeVo {
     /**
      * 苹果logo主体上端到低端
      */
-    @Excel(name = "苹果logo主体上端到低端", orderNum = "12")
+    @Excel(name = "苹果logo主体上端到底端", orderNum = "12")
     private double appleLogoBodyUpToDown;
 
     /**
      * 叶子下端到苹果logo主体下端距离
      */
-    @Excel(name = "叶子下端到苹果logo主体下端距离", orderNum = "13")
+    @Excel(name = "叶子下端到苹果logo主体下端距", orderNum = "13")
     private double leafDownToAppleLogoBodyDown;
 
     /**
