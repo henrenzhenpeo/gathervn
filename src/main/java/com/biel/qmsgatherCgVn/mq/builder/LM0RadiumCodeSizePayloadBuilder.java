@@ -47,7 +47,7 @@ public class LM0RadiumCodeSizePayloadBuilder  extends AbstractPayloadBuilder<DfU
         msg.put("CheckDevCode", null);               // 按既有约定：null
         msg.put("ItemName", e.getTestProject());     // 测试项目
         msg.put("CheckType", CheckTypeConfig.mapForPayload(e.getState()));
-        msg.put("MachineCode", e.getMachineCode());
+        msg.put("MachineCode", extractNumberAfterDash(e.getMachineCode()));
         msg.put("ProcessNO", CheckProcessName.mapForProcessName(e.getProcess()));
         msg.put("CheckTime", format(e.getDate()));   // yyyy-MM-dd HH:mm:ss
 
@@ -77,5 +77,20 @@ public class LM0RadiumCodeSizePayloadBuilder  extends AbstractPayloadBuilder<DfU
             item.put("CheckValue", value);
             list.add(item);
         }
+    }
+
+    // 提取“-”后末尾的数字；如“38#-3” -> “3”；返回字符串形式；不符合格式时返回 null
+    private String extractNumberAfterDash(String machineCode) {
+        if (machineCode == null) return null;
+        java.util.regex.Matcher m = java.util.regex.Pattern
+                .compile("-(\\d+)\\s*$")
+                .matcher(machineCode);
+        if (m.find()) {
+            return m.group(1);
+        }
+        int idx = machineCode.lastIndexOf('-');
+        return (idx >= 0 && idx < machineCode.length() - 1)
+                ? machineCode.substring(idx + 1).trim()
+                : null;
     }
 }
