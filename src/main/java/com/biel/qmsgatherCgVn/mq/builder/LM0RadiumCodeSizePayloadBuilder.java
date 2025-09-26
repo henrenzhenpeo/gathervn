@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * TODO
@@ -82,15 +84,9 @@ public class LM0RadiumCodeSizePayloadBuilder  extends AbstractPayloadBuilder<DfU
     // 提取“-”后末尾的数字；如“38#-3” -> “3”；返回字符串形式；不符合格式时返回 null
     private String extractNumberAfterDash(String machineCode) {
         if (machineCode == null) return null;
-        java.util.regex.Matcher m = java.util.regex.Pattern
-                .compile("-(\\d+)\\s*$")
-                .matcher(machineCode);
-        if (m.find()) {
-            return m.group(1);
-        }
         int idx = machineCode.lastIndexOf('-');
-        return (idx >= 0 && idx < machineCode.length() - 1)
-                ? machineCode.substring(idx + 1).trim()
-                : null;
+        if (idx < 0 || idx == machineCode.length() - 1) return null;
+        String suffix = machineCode.substring(idx + 1).trim();
+        return suffix.matches("\\d+") ? suffix : null;
     }
 }
