@@ -73,22 +73,17 @@ public class RediumCodeSizePayloadBuilder extends AbstractPayloadBuilder<DfUpRad
         }
     }
 
-    private String transformMachineCode(String originalMachineCode) {
-        if (originalMachineCode == null) {
+    private String transformMachineCode(String code) {
+        if (code == null) {
             return null;
         }
-
-        String transformedCode = originalMachineCode;
-
-        // 将 "-1" 替换为 "-L"
-        if (transformedCode.endsWith("-1")) {
-            transformedCode = transformedCode.replace("-1", "-L");
+        // 检查字符串结尾并处理
+        if (code.endsWith("-1")) {
+            return code.substring(0, code.length() - 2) + "-L";
+        } else if (code.endsWith("-2")) {
+            return code.substring(0, code.length() - 2) + "-R";
+        } else {
+            return code; // 不匹配时返回原字符串
         }
-        // 将 "-2" 替换为 "-R"
-        else if (transformedCode.endsWith("-2")) {
-            transformedCode = transformedCode.replace("-2", "-R");
-        }
-
-        return transformedCode;
     }
 }
