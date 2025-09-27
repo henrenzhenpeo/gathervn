@@ -50,7 +50,7 @@ public class LM0RadiumCodeSizePayloadBuilder  extends AbstractPayloadBuilder<DfU
         msg.put("ItemName", e.getTestProject());     // 测试项目
         msg.put("CheckType", CheckTypeConfig.mapForPayload(e.getState()));
         msg.put("MachineCode", extractNumberAfterDash(e.getMachineCode()));
-        msg.put("ProcessNO", CheckProcessName.mapForProcessName(e.getProcess()));
+        msg.put("ProcessNO", e.getProcess());
         msg.put("CheckTime", format(e.getDate()));   // yyyy-MM-dd HH:mm:ss
 
         List<Map<String, Object>> items = new ArrayList<>();
