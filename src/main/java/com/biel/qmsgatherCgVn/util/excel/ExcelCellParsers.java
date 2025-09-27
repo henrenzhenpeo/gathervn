@@ -3,6 +3,7 @@ package com.biel.qmsgatherCgVn.util.excel;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.DateUtil;
+import org.apache.poi.ss.usermodel.Row;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -254,5 +255,21 @@ public static Date getDateCellValue(Cell cell) {
         }
         BigDecimal bd = BigDecimal.valueOf(value);
         return bd.setScale(decimalPlaces, RoundingMode.HALF_UP).doubleValue();
+    }
+
+    public static boolean isEmptyRow(Row row) {
+        if (row == null) {
+            return true;
+        }
+        for (int i = row.getFirstCellNum(); i < row.getLastCellNum(); i++) {
+            Cell cell = row.getCell(i);
+            if (cell != null && cell.getCellType() != CellType.BLANK) {
+                String value = ExcelCellParsers.getStringCellValue(cell);
+                if (value != null && !value.trim().isEmpty()) {
+                    return false; // 有内容，不是空行
+                }
+            }
+        }
+        return true; // 全部为空
     }
 }

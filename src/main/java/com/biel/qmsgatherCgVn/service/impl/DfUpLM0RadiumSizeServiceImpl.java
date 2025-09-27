@@ -91,6 +91,10 @@ public class DfUpLM0RadiumSizeServiceImpl extends ServiceImpl<DfUpLM0RadiumSizeM
                 Date parsedDate = ExcelCellParsers.getDateCellValue(row.getCell(0));
                 if (parsedDate == null) continue;
 
+                if (isEmptyRow(row)) {
+                    continue; // 整行空，跳过
+                }
+
                 DfUpLM0RadiumSize entity = new DfUpLM0RadiumSize();
                 int i = 0;
 
@@ -222,6 +226,9 @@ public class DfUpLM0RadiumSizeServiceImpl extends ServiceImpl<DfUpLM0RadiumSizeM
             throw new IllegalArgumentException("Excel表头校验失败：应包含【" + expected + "】, 实际为【" + actual + "】");
         }
     }
+
+
+
 
 
 }
