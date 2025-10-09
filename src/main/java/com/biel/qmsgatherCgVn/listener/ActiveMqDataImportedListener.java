@@ -76,7 +76,7 @@ public class ActiveMqDataImportedListener {
             dispatcher.dispatch(batch, DfUpScreenPrintingbm.class);
             log.info("[DfUpScreenPrintingbm] ActiveMQ转发成功：批次条数={}", batch.size());
         } catch (Exception e) {
-            log.error("[DfUpScreenPrintWireftameIcp] ActiveMQ转发失败：", e);
+            log.error("[DfUpScreenPrintingbm] ActiveMQ转发失败：", e);
         }
     }
 
@@ -91,7 +91,7 @@ public class ActiveMqDataImportedListener {
             dispatcher.dispatch(batch, DfUpScreenPrintingVarnish.class);
             log.info("[DfUpScreenPrintingVarnish] ActiveMQ转发成功：批次条数={}", batch.size());
         } catch (Exception e) {
-            log.error("[DfUpScreenPrintWireftameIcp] ActiveMQ转发失败：", e);
+            log.error("[DfUpScreenPrintingVarnish] ActiveMQ转发失败：", e);
         }
     }
 
