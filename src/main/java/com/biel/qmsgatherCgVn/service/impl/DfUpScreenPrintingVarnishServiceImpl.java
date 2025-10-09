@@ -144,7 +144,7 @@ public class DfUpScreenPrintingVarnishServiceImpl extends ServiceImpl<DfUpScreen
                         entity.setDebugMachinex(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)), 4));
                         entity.setDebugMachiney1(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)), 4));
                         entity.setDebugMachiney2(roundToDecimalPlaces(getDoubleCellValue(row.getCell(i++)), 4));
-                        entity.setRemark(ExcelCellParsers.getStringCellValue(row.getCell(i++)));
+                        entity.setMachineCode(ExcelCellParsers.getStringCellValue(row.getCell(i++)));
                         entity.setState(ExcelCellParsers.getStringCellValue(row.getCell(i++)));
 
                         entity.setUploadName(uploadName);
