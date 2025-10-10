@@ -38,7 +38,7 @@ public class ScreenPrintingVarnishPayloadBuilder extends AbstractPayloadBuilder<
         Map<String, Object> msg = new HashMap<>();
         msg.put("CheckDevCode", null);                     // 按既有约定：null
         msg.put("ItemName", e.getTestProject());           // 测量项目
-        msg.put("CheckType", CheckTypeConfig.mapForPayload(e.getRemark()));
+        msg.put("CheckType", CheckTypeConfig.mapForPayload(e.getState()));
         msg.put("MachineCode", CheckMachineCode.mapForMachineCode(e.getMachineCode()));
         msg.put("ProcessNO", CheckProcessName.mapForProcessName(e.getProcess()));              // 工序
         msg.put("CheckTime", format(e.getDate()));         // yyyy-MM-dd HH:mm:ss
